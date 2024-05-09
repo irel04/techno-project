@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { supabase } from '../utils/supabase'
 
 const Login = () => {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const signIn = async () => {
+        const {data, error} = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        })
+    }
+
+
+
     return (
         <form className='rounded mt-20 container w-96 mx-auto bg-gray-300 flex flex-col py-14 items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-3'>
