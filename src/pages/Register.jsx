@@ -29,8 +29,7 @@ const Register = () => {
                 }),
                 loading_message('Authentication Created')
             )
-
-
+            
             const form = {
                 first_name: firstName,
                 last_name: lastName,

@@ -3,16 +3,20 @@ import { supabase } from '../utils/supabase'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { loading_message } from '../utils/messages'
+import { useAuth } from '../hooks/useAuth'
 
 const Login = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const { login } = useAuth()
 
     const signIn = async (e) => {
         e.preventDefault()
         try {
-            await toast.promise(
+
+            
+            const {data: userCredentials} = await toast.promise(
                 supabase.auth.signInWithPassword({
                     email: email,
                     password: password
@@ -20,7 +24,13 @@ const Login = () => {
                 loading_message('Login Success')
             )
 
+            const { data: userData } = await toast.promise(
+                supabase.from('users').select('*').eq('user_id', userCredentials.user.id),
+                loading_message('Data Fetch')
+            )
 
+            
+            await login(userData[0])
 
 
         } catch (error) {
