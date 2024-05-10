@@ -5,13 +5,13 @@ import Register from './pages/Register'
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
       </Routes>
-    </BrowserRouter>
+    </>
   )
 }
 

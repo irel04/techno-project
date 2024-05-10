@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
 
@@ -38,7 +39,7 @@ const Login = () => {
                 </div>
                 <div className='flex flex-col items-center'>
                     <button className='mt-8 mb-2 w-36 rounded text-white bg-neutral-800' type='submit'>Continue</button>
-                    <a href='/register' className='text-sm'>Not yet registered? <span className='font-bold cursor-pointer'>Sign up here</span></a>
+                    <Link to='register' className='text-sm'>Not yet registered? <span className='font-bold cursor-pointer'>Sign up here</span></Link>
                 </div>
             </div>
         </form>
