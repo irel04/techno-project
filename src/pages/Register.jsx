@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import arrowRightSvg from '/assets/arrow-right.svg'
 import { supabase } from '../utils/supabase'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { loading_message } from '../utils/messages'
+
 
 const Register = () => {
 
@@ -12,14 +16,20 @@ const Register = () => {
     const [email, setEmail] = useState(null)
     const [newData, setNewData] = useState(null)
 
+    const navigate = useNavigate()
+
 
     const handleRegister = async (e) => {
         e.preventDefault()
         try {
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password
-            })
+            const { data, error } = await toast.promise(
+                supabase.auth.signUp({
+                    email: email,
+                    password: password
+                }),
+                loading_message('Authentication Created')
+            )
+
 
             const form = {
                 first_name: firstName,
@@ -29,8 +39,12 @@ const Register = () => {
                 user_id: data.user.id
             }
 
-            await supabase.from('users').insert([form])
+            await toast.promise(
+                supabase.from('users').insert([form]),
+                loading_message('Account Created')
+            )
 
+            navigate('/')
 
         } catch (error) {
             console.error(error)
