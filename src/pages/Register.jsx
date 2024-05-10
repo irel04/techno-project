@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import arrowRightSvg from '../../public/assets/arrow-right.svg'
+import arrowRightSvg from '/assets/arrow-right.svg'
 import { supabase } from '../utils/supabase'
 
 const Register = () => {
@@ -16,7 +16,7 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault()
         try {
-            await supabase.auth.signUp({
+            const { data, error } = await supabase.auth.signUp({
                 email: email,
                 password: password
             })
@@ -25,10 +25,11 @@ const Register = () => {
                 first_name: firstName,
                 last_name: lastName,
                 birthday: birthday,
-                phone_number: contactNo
+                phone_number: contactNo,
+                user_id: data.user.id
             }
 
-             await supabase.from('users').insert([form])
+            await supabase.from('users').insert([form])
 
 
         } catch (error) {
@@ -37,7 +38,6 @@ const Register = () => {
     } 
 
     
-
     return (
         <form onSubmit={handleRegister} className='rounded mt-8 container w-96 mx-auto bg-gray-300 flex flex-col py-14 items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-3'>
