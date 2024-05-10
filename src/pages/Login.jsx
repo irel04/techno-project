@@ -20,7 +20,6 @@ const Login = () => {
         }
     }
 
-
     return (
         <form onSubmit={signIn} className='rounded mt-20 container w-96 mx-auto bg-gray-300 flex flex-col py-14 items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-3'>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import arrowRightSvg from '../../public/assets/arrow-right.svg'
+import arrowRightSvg from '/assets/arrow-right.svg'
 import { supabase } from '../utils/supabase'
 
 const Register = () => {
