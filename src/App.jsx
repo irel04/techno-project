@@ -6,13 +6,13 @@ import Register from './pages/Register'
 const App = () => {
   
   return (
-    <Router>
+    <BrowserRouter >
       <Routes>
         <Route path='/' element={<Login/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
       </Routes>
-    </Router>
+    </BrowserRouter>
   )
 }
 
