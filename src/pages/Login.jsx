@@ -2,36 +2,36 @@ import React, { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { loading_message } from '../utils/messages'
-import { useAuth } from '../hooks/useAuth'
 
 const Login = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { login } = useAuth()
 
     const signIn = async (e) => {
         e.preventDefault()
         try {
 
-            
             const {data: userCredentials} = await toast.promise(
                 supabase.auth.signInWithPassword({
                     email: email,
                     password: password
                 }),
-                loading_message('Login Success')
+                {
+                    pending: "Just a few seconds",
+                    success: "Login Success",
+                    error: "Invalid Email or Password"               
+                }
             )
 
             const { data: userData } = await toast.promise(
                 supabase.from('users').select('*').eq('user_id', userCredentials.user.id),
-                loading_message('Data Fetch')
+                {
+                    pending: "Fetching Data",
+                    success: "User Load Successufully",
+                    error: "Something Went Wrong"
+                }
             )
-
-            
-            await login(userData[0])
-
 
         } catch (error) {
             console.error(error)
