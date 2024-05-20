@@ -7,6 +7,7 @@ import AppLayout from "./layout/AppLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateAccount from "./pages/CreateAccount";
+import FindaDorm from "./pages/FindaDorm";
 
 const App = () => {
   return (
@@ -28,6 +29,10 @@ const App = () => {
           <Route
             path="register"
             element={<Register />}
+          />
+          <Route
+            path="dorms"
+            element={<FindaDorm />}
           />
         </Route>
       </Routes>
