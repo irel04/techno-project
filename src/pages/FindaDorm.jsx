@@ -1,4 +1,3 @@
-import React from "react";
 import Dorm from "../components/Dorm";
 import img from "../assets/owner.png";
 

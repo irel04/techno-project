@@ -24,7 +24,10 @@ function Dorm({ img, dormName, location, ownerName, price, rating }) {
           <div className="">
             <p className="text-xs">Rent Starts At</p>
             <p className="text-xs">
-              PHP <span className="text-2xl font-extrabold">{price}</span>
+              PHP{" "}
+              <span className="text-2xl text-primary font-extrabold">
+                {price}
+              </span>
             </p>
           </div>
         </div>

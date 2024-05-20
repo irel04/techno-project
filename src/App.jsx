@@ -8,6 +8,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateAccount from "./pages/CreateAccount";
 import FindaDorm from "./pages/FindaDorm";
+import PostmyDorm from "./pages/PostmyDorm";
+import About from "./pages/About";
+import Help from "./pages/Help";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsofService from "./pages/TermsofService";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -33,6 +39,30 @@ const App = () => {
           <Route
             path="dorms"
             element={<FindaDorm />}
+          />
+          <Route
+            path="business"
+            element={<PostmyDorm />}
+          />
+          <Route
+            path="about"
+            element={<About />}
+          />
+          <Route
+            path="faqs"
+            element={<Help />}
+          />
+          <Route
+            path="privacy"
+            element={<PrivacyPolicy />}
+          />
+          <Route
+            path="terms"
+            element={<TermsofService />}
+          />
+          <Route
+            path="profile"
+            element={<Profile />}
           />
         </Route>
       </Routes>
