@@ -1,6 +1,5 @@
 import React from "react";
 import Logo from "./Logo";
-import { NavLink } from "react-router-dom";
 import Link from "./Link";
 import LoginButton from "./LoginButton";
 
