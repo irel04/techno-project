@@ -1,16 +1,35 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AppLayout from "./layout/AppLayout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import CreateAccount from "./pages/CreateAccount";
 
 const App = () => {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+        <Route element={<AppLayout />}>
+          <Route
+            index
+            element={<Home />}
+          />
+          <Route
+            path="account"
+            element={<CreateAccount />}
+          />
+          <Route
+            path="login"
+            element={<Login />}
+          />
+          <Route
+            path="register"
+            element={<Register />}
+          />
+        </Route>
       </Routes>
       <ToastContainer
         position="top-right"
@@ -26,7 +45,7 @@ const App = () => {
         transition:Bounce
       />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
