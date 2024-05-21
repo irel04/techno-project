@@ -11,10 +11,10 @@ function Footer() {
 
   return (
     <footer className="bg-primary grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-white py-[5rem] px-[3%]">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col items-center justify-center text-center md:text-left md:items-start md:justify-start gap-5">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-extrabold">DormFinder.PH</h1>
-          <ul className="flex gap-2 items-center">
+          <ul className="flex gap-2 items-center justify-center md:justify-start">
             <Link to="">
               <FaFacebook className="text-secondary text-4xl" />
             </Link>
@@ -55,19 +55,19 @@ function Footer() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="hidden md:flex flex-col gap-3">
         <p className="text-xl font-bold">Renting</p>
         <a href="">Browse Dorms</a>
         <a href="">Post My Dorm (Business)</a>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="hidden md:flex flex-col gap-3">
         <p className="text-xl font-bold">Popular Searches</p>
         <a href="">Browse Dorms</a>
         <a href="">Post My Dorm (Business)</a>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="hidden md:flex flex-col gap-3">
         <p className="text-xl font-bold">Quick Links</p>
         <a href="">Help Center</a>
         <a href="">About Us</a>
