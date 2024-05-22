@@ -4,7 +4,7 @@ import { FaStar } from "react-icons/fa";
 
 function Dorm({ img, dormName, location, ownerName, price, rating }) {
   return (
-    <div className="bg-white shadow-custom w-[20rem] h-[18rem] rounded flex flex-col gap-2">
+    <div className="bg-white shadow-custom w-full md:max-w-[25rem] h-[18rem] rounded flex flex-col gap-2">
       <img
         src={img}
         className="h-[10rem] w-full object-cover"

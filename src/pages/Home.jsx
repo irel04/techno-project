@@ -33,6 +33,7 @@ const dorms = [
     price: "Price",
     rating: "Rating",
   },
+
 ];
 
 const howItWorks = [
@@ -82,10 +83,10 @@ const rentersFeedback = [
 
 function Home() {
   return (
-    <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center">
+    <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem]">
       {/* Search */}
-      <section className="flex flex-col gap-10 items-center justify-center mt-[2rem] lg:mt-[5rem]">
-        <div className="bg-white shadow-custom flex flex-col gap-2 p-5 w-[50rem] max-w-[100rem]">
+      <section className="flex flex-col gap-10 items-center justify-center w-full">
+        <div className="bg-white shadow-custom flex flex-col gap-2 p-5 w-full max-w-[60rem]">
           <h1 className="text-2xl lg:text-4xl font-bold text-primary">
             Find Your Dorm Now
           </h1>
@@ -95,7 +96,7 @@ function Home() {
             <Select />
             <Button
               color="primary"
-              className="lg:max-w-fit px-5"
+              className="px-5"
             >
               Search
             </Button>
@@ -125,7 +126,7 @@ function Home() {
       {/* Featured Properties */}
       <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="Featured Properties in DormFinder.PH" />
-        <ul className="flex flex-col lg:flex-row gap-10">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full items-center justify-center gap-10">
           {dorms.map((dorm, index) => (
             <li key={index}>
               <Dorm
@@ -144,7 +145,7 @@ function Home() {
       {/* How it works */}
       <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="How It Works" />
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-10">
           {howItWorks.map((howItWorks, index) => (
             <li key={index}>
               <HowItWorks
@@ -162,13 +163,13 @@ function Home() {
       <section className="flex flex-col md:flex-row gap-10 items-center justify-center lg:mx-[10rem]">
         <img
           src={img}
-          className="lg:w-[20rem] object-cover"
+          className="max-w-[20rem] object-cover"
         />
-        <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-extrabold">
+        <div className="items-center flex flex-col gap-3">
+          <h1 className="text-3xl font-extrabold text-center md:text-left">
             Use DormFinder.PH to find the best dorm for your needs
           </h1>
-          <p>
+          <p className="text-center md:text-left">
             Whether finding the right dorm when college comes, a bed space while
             exploring the first job, or an apartment while saving for that dream
             house for your growing family, we provide options offering monthly
@@ -185,7 +186,7 @@ function Home() {
       </section>
 
       {/* Renters Feedback */}
-      <section className="flex flex-col gap-10 items-center justify-center lg:mb-[10rem]">
+      <section className="flex flex-col gap-10 items-center justify-center ">
         <HomeTitle title="What Our Renters Say" />
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {rentersFeedback.map((rentersFeedback, index) => (

@@ -7,7 +7,7 @@ function SearchBar() {
       <input
         type="text"
         placeholder="Where do you want to live?"
-        className="rounded border border-[#6F7070] p-2 pl-10 bg-transparent text-md"
+        className="w-full md:w-[18rem] lg:w-[25rem] rounded border border-[#6F7070] p-2 pl-10 bg-transparent text-md"
       />
     </div>
   );

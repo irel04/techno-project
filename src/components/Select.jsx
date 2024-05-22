@@ -7,7 +7,7 @@ function Select() {
       <input
         type="text"
         placeholder="Where do you want to live?"
-        className="rounded border border-[#6F7070] p-2 pr-10 bg-transparent text-md"
+        className="w-full md:w-[13rem] lg:w-[20rem] rounded border border-[#6F7070] p-2 pr-10 bg-transparent text-md"
       />
     </div>
   );

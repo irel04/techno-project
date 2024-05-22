@@ -10,7 +10,7 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-white py-[5rem] px-[3%]">
+    <footer className="bg-primary grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 text-white py-[5rem] px-[3%] gap-10">
       <div className="flex flex-col items-center justify-center text-center md:text-left md:items-start md:justify-start gap-5">
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-extrabold">DormFinder.PH</h1>
