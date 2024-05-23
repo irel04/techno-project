@@ -30,9 +30,9 @@ const about = [
 
 function About() {
   return (
-    <main className="flex flex-col lg:gap-[10rem] lg:mb-[10rem] lg:mt-[5rem]">
+    <main className="flex flex-col gap-[5rem] lg:gap-[10rem] lg:mb-[10rem] my-[3rem] lg:mt-[5rem]">
       {/* What is DormFinder */}
-      <section className="flex flex-col md:flex-row items-center justify-between lg:gap-[5rem]">
+      <section className="flex flex-col md:flex-row items-center justify-between gap-[3rem] lg:gap-[5rem]">
         <div className="flex flex-col gap-5">
           <h1 className="text-4xl font-bold">
             What is{" "}
@@ -46,17 +46,17 @@ function About() {
         </div>
         <img
           src={sample}
-          className=""
+          className="w-full md:max-w-[20rem] lg:max-w-[30rem] xl:max-w-[50rem]"
         />
       </section>
 
       {/* Our Goal */}
       <section className="flex flex-col items-center justify-between gap-5 ">
-        <h2 className="uppercase">Our Goals</h2>
-        <h1 className="text-5xl font-bold">
+        <h2 className="uppercase font-semibold">Our Goals</h2>
+        <h1 className="text-center md:text-left text-5xl font-bold">
           Make dorm finding better, for everyone
         </h1>
-        <p className="text-2xl">
+        <p className="text-center md:text-left text-2xl">
           We're revolutionizing the way people rent, by paving the path towards
           a tech-enabled rental ecosystem for all.
         </p>

@@ -19,45 +19,51 @@ const ownerFaqs = [
 
 function Help() {
   return (
-    <main className="lg:my-[8rem] lg:gap-[10rem] flex flex-col  ">
+    <main className="lg:gap-[10rem] flex flex-col  my-[3rem] md:my-[5rem] lg:my-[8rem] gap-[5rem]">
       <section className="flex flex-col items-center justify-center gap-5">
-        <HomeTitle title="Frequently asked questions" />
+        <HomeTitle title="Frequently Asked Questions" />
         <p>Lorem ipsum</p>
-        <div className="flex items-center justify-center gap-10 ">
+        <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-10">
           <a
             href="#dormers"
-            className="lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex flex-col items-center"
+            className="w-full lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex md:flex-col items-center gap-5"
           >
             <img
               src={owner}
-              className="lg:h-[5rem] mb-3"
+              className=" max-h-[5rem] md:mb-3"
             />
-            <h1 className="text-xl font-bold">For dormers</h1>
-            <p className="italic">for hosts, landlords, agents</p>
+            <div className="flex flex-col gap-2 items-center">
+              <h1 className="text-xl font-bold">For dormers</h1>
+              <p className="italic">for hosts, landlords, agents</p>
+            </div>
           </a>
 
           <a
             href="#owners"
-            className="lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex flex-col items-center"
+            className="w-full lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex md:flex-col items-center gap-5"
           >
             <img
-              src={renter}
-              className="lg:h-[5rem] mb-3"
+              src={owner}
+              className=" max-h-[5rem] md:mb-3"
             />
-            <h1 className="text-xl font-bold">For dorm owners</h1>
-            <p className="italic">for student renters</p>
+            <div className="flex flex-col gap-2 items-center">
+              <h1 className="text-xl font-bold">For dorm owners</h1>
+              <p className="italic">for hosts, landlords, agents</p>
+            </div>
           </a>
 
           <a
-            href=""
-            className="lg:w-[20rem] lg:h-[15rem] bg-white shadow-custom p-6 flex flex-col items-center"
+            href="#dormers"
+            className="w-full lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex md:flex-col items-center gap-5"
           >
             <img
-              src={renter}
-              className="lg:h-[5rem] mb-3"
+              src={owner}
+              className=" max-h-[5rem] md:mb-3"
             />
-            <h1 className="text-xl font-bold">Submit feedback</h1>
-            <p className="italic">for student renters</p>
+            <div className="flex flex-col gap-2 items-center">
+              <h1 className="text-xl font-bold">Submit feedback</h1>
+              <p className="italic">for hosts, landlords, agents</p>
+            </div>
           </a>
         </div>
       </section>

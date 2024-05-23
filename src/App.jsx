@@ -14,6 +14,10 @@ import Help from "./pages/Help";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsofService from "./pages/TermsofService";
 import Profile from "./pages/Profile";
+import ScheduledVisits from "./pages/ScheduledVisits";
+import Favorites from "./pages/Favorites";
+import DormPage from "./pages/DormPage";
+import OwnerPage from "./pages/OwnerPage";
 
 const App = () => {
   return (
@@ -63,6 +67,22 @@ const App = () => {
           <Route
             path="profile"
             element={<Profile />}
+          />
+          <Route
+            path="favorites"
+            element={<Favorites />}
+          />
+          <Route
+            path="scheduled-visits"
+            element={<ScheduledVisits />}
+          />
+          <Route
+            path="dorm/id"
+            element={<DormPage />}
+          />
+          <Route
+            path="owner/id"
+            element={<OwnerPage />}
           />
         </Route>
       </Routes>

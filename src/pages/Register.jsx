@@ -55,12 +55,12 @@ const Register = () => {
     <div className="flex flex-col justify-center items-center">
       <form
         onSubmit={handleRegister}
-        className="bg-white shadow-custom rounded md:w-[30rem] p-5 flex flex-col gap-3"
+        className="bg-white md:shadow-custom rounded md:w-[30rem] p-5 flex flex-col gap-3"
       >
         {/* Logo */}
         <div className="flex gap-2 items-center justify-center">
           <img
-            className="lg:h-12"
+            className="max-h-12"
             src={logo}
           />
           <h1 className="text-3xl font-extrabold text-primary">
@@ -69,7 +69,7 @@ const Register = () => {
         </div>
 
         {/* Login with FB/GOOGLE */}
-        <div className="flex flex-col gap-3">
+        {/* <div className="flex flex-col gap-3">
           <h1 className="text-3xl font-bold">Login</h1>
           <Button color="white">
             <FaFacebook className="text-primary" />
@@ -79,7 +79,7 @@ const Register = () => {
             <FcGoogle />
             Sign Up with Google
           </Button>
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-2">
           <Input
@@ -114,7 +114,7 @@ const Register = () => {
 
           <Input
             label="Contact Number"
-            type="date"
+            type="number"
             required
             placeholder=""
             onChange={(e) => setContactNo(e.target.value)}
