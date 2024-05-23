@@ -24,7 +24,7 @@ function Input({
         id={inputId}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded border border-[#6F7070] p-2 bg-transparent placeholder-secondary text-sm"
+        className="w-full rounded border border-[#6F7070] p-2 bg-transparent  text-sm"
       />
     </div>
   );

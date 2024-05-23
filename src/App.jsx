@@ -7,6 +7,17 @@ import AppLayout from "./layout/AppLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateAccount from "./pages/CreateAccount";
+import FindaDorm from "./pages/FindaDorm";
+import PostmyDorm from "./pages/PostmyDorm";
+import About from "./pages/About";
+import Help from "./pages/Help";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsofService from "./pages/TermsofService";
+import Profile from "./pages/Profile";
+import ScheduledVisits from "./pages/ScheduledVisits";
+import Favorites from "./pages/Favorites";
+import DormPage from "./pages/DormPage";
+import OwnerPage from "./pages/OwnerPage";
 
 const App = () => {
   return (
@@ -28,6 +39,50 @@ const App = () => {
           <Route
             path="register"
             element={<Register />}
+          />
+          <Route
+            path="dorms"
+            element={<FindaDorm />}
+          />
+          <Route
+            path="business"
+            element={<PostmyDorm />}
+          />
+          <Route
+            path="about"
+            element={<About />}
+          />
+          <Route
+            path="faqs"
+            element={<Help />}
+          />
+          <Route
+            path="privacy"
+            element={<PrivacyPolicy />}
+          />
+          <Route
+            path="terms"
+            element={<TermsofService />}
+          />
+          <Route
+            path="profile"
+            element={<Profile />}
+          />
+          <Route
+            path="favorites"
+            element={<Favorites />}
+          />
+          <Route
+            path="scheduled-visits"
+            element={<ScheduledVisits />}
+          />
+          <Route
+            path="dorm/id"
+            element={<DormPage />}
+          />
+          <Route
+            path="owner/id"
+            element={<OwnerPage />}
           />
         </Route>
       </Routes>
