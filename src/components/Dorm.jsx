@@ -1,10 +1,14 @@
 import React from "react";
 import { GrLocation } from "react-icons/gr";
 import { FaStar } from "react-icons/fa";
+import HeartButton from "./FavoriteButton";
 
-function Dorm({ img, dormName, location, ownerName, price, rating }) {
+function Dorm({ img, dormName, location, ownerName, price, rating, link }) {
   return (
-    <div className="bg-white shadow-custom w-[20rem] h-[18rem] rounded flex flex-col gap-2">
+    <a
+      className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2 cursor-pointer"
+      href={link}
+    >
       <img
         src={img}
         className="h-[10rem] w-full object-cover"
@@ -37,10 +41,10 @@ function Dorm({ img, dormName, location, ownerName, price, rating }) {
             {rating} / 5 Star Rating
           </p>
 
-          <button>Star button</button>
+          <HeartButton />
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 

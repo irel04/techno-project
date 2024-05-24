@@ -4,7 +4,7 @@ function Link({ to, page }) {
   return (
     <NavLink
       to={to}
-      className=""
+      className={({ isActive }) => (isActive ? "font-extrabold" : "")}
     >
       {page}
     </NavLink>

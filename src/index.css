@@ -23,11 +23,34 @@ body {
   color: #010a10;
 }
 
-/* @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   html {
     font-size: 80%;
   }
-} */
+}
 
 @layer utilities {
+}
+
+@media (max-width: 640px) {
+  nav ul.absolute {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffdd00;
+    padding-block: 1rem;
+  }
+
+  nav ul.absolute.flex {
+    display: flex; /* Show menu when `flex` class is added */
+  }
+
+  nav ul.absolute li {
+    margin: 0.5rem 0;
+    text-align: center;
+    font-weight: 600;
+    font-size: medium;
+  }
 }

@@ -1,18 +1,11 @@
-function Button({
-  children,
-  color,
-  type = "submit",
-  onClick,
-  icon,
-  className,
-}) {
+function Button({ children, color, type = "submit", onClick, className }) {
   let buttonClass =
     "flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full";
 
   if (color === "primary") {
     buttonClass += " bg-primary text-white";
   } else if (color === "secondary") {
-    buttonClass += " bg-secondary text-white";
+    buttonClass += " bg-secondary text-black";
   } else if (color === "white") {
     buttonClass += " bg-white border border-[#6F7070] text-text-color";
   }

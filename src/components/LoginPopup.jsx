@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { supabase } from "../utils/supabase";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { supabase } from "../utils/supabase";
+
 import logo from "../assets/logo.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
 
-const Login = () => {
+function LoginPopup({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -43,13 +41,27 @@ const Login = () => {
     }
   };
 
+  const popupRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) {
+      onClose(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col justify-center items-center my-[5rem] md:my-[2rem]">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <form
-        onSubmit={signIn}
-        className=" bg-white md:shadow-custom  rounded md:w-[30rem] p-5 flex flex-col gap-3"
+        ref={popupRef}
+        className="bg-white rounded p-5 flex flex-col gap-3 w-full md:max-w-[30rem] mx-6"
       >
-        {/* Logo */}
         <div className="flex gap-2 items-center justify-center">
           <img
             className="max-h-12"
@@ -100,8 +112,8 @@ const Login = () => {
         >
           Log In
         </Button>
-        <p className="flex gap-1 justify-center">
-          Not registered yet?{" "}
+        <p className="text-text-color flex gap-1 justify-center">
+          Not registered yet?
           <a
             href="/register"
             className="text-primary underline font-semibold"
@@ -112,6 +124,6 @@ const Login = () => {
       </form>
     </div>
   );
-};
+}
 
-export default Login;
+export default LoginPopup;

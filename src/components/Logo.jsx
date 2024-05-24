@@ -9,10 +9,10 @@ function Logo() {
       className="flex gap-3 items-center"
     >
       <img
-        className="lg:h-12"
+        className="h-10 md:h-12"
         src={logo}
       />
-      <h1 className="text-xl font-bold">DormFinder.PH</h1>
+      <h1 className="hidden lg:block text-xl font-bold">DormFinder.PH</h1>
     </NavLink>
   );
 }

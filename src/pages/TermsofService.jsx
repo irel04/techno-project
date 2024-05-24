@@ -13,7 +13,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 1: Acceptance of Terms */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">1. Acceptance of Terms</p>
           <p>
@@ -21,7 +20,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 2: Use of Services */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">2. Use of Services</p>
           <p>
@@ -35,11 +33,9 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 3: User Roles and Responsibilities */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">3. User Roles and Responsibilities</p>
 
-          {/* Subsection a: Dorm Owners */}
           <div className="ml-4">
             <p className="font-bold">a. Dorm Owners:</p>
             <p>
@@ -53,7 +49,6 @@ function TermsofService() {
             </p>
           </div>
 
-          {/* Subsection b: Renters */}
           <div className="ml-4">
             <p className="font-bold">b. Renters:</p>
             <p>
@@ -67,7 +62,6 @@ function TermsofService() {
             </p>
           </div>
 
-          {/* Subsection c: Other Users */}
           <div className="ml-4">
             <p className="font-bold">c. Other Users:</p>
             <p>
@@ -79,7 +73,6 @@ function TermsofService() {
           </div>
         </div>
 
-        {/* Section 4: User Content */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">4. User Content</p>
           <p>
@@ -90,7 +83,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 5: Intellectual Property */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">5. Intellectual Property</p>
           <p>
@@ -101,7 +93,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 6: Privacy */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">6. Privacy</p>
           <p>
@@ -109,7 +100,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 7: Disclaimer of Warranties */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">7. Disclaimer of Warranties</p>
           <p>
@@ -117,7 +107,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 8: Limitation of Liability */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">8. Limitation of Liability</p>
           <p>
@@ -125,7 +114,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 9: Governing Law */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">9. Governing Law</p>
           <p>
@@ -133,7 +121,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 10: Changes to Terms */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">10. Changes to Terms</p>
           <p>
@@ -141,7 +128,6 @@ function TermsofService() {
           </p>
         </div>
 
-        {/* Section 11: Contact Us */}
         <div className="my-4 text-justify">
           <p className="font-bold text-xl">11. Contact Us</p>
           <p>
