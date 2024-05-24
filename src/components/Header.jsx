@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import Link from "./Link";
-import LoginButton from "./LoginButton";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import LoginPopup from "./LoginPopup";
 import { MdAccountCircle } from "react-icons/md";

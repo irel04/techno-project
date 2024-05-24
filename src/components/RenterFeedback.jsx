@@ -11,10 +11,10 @@ function RenterFeedback({ img, name, feedback }) {
     ));
 
   return (
-    <div className="w-full md:w-[25rem] max-h-[20rem] flex flex-col items-center justify-center gap-4 bg-white shadow-custom p-4 rounded">
+    <div className="w-full lg:w-[25rem] max-h-[20rem] flex flex-col items-center justify-center gap-4 bg-white shadow-custom p-4 rounded">
       <img
         src={img}
-        className="max-w-[5rem] rounded-full"
+        className="w-[5rem] h-[5rem] rounded-full"
       />
       <h1 className="text-2xl font-semibold">{name}</h1>
       <p className="text-center">{feedback}</p>

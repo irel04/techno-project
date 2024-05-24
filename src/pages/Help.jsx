@@ -19,22 +19,22 @@ const ownerFaqs = [
 
 function Help() {
   return (
-    <main className="lg:gap-[10rem] flex flex-col  my-[3rem] md:my-[5rem] lg:my-[8rem] gap-[5rem]">
+    <main className="flex flex-col  my-[3rem] md:my-[5rem] lg:my-[8rem] gap-[5rem]">
       <section className="flex flex-col items-center justify-center gap-5">
         <HomeTitle title="Frequently Asked Questions" />
-        <p>Lorem ipsum</p>
+        <p>Everything you need to know to use DormFinder.Ph like a pro!</p>
         <div className="w-full flex flex-col md:flex-row items-center justify-center gap-2 md:gap-10">
           <a
             href="#dormers"
             className="w-full lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex md:flex-col items-center gap-5"
           >
             <img
-              src={owner}
+              src={renter}
               className=" max-h-[5rem] md:mb-3"
             />
             <div className="flex flex-col gap-2 items-center">
               <h1 className="text-xl font-bold">For dormers</h1>
-              <p className="italic">for hosts, landlords, agents</p>
+              <p className="italic">for renters, students</p>
             </div>
           </a>
 
@@ -51,26 +51,12 @@ function Help() {
               <p className="italic">for hosts, landlords, agents</p>
             </div>
           </a>
-
-          <a
-            href="#dormers"
-            className="w-full lg:w-[20rem] lg:h-[15rem]  bg-white shadow-custom p-6 flex md:flex-col items-center gap-5"
-          >
-            <img
-              src={owner}
-              className=" max-h-[5rem] md:mb-3"
-            />
-            <div className="flex flex-col gap-2 items-center">
-              <h1 className="text-xl font-bold">Submit feedback</h1>
-              <p className="italic">for hosts, landlords, agents</p>
-            </div>
-          </a>
         </div>
       </section>
 
       {/* For dormers */}
       <section
-        className="flex flex-col gap-5"
+        className="mt-[5rem] flex flex-col gap-5"
         id="dormers"
       >
         <h1 className="text-2xl font-bold">For Dorm Owners</h1>

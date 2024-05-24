@@ -1,5 +1,7 @@
 import React from "react";
-import sample from "../assets/sample.jpeg";
+import aboutImg from "../assets/about.png";
+import sample from "../assets/about.png";
+
 import logo from "../assets/logo.png";
 import AboutCard from "../components/AboutCard";
 import Button from "../components/Button";
@@ -9,21 +11,21 @@ const about = [
     bannerImg: sample,
     logoImg: logo,
     description:
-      "An online listings platform connecting renters with rentals and roommates.",
+      "Connecting renters with rentals and roommates for hassle-free student accommodations in Metro Manila.",
     button: <Button color="primary">Search for Dorms</Button>,
   },
   {
     bannerImg: sample,
     logoImg: logo,
     description:
-      "An online listings platform connecting renters with rentals and roommates.",
+      "Simplifying rental lead generation and management for landlords in Metro Manila's student housing market.",
     button: <Button color="primary">Search for Dorms</Button>,
   },
   {
     bannerImg: sample,
     logoImg: logo,
     description:
-      "An online listings platform connecting renters with rentals and roommates.",
+      "Premium subscriptions boost visibility and lead generation for landlords in Metro Manila's student housing market.",
     button: <Button color="primary">Search for Dorms</Button>,
   },
 ];
@@ -39,14 +41,16 @@ function About() {
             <span className="text-primary font-extrabold">DormFinder.PH</span>?
           </h1>
           <p className="text-xl">
-            <span className="font-bold">DormFinder.PH</span> is a marketplace
-            for residential stays, where renters can easily find residential
-            spaces for rent in one platform.
+            <span className="font-bold">DormFinder.PH</span> is an online
+            platform connecting students with high-quality dormitories and
+            student housing in Metro Manila. With verified listings and a
+            user-friendly interface, it simplifies the search for the perfect
+            student accommodation.
           </p>
         </div>
         <img
-          src={sample}
-          className="w-full md:max-w-[20rem] lg:max-w-[30rem] xl:max-w-[50rem]"
+          src={aboutImg}
+          className="w-full md:max-w-[20rem] lg:max-w-[30rem] xl:max-w-[50rem] max-h-[30rem] object-cover"
         />
       </section>
 
