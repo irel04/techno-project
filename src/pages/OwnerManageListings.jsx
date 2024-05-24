@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ManageListings = () => {
+const OwnerManageListings = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Manage Listings</h2>
@@ -9,4 +9,4 @@ const ManageListings = () => {
   );
 };
 
-export default ManageListings;
+export default OwnerManageListings;

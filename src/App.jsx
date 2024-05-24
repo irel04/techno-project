@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AppLayout from "./layout/AppLayout";
+import BusinessLayout from "./layout/BusinessLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateAccount from "./pages/CreateAccount";
@@ -80,11 +81,18 @@ const App = () => {
             path="dorm/id"
             element={<DormPage />}
           />
-          <Route
+          {/*<Route
             path="owner/id"
             element={<OwnerPage />}
-          />
+          />*/}
         </Route>
+        {/* For business layout */}
+        <Route path="owner/id" element={<BusinessLayout />}>
+          <Route
+            index
+            element={<OwnerPage />}
+          />
+          </Route>
       </Routes>
       <ToastContainer
         position="top-right"
