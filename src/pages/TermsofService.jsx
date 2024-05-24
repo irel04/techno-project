@@ -4,7 +4,7 @@ import HomeTitle from "../components/HomeTitle";
 function TermsofService() {
   return (
     <main className="flex flex-col items-center justify-center">
-      <section className="w-3/5">
+      <section className="w-full md:w-3/4 lg:w-1/2 px-4">
         <HomeTitle title="Terms of Service" />
 
         <div className="my-4 text-justify">
