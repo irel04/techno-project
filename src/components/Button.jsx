@@ -1,6 +1,6 @@
 function Button({ children, color, type = "submit", onClick, className }) {
   let buttonClass =
-    "flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full";
+    "whitespace-nowrap px-4 flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full";
 
   if (color === "primary") {
     buttonClass += " bg-primary text-white";

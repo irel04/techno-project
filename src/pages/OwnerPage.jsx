@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import Sidebar from '../components/SideBar';
-import OwnerOverview from './OwnerOverview';
-import OwnerManageListings from './OwnerManageListings';
-import OwnerSchedules from './OwnerSchedules';
-import OwnerSubscriptions from './OwnerSubscriptions';
+import { useState } from "react";
+import Sidebar from "../components/SideBar";
+import OwnerOverview from "./OwnerOverview";
+import OwnerManageListings from "./OwnerManageListings";
+import OwnerSchedules from "./OwnerSchedules";
+import OwnerSubscriptions from "./OwnerSubscriptions";
 
 const OwnerPage = () => {
-  const [activeTab, setActiveTab] = useState('Overview');
+  const [activeTab, setActiveTab] = useState("Overview");
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'Overview':
+      case "Overview":
         return <OwnerOverview />;
-      case 'Listings':
+      case "Listings":
         return <OwnerManageListings />;
-      case 'Schedules':
+      case "Schedules":
         return <OwnerSchedules />;
-      case 'Subscriptions':
+      case "Subscriptions":
         return <OwnerSubscriptions />;
       default:
         return <OwnerOverview />;

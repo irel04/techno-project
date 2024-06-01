@@ -19,6 +19,8 @@ import ScheduledVisits from "./pages/ScheduledVisits";
 import Favorites from "./pages/Favorites";
 import DormPage from "./pages/SpecificDormPage";
 import OwnerPage from "./pages/OwnerPage";
+import SpecificOwnerPage from "./pages/SpecificOwnerPage";
+import SpecificDormPage from "./pages/SpecificDormPage";
 
 const App = () => {
   return (
@@ -79,20 +81,23 @@ const App = () => {
           />
           <Route
             path="dorm/id"
-            element={<DormPage />}
+            element={<SpecificDormPage />}
           />
-          {/*<Route
+          <Route
             path="owner/id"
-            element={<OwnerPage />}
-          />*/}
+            element={<SpecificOwnerPage />}
+          />
         </Route>
         {/* For business layout */}
-        <Route path="owner/id" element={<BusinessLayout />}>
+        <Route
+          path="owner/id"
+          element={<BusinessLayout />}
+        >
           <Route
             index
             element={<OwnerPage />}
           />
-          </Route>
+        </Route>
       </Routes>
       <ToastContainer
         position="top-right"

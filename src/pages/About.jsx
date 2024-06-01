@@ -1,7 +1,5 @@
-import React from "react";
 import aboutImg from "../assets/about.png";
 import sample from "../assets/about.png";
-
 import logo from "../assets/logo.png";
 import AboutCard from "../components/AboutCard";
 import Button from "../components/Button";
