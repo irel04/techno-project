@@ -16,7 +16,7 @@ import TermsofService from "./pages/TermsofService";
 import Profile from "./pages/Profile";
 import ScheduledVisits from "./pages/ScheduledVisits";
 import Favorites from "./pages/Favorites";
-import DormPage from "./pages/DormPage";
+import DormPage from "./pages/SpecificDormPage";
 import OwnerPage from "./pages/OwnerPage";
 
 const App = () => {

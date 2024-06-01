@@ -5,32 +5,39 @@ import sample from "../assets/about.png";
 import logo from "../assets/logo.png";
 import AboutCard from "../components/AboutCard";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
-const about = [
+const aboutData = [
   {
     bannerImg: sample,
     logoImg: logo,
     description:
       "Connecting renters with rentals and roommates for hassle-free student accommodations in Metro Manila.",
-    button: <Button color="primary">Search for Dorms</Button>,
+    onClick: "/login",
   },
   {
     bannerImg: sample,
     logoImg: logo,
     description:
       "Simplifying rental lead generation and management for landlords in Metro Manila's student housing market.",
-    button: <Button color="primary">Search for Dorms</Button>,
+    onClick: "/business",
   },
   {
     bannerImg: sample,
     logoImg: logo,
     description:
       "Premium subscriptions boost visibility and lead generation for landlords in Metro Manila's student housing market.",
-    button: <Button color="primary">Search for Dorms</Button>,
+    onClick: "/subscription",
   },
 ];
 
 function About() {
+  const navigate = useNavigate();
+
+  const handleClick = (path) => {
+    navigate(path);
+  };
+
   return (
     <main className="flex flex-col gap-[5rem] lg:gap-[10rem] lg:mb-[10rem] my-[3rem] lg:mt-[5rem]">
       {/* What is DormFinder */}
@@ -67,13 +74,20 @@ function About() {
         <p className="text-xl italic">Explore our initiatives below 👇</p>
 
         <ul className="flex flex-col gap-10 md:flex-row">
-          {about.map((about, index) => (
+          {aboutData.map((item, index) => (
             <li key={index}>
               <AboutCard
-                bannerImg={about.bannerImg}
-                logoImg={about.logoImg}
-                description={about.description}
-                button={about.button}
+                bannerImg={item.bannerImg}
+                logoImg={item.logoImg}
+                description={item.description}
+                button={
+                  <Button
+                    onClick={() => handleClick(item.onClick)}
+                    color="primary"
+                  >
+                    Learn More
+                  </Button>
+                }
               />
             </li>
           ))}

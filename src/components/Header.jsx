@@ -8,7 +8,7 @@ import { MdAccountCircle } from "react-icons/md";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Track login state
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const navigate = useNavigate();
   const loginPopupRef = useRef(null);
