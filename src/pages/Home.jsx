@@ -1,12 +1,23 @@
 import HomeTitle from "../components/HomeTitle";
 import Dorm from "../components/Dorm";
-import img from "../assets/owner.png";
-import HowItWorks from "../components/HowItWorks";
+import dormImg from "../assets/dorm.jpg";
+import img from "../assets/dorm.jpg";
+import student from "../assets/student.jpg";
+import student1 from "../assets/student1.jpg";
+import student2 from "../assets/student2.jpg";
+import how1 from "../assets/how1.png";
+import how2 from "../assets/how2.png";
+import how3 from "../assets/how3.png";
+
+import welcomeImg from "../assets/design.png";
+
 import Button from "../components/Button";
 import RenterFeedback from "../components/RenterFeedback";
 import Input from "../components/Input";
 import SearchBar from "../components/SearchBar";
 import Select from "../components/Select";
+import HowItWorks from "../components/HowItWorks";
+import { useNavigate } from "react-router-dom";
 
 const dorms = [
   {
@@ -33,55 +44,65 @@ const dorms = [
     price: "Price",
     rating: "Rating",
   },
-
 ];
 
 const howItWorks = [
   {
-    img: img,
+    img: how1,
     number: "01",
-    title: "Search Nearby",
+    title: "Search for Your Ideal Dorm",
     description:
-      "Looking for a small room you can rent out near your workplace? or perhaps you’re looking to rent out an apartment for your growing family?",
+      "Use our easy-to-navigate website to browse through a wide range of dormitories and student housing options in Metro Manila. Filter your search by location, price, and amenities to find the perfect fit.",
   },
   {
-    img: img,
-    number: "01",
-    title: "Search Nearby",
+    img: how2,
+    number: "02",
+    title: "Review Dorm Listings",
     description:
-      "Looking for a small room you can rent out near your workplace? or perhaps you’re looking to rent out an apartment for your growing family?",
+      "Explore detailed listings that have been reviewed and verified to ensure accuracy and quality. Each listing provides comprehensive information, including photos, descriptions, and reviews from other students.",
   },
   {
-    img: img,
-    number: "01",
-    title: "Search Nearby",
+    img: how3,
+    number: "03",
+    title: "Contact and Book",
     description:
-      "Looking for a small room you can rent out near your workplace? or perhaps you’re looking to rent out an apartment for your growing family?",
+      "Once you’ve found the ideal dorm, reach out to the property owner or manager directly through our platform to ask questions, schedule a visit, or make a booking. Enjoy a smooth and hassle-free process from start to finish.",
   },
 ];
 
 const rentersFeedback = [
   {
-    img: img,
-    name: "Juan Dela Cruz",
+    img: student,
+    name: "Maria Santos",
     feedback:
-      "I recently had the pleasure of staying in a small room at this lovely hotel, and I must say it was a delightful experience.",
+      "Thanks to DormFinder.ph, I found a great student accommodation in no time.",
   },
   {
-    img: img,
+    img: student1,
     name: "Juan Dela Cruz",
     feedback:
-      "I recently had the pleasure of staying in a small room at this lovely hotel, and I must say it was a delightful experience.",
+      "The listings on DormFinder.ph are accurate and reliable, making my search hassle-free.",
   },
   {
-    img: img,
-    name: "Juan Dela Cruz",
+    img: student2,
+    name: "Anna Delos Reyes",
     feedback:
-      "I recently had the pleasure of staying in a small room at this lovely hotel, and I must say it was a delightful experience.",
+      "DormFinder.ph is a fantastic resource for finding quality dorms in Metro Manila.",
   },
 ];
 
+const options = [
+  "Php 1000 - 1500",
+  "Php 1000 - 1500",
+  "Php 1000 - 1500",
+  "Php 1000 - 1500",
+];
+
 function Home() {
+  const navigate = useNavigate();
+  const navigateToRegister = () => navigate("/account");
+  const navigateToAbout = () => navigate("/about");
+
   return (
     <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem]">
       {/* Search */}
@@ -93,7 +114,7 @@ function Home() {
           <p>Lorem ipsum</p>
           <div className="flex flex-col md:flex-row gap-8">
             <SearchBar />
-            <Select />
+            <Select options={options} />
             <Button
               color="primary"
               className="px-5"
@@ -107,24 +128,31 @@ function Home() {
       {/* Welcome Message */}
       <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="Dorms for Rent in the Metro Manila, Philippines" />
-        <p className="font-semibold  text-xl">Welcome to DormFinder.ph</p>
+        <p className="font-semibold  text-xl">Welcome to DormFinder.PH</p>
         <p className="text-center">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-          tempor, enim a pharetra vestibulum, neque augue mattis lectus, nec
-          luctus tortor lorem eget augue. Ut feugiat auctor urna in blandit. Ut
-          quis dui sollicitudin nisi bibendum volutpat eu accumsan ligula. Nunc
-          eleifend porttitor nisl, at ultrices erat hendrerit eu. Pellentesque
-          habitant morbi tristique senectus et netus et malesuada fames ac
-          turpis egestas.
+          Welcome to DormFinder.ph! Your go-to site for finding top-notch
+          student dormitories and housing across Metro Manila. We offer a
+          variety of rental options, from shared rooms to individual units,
+          ensuring you find the perfect fit for your needs. Our commitment to
+          quality means most of our listings are thoroughly reviewed and
+          verified, and we're working towards 100% verification. Best of luck in
+          your search for student accommodation, and don't hesitate to contact
+          us with any rental inquiries. Happy searching!
         </p>
+      </section>
+
+      <section className="-mt-[5rem] w-screen max-w-screen flex justify-center items-baseline">
+        <div className="bg-primary w-full h-[6rem] md:h-[10rem]"></div>
+
         <img
-          src=""
-          className=""
+          src={welcomeImg}
+          className="h-[15rem] md:h-[25rem] align-middle"
         />
+        <div className="bg-primary w-full h-[6rem]  md:h-[10rem]"></div>
       </section>
 
       {/* Featured Properties */}
-      <section className="flex flex-col gap-10 items-center justify-center">
+      <section className="w-full flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="Featured Properties in DormFinder.PH" />
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full items-center justify-center gap-10">
           {dorms.map((dorm, index) => (
@@ -157,13 +185,21 @@ function Home() {
             </li>
           ))}
         </ul>
+
+        <Button
+          className="max-w-fit px-5"
+          color="primary"
+          onClick={navigateToRegister}
+        >
+          Register Now
+        </Button>
       </section>
 
       {/* Why Join Us */}
       <section className="flex flex-col md:flex-row gap-10 items-center justify-center lg:mx-[10rem]">
         <img
-          src={img}
-          className="max-w-[20rem] object-cover"
+          src={dormImg}
+          className="rounded md:max-w-[20rem] md:max-h-[20rem]  lg:max-w-[30rem] lg:max-h-[30rem] object-cover"
         />
         <div className="items-center flex flex-col gap-3">
           <h1 className="text-3xl font-extrabold text-center md:text-left">
@@ -179,8 +215,9 @@ function Home() {
           <Button
             color="primary"
             className="max-w-fit px-5"
+            onClick={navigateToAbout}
           >
-            Why Join Us
+            Learn More
           </Button>
         </div>
       </section>

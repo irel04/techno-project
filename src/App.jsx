@@ -1,9 +1,9 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AppLayout from "./layout/AppLayout";
+import BusinessLayout from "./layout/BusinessLayout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateAccount from "./pages/CreateAccount";
@@ -16,8 +16,9 @@ import TermsofService from "./pages/TermsofService";
 import Profile from "./pages/Profile";
 import ScheduledVisits from "./pages/ScheduledVisits";
 import Favorites from "./pages/Favorites";
-import DormPage from "./pages/DormPage";
 import OwnerPage from "./pages/OwnerPage";
+import SpecificOwnerPage from "./pages/SpecificOwnerPage";
+import SpecificDormPage from "./pages/SpecificDormPage";
 
 const App = () => {
   return (
@@ -78,10 +79,21 @@ const App = () => {
           />
           <Route
             path="dorm/id"
-            element={<DormPage />}
+            element={<SpecificDormPage />}
           />
           <Route
             path="owner/id"
+            element={<SpecificOwnerPage />}
+          />
+        </Route>
+
+        {/* For business layout */}
+        <Route
+          path="business"
+          element={<BusinessLayout />}
+        >
+          <Route
+            index
             element={<OwnerPage />}
           />
         </Route>

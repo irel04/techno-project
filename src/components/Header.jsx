@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import Link from "./Link";
-import LoginButton from "./LoginButton";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import LoginPopup from "./LoginPopup";
 import { MdAccountCircle } from "react-icons/md";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Track login state
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const navigate = useNavigate();
   const loginPopupRef = useRef(null);

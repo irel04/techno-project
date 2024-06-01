@@ -112,7 +112,7 @@ function LoginPopup({ onClose }) {
         >
           Log In
         </Button>
-        <p className="flex gap-1 justify-center">
+        <p className="text-text-color flex gap-1 justify-center">
           Not registered yet?
           <a
             href="/register"

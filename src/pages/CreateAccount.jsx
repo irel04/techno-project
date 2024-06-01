@@ -22,7 +22,7 @@ function CreateAccount() {
         </a>
 
         <a
-          href=""
+          href="/login"
           className="bg-white shadow-custom p-6 flex flex-col items-center"
         >
           <img

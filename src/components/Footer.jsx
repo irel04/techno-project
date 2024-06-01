@@ -64,7 +64,7 @@ function Footer() {
       <div className="hidden md:flex flex-col gap-3">
         <p className="text-xl font-bold">Popular Searches</p>
         <a href="">Browse Dorms</a>
-        <a href="">Post My Dorm (Business)</a>
+        <a href="/owner/id">Post My Dorm (Business)</a>
       </div>
 
       <div className="hidden md:flex flex-col gap-3">
@@ -74,8 +74,8 @@ function Footer() {
         <a href="">Account</a>
 
         <p className="text-xl font-bold">Legal</p>
-        <a href="">Terms of Service</a>
-        <a href="">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="/privacy">Privacy Policy</a>
       </div>
     </footer>
   );
