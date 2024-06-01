@@ -1,4 +1,3 @@
-import React from "react";
 import { GrLocation } from "react-icons/gr";
 import { FaStar } from "react-icons/fa";
 import HeartButton from "./FavoriteButton";

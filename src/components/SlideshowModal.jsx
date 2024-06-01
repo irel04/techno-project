@@ -28,7 +28,7 @@ const SlideshowModal = ({ photos, onClose }) => {
       onClick={handleClickOutside}
     >
       <div
-        className="relative bg-white p-8 rounded-lg max-w-lg w-full"
+        className="m-4 relative bg-white p-8 rounded-lg max-w-lg w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <button

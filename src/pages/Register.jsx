@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import arrowRightSvg from "/assets/arrow-right.svg";
 import { supabase } from "../utils/supabase";
 import { toast } from "react-toastify";

@@ -4,12 +4,11 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoMdPhotos } from "react-icons/io";
 import { FaFire } from "react-icons/fa";
 import { GrLocation } from "react-icons/gr";
-import { MdPayments } from "react-icons/md";
 import SlideshowModal from "../components/SlideshowModal";
 import Button from "../components/Button";
 import { useState } from "react";
 import GoogleMap from "../components/GoogleMap";
-import logo from "../assets/default.jpg";
+import dormOwnerPicture from "../assets/default.jpg";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +24,7 @@ function SpecificDormPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [isInquirePopupOpen, setIsInquirePopupOpen] = useState(false);
   const [isVisitPopupOpen, setIsVisitPopupOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // New state for login status
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   // const openInquirePopup = () => {
   //   setIsInquirePopupOpen(true);
@@ -37,8 +36,12 @@ function SpecificDormPage() {
 
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const navigateToLogin = () => {
     navigate("/login");
+  };
+
+  const navigateToOwnerPage = () => {
+    navigate("/owner/id");
   };
 
   const openVisitPopup = () => {
@@ -50,11 +53,11 @@ function SpecificDormPage() {
   };
 
   return (
-    <main className="flex flex-col gap-5">
+    <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
       {/* Directory */}
       <div className="flex gap-4 items-center">
         <IoArrowBack />
-        <p>Dorm Listings</p>
+        <a href="/dorms">Dorm Listings</a>
         <IoIosArrowForward />
         <p className="font-semibold">Dorm Details</p>
       </div>
@@ -103,13 +106,13 @@ function SpecificDormPage() {
       </div>
 
       {/* Information */}
-      <section className="flex justify-between">
+      <section className="flex items-center md:items-start justify-between">
         <div>
           <p className="flex items-center gap-2">
             <GrLocation />
             Location
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-4">
             <h1 className="font-bold text-2xl">Name of Dorm</h1>
             {/* Status (Newly Listed or Verified*/}
             {/* Newly Listed meaning di pa naveverify ng admin */}
@@ -133,7 +136,7 @@ function SpecificDormPage() {
         </div>
       </section>
 
-      <section className="flex justify-between items-center">
+      <section className="flex flex-col md:flex-row gap-2 justify-between items-start md:items-center">
         <div className="">
           <p className="text-lg font-semibold">Description</p>
           <p>Description of the Dorm</p>
@@ -155,7 +158,7 @@ function SpecificDormPage() {
 
         {isVisitPopupOpen && (
           <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="flex flex-col gap-2 bg-white p-8 rounded md:w-[30rem] max-w-[30rem]">
+            <div className="flex flex-col gap-2 bg-white p-8 rounded w-full m-4 md:w-[30rem] max-w-[30rem]">
               {isLoggedIn ? (
                 <>
                   <h2 className="text-2xl font-bold text-center ">
@@ -196,7 +199,7 @@ function SpecificDormPage() {
                   <div className="flex gap-2">
                     <Button
                       color="primary"
-                      onClick={handleLogin}
+                      onClick={navigateToLogin}
                     >
                       Login
                     </Button>
@@ -214,35 +217,74 @@ function SpecificDormPage() {
         )}
       </section>
 
-      <section className="flex justify-between items-start">
-        <div className="flex flex-col gap-4">
+      <section className="flex flex-col lg:flex-row justify-between items-start">
+        <div className="w-full flex flex-col gap-4">
           {/* Features */}
 
           <div className="flex flex-col gap-1">
             <div className="text-lg font-semibold">Features</div>
-            <ul className="flex flex-col gap-1">
+            <ul className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-48 overflow-hidden">
               <li>Feature 1</li>
               <li>Feature 2</li>
               <li>Feature 3</li>
+              <li>Feature 4</li>
+              <li>Feature 5</li>
+              <li>Feature 6</li>
+              <li>Feature 7</li>
+              <li>Feature 8</li>
+              <li>Feature 9</li>
+              <li>Feature 10</li>
+              <li>Feature 11</li>
+              <li>Feature 12</li>
             </ul>
           </div>
           {/* Amenities */}
-          <div className="flex flex-col gap-1">
+          <div className="w-full flex flex-col gap-1">
             <p className="text-lg font-semibold">Amenities</p>
-            <ul className="flex flex-col gap-1">
-              <li>Amenity 1</li>
-              <li>Amenity 2</li>
-              <li>Amenity 3</li>
+            <ul className="grid grid-cols-2  md:grid-cols-3 gap-2 max-h-48 overflow-hidden">
+              <li>Feature 1</li>
+              <li>Feature 2</li>
+              <li>Feature 3</li>
+              <li>Feature 4</li>
+              <li>Feature 5</li>
+              <li>Feature 6</li>
+              <li>Feature 7</li>
+              <li>Feature 8</li>
+              <li>Feature 9</li>
+              <li>Feature 10</li>
+              <li>Feature 11</li>
+              <li>Feature 12</li>
             </ul>
           </div>
 
           {/* Payment terms */}
-          <div className="flex flex-col gap-1">
+          <div className="w-full flex flex-col gap-1">
             <p className="text-lg font-semibold">Payment Terms</p>
             <ul className="flex flex-col gap-1">
-              <li>Payment Term 1</li>
-              <li>Payment Term 2</li>
-              <li>Payment Term 3</li>
+              <li className="flex gap-1 items-center">
+                Advance Payments:
+                <p className="font-semibold">Payment</p>
+              </li>
+              <li className="flex gap-1 items-center">
+                Security Deposit:
+                <p className="font-semibold">Deposit</p>
+              </li>
+              <li className="flex gap-1 items-center">
+                Minimum Stay:
+                <p className="font-semibold">Deposit</p>
+              </li>
+              <li className="flex gap-1 items-center">
+                Electricity Bills:
+                <p className="font-semibold">Deposit</p>
+              </li>
+              <li className="flex gap-1 items-center">
+                Water Bills:
+                <p className="font-semibold">Deposit</p>
+              </li>
+              <li className="flex gap-1 items-center">
+                Association Dues:
+                <p className="font-semibold">Deposit</p>
+              </li>
             </ul>
           </div>
 
@@ -257,7 +299,7 @@ function SpecificDormPage() {
         </div>
 
         {/* Map */}
-        <div>
+        <div className="mt-4 w-full">
           <GoogleMap src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123552.89649011318!2d120.99793040419922!3d14.597479520235341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b795a0e244e5%3A0x6a1a7885c2c5109!2sArt%20In%20Island!5e0!3m2!1sen!2sph!4v1717234973176!5m2!1sen!2sph" />
         </div>
       </section>
@@ -268,7 +310,7 @@ function SpecificDormPage() {
       <div className="flex gap-4 items-center">
         {/* Picture of Dorm Owner */}
         <img
-          src={logo}
+          src={dormOwnerPicture}
           className="h-24 w-24"
           alt="Dorm Owner"
         />
@@ -278,6 +320,7 @@ function SpecificDormPage() {
           <Button
             color="primary"
             className="max-w-fit text-sm"
+            onClick={navigateToOwnerPage}
           >
             View host's profile <IoIosArrowRoundForward />
           </Button>

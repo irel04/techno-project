@@ -3,13 +3,12 @@ function GoogleMap({ src }) {
     <iframe
       title="Google Map"
       src={src}
-      width="600px"
-      height="450px"
       frameBorder="0"
       style={{ border: 0 }}
       allowFullScreen=""
       aria-hidden="false"
       tabIndex="0"
+      className="w-full lg:w-[600px] lg:h-[450px]"
     ></iframe>
   );
 }

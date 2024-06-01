@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -17,7 +16,6 @@ import TermsofService from "./pages/TermsofService";
 import Profile from "./pages/Profile";
 import ScheduledVisits from "./pages/ScheduledVisits";
 import Favorites from "./pages/Favorites";
-import DormPage from "./pages/SpecificDormPage";
 import OwnerPage from "./pages/OwnerPage";
 import SpecificOwnerPage from "./pages/SpecificOwnerPage";
 import SpecificDormPage from "./pages/SpecificDormPage";
@@ -88,9 +86,10 @@ const App = () => {
             element={<SpecificOwnerPage />}
           />
         </Route>
+
         {/* For business layout */}
         <Route
-          path="owner/id"
+          path="business"
           element={<BusinessLayout />}
         >
           <Route
