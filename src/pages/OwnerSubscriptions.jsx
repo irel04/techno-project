@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Subscriptions = () => {
+const OwnerSubscriptions = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Subscription Options</h2>
@@ -9,4 +9,4 @@ const Subscriptions = () => {
   );
 };
 
-export default Subscriptions;
+export default OwnerSubscriptions;
