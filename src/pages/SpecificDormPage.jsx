@@ -11,6 +11,7 @@ import GoogleMap from "../components/GoogleMap";
 import dormOwnerPicture from "../assets/default.jpg";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
+import FavoriteButton from "../components/FavoriteButton";
 
 const photos = [
   "https://via.placeholder.com/300",
@@ -89,14 +90,18 @@ function SpecificDormPage() {
             </div>
           </div>
         </div>
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          color="primary"
-          className="mt-4 ml-auto max-w-fit px-4 text-sm"
-        >
-          <IoMdPhotos className="text-white" />
-          See All Photos
-        </Button>
+        <div className="flex justify-between mt-4">
+          <FavoriteButton />
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            color="primary"
+            className=" max-w-fit px-4 text-sm"
+          >
+            <IoMdPhotos className="text-white" />
+            See All Photos
+          </Button>
+        </div>
+
         {isModalOpen && (
           <SlideshowModal
             photos={photos}
