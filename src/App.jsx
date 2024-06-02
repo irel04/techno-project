@@ -94,7 +94,7 @@ const App = () => {
 
         {/* For business layout */}
         <Route
-          path="business"
+          path="business-side"
           element={<BusinessLayout />}
         >
           <Route
