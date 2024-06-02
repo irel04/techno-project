@@ -84,47 +84,58 @@ const Register = () => {
         <div className="flex flex-col gap-2">
           <Input
             label="First Name"
-            required
+            required={true}
             placeholder=""
             onChange={(e) => setFirstName(e.target.value)}
+            name={"firstName"}
+            maxLength={50}
           />
 
           <Input
             label="Last Name"
-            required
+            required={true}
+            maxLength={50}
             placeholder=""
+            name={"lastName"}
             onChange={(e) => setLastName(e.target.value)}
           />
 
           <Input
             label="Email"
             type="email"
-            required
+            required={true}
+            maxLength={50}
             placeholder=""
+            name={"email"}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <Input
             label="Birthday"
             type="date"
-            required
+            required={true}
             placeholder=""
+            name={"bday"}
             onChange={(e) => setBirthday(e.target.value)}
           />
 
           <Input
             label="Contact Number"
             type="number"
-            required
+            required={true}
+            maxLength={50}
             placeholder=""
+            name={"number"}
             onChange={(e) => setContactNo(e.target.value)}
           />
 
           <Input
             label="Password"
             type="password"
-            required
+            required={true}
+            maxLength={50}
             placeholder=""
+            name={"password"}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>

@@ -1,13 +1,11 @@
 import React from "react";
+import { useForm } from "react-hook-form";
 
-function Input({
-  label,
-  type = "text",
-  placeholder,
-  required = false,
-  onChange,
-}) {
+
+const Input = ({ label, type = "text", placeholder, required = false, onChange, name, maxLength }) => {
+  
   const inputId = `input_${Math.random().toString(36).substr(2, 9)}`;
+  const { register } = useForm()
 
   return (
     <div className="flex flex-col gap-1">
@@ -20,6 +18,7 @@ function Input({
       </label>
 
       <input
+        {...register(name), {required: required, maxLength: maxLength}}
         type={type}
         id={inputId}
         placeholder={placeholder}
