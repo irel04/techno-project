@@ -13,46 +13,109 @@ import * as yup from 'yup'
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-//yup validation
-
+// yup validation schema, we'll use this as resolver along with useForm hook
+// the name of the object inside should be the same on what you are putting inside the <Input/> component
 const schema = yup.object({
   firstName: yup.string().required().max(50).label("First Name"),
   lastName: yup.string().required().max(50).label("Last Name"),
   email: yup.string().max(50).required().label("Email"),
-  bday: yup.date().required().label("Birthday"),
-  contactNo: yup.string().max(12).label("Contact Number"),
+  bday: yup.string().required().label("Birthday"),
+  number: yup.string().max(12).label("Contact Number"),
   password: yup.string().required().label("Password").max(50)
 })
 
+// Default value template
+const defaultValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  bday: "",
+  number: "",
+  password: ""
+}
+
 const Register = () => {
   
-  const { register, formState: { errors }, handleSubmit, getValues } = useForm({
+
+  // Initialized useForm hook 
+  const { register, formState: { errors, isSubmitSuccessful }, reset, handleSubmit, getValues } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      bday: "",
-      contactNo: "",
-      password: ""
-    },
-    mode: "all",
+    defaultValues: defaultValues,
+    mode: "onChange",
   })
 
 
-  const handleRegister = () => {
-    const data = {
+  const signupNewUser = async () => {
+    const userBasicInfo = {
       last_name: getValues('firstName'),
       first_name: getValues('lastName'),
       email: getValues('email'),
-      contactNo: getValues('contactNo'),
+      contact_number: getValues('number'),
       birthday: getValues('bday'),
-      password: getValues('password')
     }
 
-    console.log(data);
-    
+    const userCredential = {
+      password: getValues('password'),
+      email: userBasicInfo.email
+    }
+
+    try {
+      
+      const { error: signUpError } = await supabase.auth.signUp(userCredential)
+      if(signUpError){
+        throw new Error(`Signup Error: ${signUpError.message}`)
+      }
+
+      // feed basic info
+      const { error: registrationError } = await supabase.from('renters').insert([userBasicInfo])
+      if(registrationError){
+        throw new Error(`Database Error: ${registrationError.message}`)
+      }
+
+      return { message: "Registration Successful" }
+
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+
   }
+
+  // Register function for invoking submit button
+  const handleRegister = async () => {
+    try {
+      await toast.promise(
+        signupNewUser,
+        {
+          success: {
+            render({data}){
+              return data.message
+            }
+          },
+          pending: "Please wait...",
+          error: {
+            render({error}){
+              throw error
+            }
+          }
+        }
+      )
+      
+    } catch (error) {
+      console.error(error)
+      toast.error(error.message)
+    }
+
+
+
+  }
+
+  // Reset form state as per documentation use useEffect
+  useEffect(()=> {
+    if(isSubmitSuccessful){
+      reset(defaultValues)
+    }
+  }, [isSubmitSuccessful, errors, reset])
 
 
   return (
