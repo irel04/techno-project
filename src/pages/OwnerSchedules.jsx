@@ -36,6 +36,16 @@ const OwnerSchedules = () => {
     setSearchQuery(e.target.value);
   };
 
+  const handleStatusChange = (id, newStatus) => {
+    const updatedSchedules = schedules.map(schedule => {
+      if (schedule.id === id) {
+        return { ...schedule, status: newStatus };
+      }
+      return schedule;
+    });
+    setSchedules(updatedSchedules);
+  };
+
   const getStatusStyles = (status) => {
     switch (status) {
       case 'upcoming':
@@ -138,9 +148,15 @@ const OwnerSchedules = () => {
                 <td className="py-4 px-5 border-b border-gray-200">{schedule.date}</td>
                 <td className="py-4 px-5 border-b border-gray-200">{schedule.time}</td>
                 <td className="py-4 px-5 border-b border-gray-200">
-                  <span className={`px-2 py-1 rounded ${getStatusStyles(schedule.status)}`}>
-                    {schedule.status.charAt(0).toUpperCase() + schedule.status.slice(1)}
-                  </span>
+                  <select
+                    value={schedule.status}
+                    onChange={(e) => handleStatusChange(schedule.id, e.target.value)}
+                    className={`px-2 py-1 rounded ${getStatusStyles(schedule.status)}`}
+                  >
+                    <option value="upcoming">Upcoming</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
                 </td>
               </tr>
             ))}

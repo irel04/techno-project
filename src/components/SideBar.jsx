@@ -9,10 +9,10 @@ const SideBar = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="relative z-10">
+    <div className="relative z-5">
       {/* Hamburger Icon */}
       <button 
-        className="block sm:hidden p-4 text-primary z-20"
+        className="block sm:hidden p-4 text-primary z-10"
         onClick={toggleSidebar}
       >
         {isOpen ? <FaTimes className="text-2xl" /> : <FaBars className="text-2xl" />}

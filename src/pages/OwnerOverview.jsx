@@ -16,6 +16,10 @@ const OwnerOverview = () => {
     completedSchedules: 1,
   });
 
+  // State for current subscription plan
+  const [currentPlan, setCurrentPlan] = useState('Basic');
+  const [renewalDate, setRenewalDate] = useState('June 15, 2024');
+
   return (
     <div className="max-w-7xl mx-auto p-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Overview</h1>
@@ -66,6 +70,15 @@ const OwnerOverview = () => {
             <h3 className="text-base font-bold text-gray-800 mb-2">Completed Schedules</h3>
             <p className="text-2xl font-bold text-green-600">{scheduleAnalytics.completedSchedules}</p>
           </div>
+        </div>
+      </div>
+
+      {/* Current Subscription Plan */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Current Subscription</h2>
+        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
+          <h3 className="text-xl font-bold text-gray-800 mb-2">Plan: {currentPlan}</h3>
+          <p className="text-lg text-gray-600">Renewal Date: {renewalDate}</p>
         </div>
       </div>
     </div>
