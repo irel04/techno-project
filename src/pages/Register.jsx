@@ -9,52 +9,56 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import * as yup from 'yup'
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+//yup validation
+
+const schema = yup.object({
+  firstName: yup.string().required().max(50).label("First Name"),
+  lastName: yup.string().required().max(50).label("Last Name"),
+  email: yup.string().max(50).required().label("Email"),
+  bday: yup.date().required().label("Birthday"),
+  contactNo: yup.string().max(12).label("Contact Number"),
+  password: yup.string().required().label("Password").max(50)
+})
 
 const Register = () => {
-  const [lastName, setLastName] = useState(null);
-  const [firstName, setFirstName] = useState(null);
-  const [birthday, setBirthday] = useState(null);
-  const [contactNo, setContactNo] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [newData, setNewData] = useState(null);
+  
+  const { register, formState: { errors }, handleSubmit, getValues } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      bday: "",
+      contactNo: "",
+      password: ""
+    },
+    mode: "all",
+  })
 
-  const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const { data, error } = await toast.promise(
-        supabase.auth.signUp({
-          email: email,
-          password: password,
-        }),
-        loading_message("Authentication Created"),
-      );
-
-      const form = {
-        first_name: firstName,
-        last_name: lastName,
-        birthday: birthday,
-        phone_number: contactNo,
-        user_id: data.user.id,
-      };
-
-      await toast.promise(
-        supabase.from("users").insert([form]),
-        loading_message("Account Created"),
-      );
-
-      navigate("/");
-    } catch (error) {
-      console.error(error);
+  const handleRegister = () => {
+    const data = {
+      last_name: getValues('firstName'),
+      first_name: getValues('lastName'),
+      email: getValues('email'),
+      contactNo: getValues('contactNo'),
+      birthday: getValues('bday'),
+      password: getValues('password')
     }
-  };
+
+    console.log(data);
+    
+  }
+
 
   return (
     <div className="flex flex-col justify-center items-center">
       <form
-        onSubmit={handleRegister}
+        onSubmit={handleSubmit(handleRegister)}
         className="bg-white md:shadow-custom rounded md:w-[30rem] p-5 flex flex-col gap-3"
       >
         {/* Logo */}
@@ -84,59 +88,58 @@ const Register = () => {
         <div className="flex flex-col gap-2">
           <Input
             label="First Name"
-            required={true}
             placeholder=""
-            onChange={(e) => setFirstName(e.target.value)}
+            register={register}
             name={"firstName"}
-            maxLength={50}
+            error={errors.firstName}
+            maxLength={51}
+            required={true}
           />
 
           <Input
             label="Last Name"
-            required={true}
-            maxLength={50}
-            placeholder=""
+            register={register}
             name={"lastName"}
-            onChange={(e) => setLastName(e.target.value)}
+            required={true}
+            maxLength={51}
+            error={errors.lastName}
           />
 
           <Input
             label="Email"
             type="email"
             required={true}
-            maxLength={50}
-            placeholder=""
+            register={register}
+            maxLength={51}
             name={"email"}
-            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email}
           />
 
           <Input
             label="Birthday"
             type="date"
             required={true}
-            placeholder=""
+            register={register}
             name={"bday"}
-            onChange={(e) => setBirthday(e.target.value)}
+            error={errors.bday}
           />
 
           <Input
             label="Contact Number"
             type="number"
-            required={true}
-            maxLength={50}
-            placeholder=""
+            register={register}
+            maxLength={12}
             name={"number"}
-            onChange={(e) => setContactNo(e.target.value)}
           />
 
           <Input
             label="Password"
             type="password"
             required={true}
-            maxLength={50}
-            placeholder=""
+            register={register}
+            maxLength={51}
             name={"password"}
-            onChange={(e) => setPassword(e.target.value)}
+            error={errors.password}
           />
         </div>
 
@@ -160,6 +163,7 @@ const Register = () => {
         <Button
           className="mt-3"
           color="primary"
+          type="submit"
         >
           Sign Up
         </Button>

@@ -1,11 +1,9 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect } from "react";
 
-
-const Input = ({ label, type = "text", placeholder, required = false, onChange, name, maxLength }) => {
+const Input = ({ label, required=false, type = "text", placeholder, register, name, error, maxLength }) => {
   
   const inputId = `input_${Math.random().toString(36).substr(2, 9)}`;
-  const { register } = useForm()
+  
 
   return (
     <div className="flex flex-col gap-1">
@@ -18,13 +16,14 @@ const Input = ({ label, type = "text", placeholder, required = false, onChange, 
       </label>
 
       <input
-        {...register(name), {required: required, maxLength: maxLength}}
+        {...register(name)}
         type={type}
         id={inputId}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        maxLength={maxLength}
         className="w-full rounded border border-[#6F7070] p-2 bg-transparent  text-sm"
       />
+      {<p className="text-rose-500">{error?.message}</p> }
     </div>
   );
 }
