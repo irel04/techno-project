@@ -19,6 +19,7 @@ import Favorites from "./pages/Favorites";
 import OwnerPage from "./pages/OwnerPage";
 import SpecificOwnerPage from "./pages/SpecificOwnerPage";
 import SpecificDormPage from "./pages/SpecificDormPage";
+import OwnerRegister from "./pages/OwnerRegister";
 
 const App = () => {
   return (
@@ -40,6 +41,10 @@ const App = () => {
           <Route
             path="register"
             element={<Register />}
+          />
+          <Route
+            path="owner-register"
+            element={<OwnerRegister />}
           />
           <Route
             path="dorms"
