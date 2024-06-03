@@ -20,6 +20,7 @@ import OwnerPage from "./pages/OwnerPage";
 import SpecificOwnerPage from "./pages/SpecificOwnerPage";
 import SpecificDormPage from "./pages/SpecificDormPage";
 import OwnerRegister from "./pages/OwnerRegister";
+import PostaRental from "./pages/PostaRental";
 
 const App = () => {
   return (
@@ -101,6 +102,8 @@ const App = () => {
             index
             element={<OwnerPage />}
           />
+          <Route path="post-rental" 
+          element={<PostaRental />} />
         </Route>
       </Routes>
       <ToastContainer

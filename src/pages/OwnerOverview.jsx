@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaListAlt, FaClock, FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
+import { FaListAlt, FaClock, FaCheckCircle, FaHourglassHalf, FaBan } from 'react-icons/fa';
 
 const OwnerOverview = () => {
   // Placeholder data for analytics
@@ -14,6 +14,7 @@ const OwnerOverview = () => {
     totalSchedules: 3,
     upcomingSchedules: 2,
     completedSchedules: 1,
+    cancelledSchedules: 1, // Added cancelled schedules
   });
 
   // State for current subscription plan
@@ -69,6 +70,11 @@ const OwnerOverview = () => {
             <FaCheckCircle className="text-3xl text-green-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Completed Schedules</h3>
             <p className="text-2xl font-bold text-green-600">{scheduleAnalytics.completedSchedules}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
+            <FaBan className="text-3xl text-red-600 mb-2" />
+            <h3 className="text-base font-bold text-gray-800 mb-2">Cancelled Schedules</h3>
+            <p className="text-2xl font-bold text-red-600">{scheduleAnalytics.cancelledSchedules}</p>
           </div>
         </div>
       </div>

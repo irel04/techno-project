@@ -9,16 +9,16 @@ const OwnerSubscriptions = () => {
   const plans = [
     {
       name: 'Basic',
-      price: 'Php10/month',
+      price: 'Free',
       features: [
-        'Up to 5 listings',
+        'Up to 2 listings',
         'Standard support',
         'Basic analytics',
       ],
     },
     {
       name: 'Premium',
-      price: 'Php30/month',
+      price: 'Php200/month',
       features: [
         'Up to 20 listings',
         'Priority support',
@@ -28,7 +28,7 @@ const OwnerSubscriptions = () => {
     },
     {
       name: 'Enterprise',
-      price: 'Php100/month',
+      price: 'Php600/month',
       features: [
         'Unlimited listings',
         'Dedicated support',
