@@ -3,6 +3,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoMdPhotos } from "react-icons/io";
 import { FaFire } from "react-icons/fa";
+import { FaCircleCheck } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
 import SlideshowModal from "../components/SlideshowModal";
 import Button from "../components/Button";
@@ -127,7 +128,7 @@ function SpecificDormPage() {
             </p>
             {/* Newly Listed meaning di pa naveverify ng admin */}
             <p className="flex gap-2 items-center bg-primary text-white px-4 py-2 rounded max-w-fit font-semibold text-sm">
-              <FaFire />
+              <FaCircleCheck />
               Verified
             </p>
           </div>

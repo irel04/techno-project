@@ -58,13 +58,13 @@ function Footer() {
       <div className="hidden md:flex flex-col gap-3">
         <p className="text-xl font-bold">Renting</p>
         <a href="">Browse Dorms</a>
-        <a href="">Post My Dorm (Business)</a>
+        <a href="/owner/id">Post My Dorm (Business)</a>
       </div>
 
       <div className="hidden md:flex flex-col gap-3">
         <p className="text-xl font-bold">Popular Searches</p>
         <a href="">Browse Dorms</a>
-        <a href="/owner/id">Post My Dorm (Business)</a>
+        <a href="/business-side">Post My Dorm (Business)</a>
       </div>
 
       <div className="hidden md:flex flex-col gap-3">

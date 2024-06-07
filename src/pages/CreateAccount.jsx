@@ -10,7 +10,7 @@ function CreateAccount() {
 
       <div className="flex items-center justify-center gap-10">
         <a
-          href=""
+          href="/owner-register"
           className="bg-white shadow-custom p-6 flex flex-col items-center"
         >
           <img
@@ -22,7 +22,7 @@ function CreateAccount() {
         </a>
 
         <a
-          href="/login"
+          href="/register"
           className="bg-white shadow-custom p-6 flex flex-col items-center"
         >
           <img
