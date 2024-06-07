@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
-import arrowRightSvg from "/assets/arrow-right.svg";
-import { supabase } from "../utils/supabase";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { loading_message } from "../utils/messages";
-import logo from "../assets/logo.png";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
-import * as yup from 'yup'
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import * as yup from 'yup';
+import logo from "../assets/logo.png";
+import Button from "../components/Button";
+import Input from "../components/Input";
+import { supabase } from "../utils/supabase";
 
 // yup validation schema, we'll use this as resolver along with useForm hook
 // the name of the object inside should be the same on what you are putting inside the <Input/> component
@@ -35,7 +31,8 @@ const defaultValues = {
 }
 
 const Register = () => {
-  
+
+  const navigate = useNavigate()
 
   // Initialized useForm hook 
   const { register, formState: { errors, isSubmitSuccessful }, reset, handleSubmit, getValues } = useForm({
@@ -100,6 +97,8 @@ const Register = () => {
           }
         }
       )
+
+      navigate("/")
       
     } catch (error) {
       console.error(error)
