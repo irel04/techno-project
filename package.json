@@ -22,7 +22,8 @@
     "react-router-dom": "^6.23.0",
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.26.4",
-    "sort-by": "^0.0.2"
+    "sort-by": "^0.0.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
