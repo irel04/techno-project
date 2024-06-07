@@ -32,7 +32,7 @@ const OwnerRegister = () => {
           email: email,
           password: password,
         }),
-        loading_message("Creating Authentication...")
+        loading_message("Creating Authentication..."),
       );
 
       if (error) throw error;
@@ -52,7 +52,7 @@ const OwnerRegister = () => {
 
       await toast.promise(
         supabase.from("owners").insert([form]),
-        loading_message("Creating Account...")
+        loading_message("Creating Account..."),
       );
 
       navigate("/");
@@ -70,21 +70,27 @@ const OwnerRegister = () => {
       >
         {/* Logo */}
         <div className="flex gap-2 items-center justify-center">
-          <img className="max-h-12" src={logo} alt="Logo" />
-          <h1 className="text-3xl font-extrabold text-primary">DormFinder.PH</h1>
+          <img
+            className="max-h-12"
+            src={logo}
+            alt="Logo"
+          />
+          <h1 className="text-3xl font-extrabold text-primary">
+            DormFinder.PH
+          </h1>
         </div>
 
         {/* Input Fields */}
         <label className="text-l font-semibold text-primary">Owner Type</label>
-          <select
-            className="border p-2 rounded"
-            value={ownerType}
-            onChange={(e) => setOwnerType(e.target.value)}
-            required
-          >
-            <option value="individual">Individual</option>
-            <option value="company">Company</option>
-          </select>
+        <select
+          className="w-full rounded border border-[#6F7070] p-2 bg-transparent  text-sm pr-5"
+          value={ownerType}
+          onChange={(e) => setOwnerType(e.target.value)}
+          required
+        >
+          <option value="individual">Individual</option>
+          <option value="company">Company</option>
+        </select>
 
         <div className="flex flex-col gap-2">
           <Input
@@ -158,20 +164,33 @@ const OwnerRegister = () => {
 
         <p className="text-center">
           By signing up for a DormFinder Account, you agree to our{" "}
-          <a href="/terms" className="text-primary underline font-semibold">
+          <a
+            href="/terms"
+            className="text-primary underline font-semibold"
+          >
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="/privacy" className="text-primary underline font-semibold">
+          <a
+            href="/privacy"
+            className="text-primary underline font-semibold"
+          >
             Privacy Policy
-          </a>.
+          </a>
+          .
         </p>
-        <Button className="mt-3" color="primary">
+        <Button
+          className="mt-3"
+          color="primary"
+        >
           Sign Up
         </Button>
         <p className="flex gap-1 justify-center">
           Already have an account?
-          <a href="/login" className="text-primary underline font-semibold">
+          <a
+            href="/login"
+            className="text-primary underline font-semibold"
+          >
             Login here
           </a>
         </p>

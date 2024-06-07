@@ -155,7 +155,7 @@ const Register = () => {
         <p className="flex gap-1 justify-center">
           Already have an account?
           <a
-            href="/register"
+            href="/login"
             className="text-primary underline font-semibold"
           >
             Login here
