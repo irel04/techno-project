@@ -1,60 +1,126 @@
-import { useEffect, useState } from "react";
-import arrowRightSvg from "/assets/arrow-right.svg";
-import { supabase } from "../utils/supabase";
-import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { loading_message } from "../utils/messages";
+import { toast } from "react-toastify";
+import * as yup from 'yup';
 import logo from "../assets/logo.png";
-import Input from "../components/Input";
 import Button from "../components/Button";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import Input from "../components/Input";
+import { supabase } from "../utils/supabase";
+
+// yup validation schema, we'll use this as resolver along with useForm hook
+// the name of the object inside should be the same on what you are putting inside the <Input/> component
+const schema = yup.object({
+  firstName: yup.string().required().max(50).label("First Name"),
+  lastName: yup.string().required().max(50).label("Last Name"),
+  email: yup.string().max(50).required().label("Email"),
+  bday: yup.string().required().label("Birthday"),
+  number: yup.string().max(12).label("Contact Number"),
+  password: yup.string().required().label("Password").max(50)
+})
+
+// Default value template
+const defaultValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  bday: "",
+  number: "",
+  password: ""
+}
 
 const Register = () => {
-  const [lastName, setLastName] = useState(null);
-  const [firstName, setFirstName] = useState(null);
-  const [birthday, setBirthday] = useState(null);
-  const [contactNo, setContactNo] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [newData, setNewData] = useState(null);
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const { data, error } = await toast.promise(
-        supabase.auth.signUp({
-          email: email,
-          password: password,
-        }),
-        loading_message("Authentication Created"),
-      );
+  // Initialized useForm hook 
+  const { register, formState: { errors, isSubmitSuccessful }, reset, handleSubmit, getValues } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: defaultValues,
+    mode: "onChange",
+  })
 
-      const form = {
-        first_name: firstName,
-        last_name: lastName,
-        birthday: birthday,
-        phone_number: contactNo,
-        user_id: data.user.id,
-      };
 
-      await toast.promise(
-        supabase.from("users").insert([form]),
-        loading_message("Account Created"),
-      );
-
-      navigate("/");
-    } catch (error) {
-      console.error(error);
+  const signupNewUser = async () => {
+    const userBasicInfo = {
+      last_name: getValues('firstName'),
+      first_name: getValues('lastName'),
+      email: getValues('email'),
+      contact_number: getValues('number'),
+      birthday: getValues('bday'),
     }
-  };
+
+    const userCredential = {
+      password: getValues('password'),
+      email: userBasicInfo.email
+    }
+
+    try {
+      
+      const { error: signUpError } = await supabase.auth.signUp(userCredential)
+      if(signUpError){
+        throw new Error(`Signup Error: ${signUpError.message}`)
+      }
+
+      // feed basic info
+      const { error: registrationError } = await supabase.from('renters').insert([userBasicInfo])
+      if(registrationError){
+        throw new Error(`Database Error: ${registrationError.message}`)
+      }
+
+      return { message: "Registration Successful" }
+
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+
+  }
+
+  // Register function for invoking submit button
+  const handleRegister = async () => {
+    try {
+      await toast.promise(
+        signupNewUser,
+        {
+          success: {
+            render({data}){
+              return data.message
+            }
+          },
+          pending: "Please wait...",
+          error: {
+            render({error}){
+              throw error
+            }
+          }
+        }
+      )
+
+      navigate("/")
+      
+    } catch (error) {
+      console.error(error)
+      toast.error(error.message)
+    }
+
+
+
+  }
+
+  // Reset form state as per documentation use useEffect
+  useEffect(()=> {
+    if(isSubmitSuccessful){
+      reset(defaultValues)
+    }
+  }, [isSubmitSuccessful, errors, reset])
+
 
   return (
     <div className="flex flex-col justify-center items-center">
       <form
-        onSubmit={handleRegister}
+        onSubmit={handleSubmit(handleRegister)}
         className="bg-white md:shadow-custom rounded md:w-[30rem] p-5 flex flex-col gap-3"
       >
         {/* Logo */}
@@ -84,48 +150,58 @@ const Register = () => {
         <div className="flex flex-col gap-2">
           <Input
             label="First Name"
-            required
             placeholder=""
-            onChange={(e) => setFirstName(e.target.value)}
+            register={register}
+            name={"firstName"}
+            error={errors.firstName}
+            maxLength={51}
+            required={true}
           />
 
           <Input
             label="Last Name"
-            required
-            placeholder=""
-            onChange={(e) => setLastName(e.target.value)}
+            register={register}
+            name={"lastName"}
+            required={true}
+            maxLength={51}
+            error={errors.lastName}
           />
 
           <Input
             label="Email"
             type="email"
-            required
-            placeholder=""
-            onChange={(e) => setEmail(e.target.value)}
+            required={true}
+            register={register}
+            maxLength={51}
+            name={"email"}
+            error={errors.email}
           />
 
           <Input
             label="Birthday"
             type="date"
-            required
-            placeholder=""
-            onChange={(e) => setBirthday(e.target.value)}
+            required={true}
+            register={register}
+            name={"bday"}
+            error={errors.bday}
           />
 
           <Input
             label="Contact Number"
             type="number"
-            required
-            placeholder=""
-            onChange={(e) => setContactNo(e.target.value)}
+            register={register}
+            maxLength={12}
+            name={"number"}
           />
 
           <Input
             label="Password"
             type="password"
-            required
-            placeholder=""
-            onChange={(e) => setPassword(e.target.value)}
+            required={true}
+            register={register}
+            maxLength={51}
+            name={"password"}
+            error={errors.password}
           />
         </div>
 
@@ -149,6 +225,7 @@ const Register = () => {
         <Button
           className="mt-3"
           color="primary"
+          type="submit"
         >
           Sign Up
         </Button>

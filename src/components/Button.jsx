@@ -20,7 +20,7 @@ function Button({ children, color, type = "submit", onClick, className }) {
     <button
       className={buttonClass}
       color={color}
-      onClick={eventHandler}
+      // onClick={eventHandler}
       type={type}
     >
       {children}

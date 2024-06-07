@@ -1,13 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-function Input({
-  label,
-  type = "text",
-  placeholder,
-  required = false,
-  onChange,
-}) {
+const Input = ({ label, required=false, type = "text", placeholder, register, name, error, maxLength }) => {
+  
   const inputId = `input_${Math.random().toString(36).substr(2, 9)}`;
+  
 
   return (
     <div className="flex flex-col gap-1">
@@ -20,12 +16,14 @@ function Input({
       </label>
 
       <input
+        {...register(name)}
         type={type}
         id={inputId}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
+        maxLength={maxLength}
         className="w-full rounded border border-[#6F7070] p-2 bg-transparent  text-sm"
       />
+      {<p className="text-rose-500">{error?.message}</p> }
     </div>
   );
 }
