@@ -21,7 +21,7 @@ const Input = ({ label, required=false, type = "text", placeholder, register, na
         id={inputId}
         placeholder={placeholder}
         maxLength={maxLength}
-        className="w-full rounded border border-[#6F7070] p-2 bg-transparent  text-sm"
+        className="w-full rounded border border-[#6F7070] p-2 bg-transparent text-sm text-black	"
       />
       {<p className="text-rose-500">{error?.message}</p> }
     </div>

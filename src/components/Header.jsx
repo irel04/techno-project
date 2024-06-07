@@ -23,6 +23,7 @@ function Header() {
       navigate("/profile");
     } else {
       setShowLoginPopup(true);
+      // navigate("/login")
     }
   };
 

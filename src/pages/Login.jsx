@@ -1,52 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../utils/supabase";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import * as yup from 'yup';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+
+const schema = yup.object({
+  email: yup.string().required().max(50).label("Email"),
+  password: yup.string().required().max(50).label("Password")
+})
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = async (e) => {
-    e.preventDefault();
-    try {
-      const { data: userCredentials } = await toast.promise(
-        supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
-        }),
-        {
-          pending: "Just a few seconds",
-          success: "Login Success",
-          error: "Invalid Email or Password",
-        },
-      );
-
-      const { data: userData } = await toast.promise(
-        supabase
-          .from("users")
-          .select("*")
-          .eq("user_id", userCredentials.user.id),
-        {
-          pending: "Fetching Data",
-          success: "User Load Successufully",
-          error: "Something Went Wrong",
-        },
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // Initialized useForm 
+  const { register, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange"
+  })
 
   return (
     <div className="flex flex-col justify-center items-center my-[5rem] md:my-[2rem]">
       <form
-        onSubmit={signIn}
         className=" bg-white md:shadow-custom  rounded md:w-[30rem] p-5 flex flex-col gap-3"
       >
         {/* Logo */}
@@ -83,14 +64,16 @@ const Login = () => {
           <Input
             label="Username"
             placeholder=""
-            onChange={(e) => setEmail(e.target.value)}
+            register={register}
+            name={"email"}
           />
 
           <Input
             label="Password"
             placeholder=""
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
+            name={"password"}
+            register={register}
           />
         </div>
 
