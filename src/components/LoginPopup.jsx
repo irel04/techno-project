@@ -126,7 +126,7 @@ function LoginPopup({ onClose }) {
         <p className="text-text-color flex gap-1 justify-center">
           Not registered yet?
           <a
-            href="/register"
+            href="/account"
             className="text-primary underline font-semibold"
           >
             Create an account here

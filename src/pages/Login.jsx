@@ -62,7 +62,7 @@ const Login = () => {
 
         <div className="flex flex-col gap-2">
           <Input
-            label="Username"
+            label="Email or Username"
             placeholder=""
             register={register}
             name={"email"}
@@ -86,7 +86,7 @@ const Login = () => {
         <p className="flex gap-1 justify-center">
           Not registered yet?{" "}
           <a
-            href="/register"
+            href="/account"
             className="text-primary underline font-semibold"
           >
             Create an account here

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import { MdAddCircleOutline, MdAccountCircle } from "react-icons/md";
 
@@ -13,10 +14,12 @@ function OwnerHeader() {
       {/* Right Side: Account Button and Post a Rental Button */}
       <div className="flex items-center gap-10">
         {/* Post a Rental Button */}
-        <button className="bg-secondary text-text-color py-2 px-4 rounded-lg flex items-center gap-2">
-          <MdAddCircleOutline className="text-xl" />
-          <span>Post a Rental</span>
-        </button>
+        <Link to="/business-side/post-rental">
+          <button className="bg-secondary text-text-color py-2 px-4 rounded-lg flex items-center gap-2">
+            <MdAddCircleOutline className="text-xl" />
+            <span>Post a Rental</span>
+          </button>
+        </Link>
 
         {/* Account Button */}
         <button className="bg-secondary py-2 px-4 text-text-color font-semibold rounded flex items-center gap-2">

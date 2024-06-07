@@ -19,6 +19,8 @@ import Favorites from "./pages/Favorites";
 import OwnerPage from "./pages/OwnerPage";
 import SpecificOwnerPage from "./pages/SpecificOwnerPage";
 import SpecificDormPage from "./pages/SpecificDormPage";
+import OwnerRegister from "./pages/OwnerRegister";
+import PostaRental from "./pages/PostaRental";
 
 const App = () => {
   return (
@@ -40,6 +42,10 @@ const App = () => {
           <Route
             path="register"
             element={<Register />}
+          />
+          <Route
+            path="owner-register"
+            element={<OwnerRegister />}
           />
           <Route
             path="dorms"
@@ -89,13 +95,15 @@ const App = () => {
 
         {/* For business layout */}
         <Route
-          path="business"
+          path="business-side"
           element={<BusinessLayout />}
         >
           <Route
             index
             element={<OwnerPage />}
           />
+          <Route path="post-rental" 
+          element={<PostaRental />} />
         </Route>
       </Routes>
       <ToastContainer

@@ -11,7 +11,10 @@ const dorms = [
     location: "Location",
     ownerName: "Owner Name",
     price: "Price",
+
     rating: "Rating",
+    status: "verified",
+    link: "/dorm/id",
   },
   {
     img: img,
@@ -20,6 +23,8 @@ const dorms = [
     ownerName: "Owner Name",
     price: "Price",
     rating: "Rating",
+    status: "verified",
+    link: "/dorm/id",
   },
   {
     img: img,
@@ -28,6 +33,8 @@ const dorms = [
     ownerName: "Owner Name",
     price: "Price",
     rating: "Rating",
+    status: "verified",
+    link: "/dorm/id",
   },
   {
     img: img,
@@ -36,6 +43,8 @@ const dorms = [
     ownerName: "Owner Name",
     price: "Price",
     rating: "Rating",
+    status: "verified",
+    link: "/dorm/id",
   },
   {
     img: img,
@@ -44,6 +53,8 @@ const dorms = [
     ownerName: "Owner Name",
     price: "Price",
     rating: "Rating",
+    status: "verified",
+    link: "/dorm/id",
   },
 ];
 
@@ -103,6 +114,8 @@ function SpecificOwnerPage() {
               ownerName={dorm.ownerName}
               price={dorm.price}
               rating={dorm.rating}
+              status={dorm.status}
+              link={dorm.link}
             />
           </li>
         ))}

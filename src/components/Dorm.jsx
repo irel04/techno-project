@@ -1,8 +1,10 @@
 import { GrLocation } from "react-icons/gr";
 import { FaStar } from "react-icons/fa";
-import HeartButton from "./FavoriteButton";
+import FavoriteButton from "./FavoriteButton";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaFire } from "react-icons/fa";
 
-function Dorm({ img, dormName, location, ownerName, price, rating, link }) {
+function Dorm({ img, dormName, location, ownerName, price, status, link }) {
   return (
     <a
       className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2 cursor-pointer"
@@ -35,12 +37,19 @@ function Dorm({ img, dormName, location, ownerName, price, rating, link }) {
           </div>
         </div>
         <div className="flex justify-between">
-          <p className="flex items-center text-sm gap-1">
-            <FaStar className="text-secondary" />
-            {rating} / 5 Star Rating
-          </p>
-
-          <HeartButton />
+          {status === "new" && (
+            <p className="flex gap-2 items-center bg-secondary px-2 py-1 rounded max-w-fit font-semibold text-sm">
+              <FaFire />
+              Newly Listed
+            </p>
+          )}
+          {status === "verified" && (
+            <p className="flex gap-2 items-center bg-primary text-white px-2 py-1 rounded max-w-fit font-semibold text-sm">
+              <FaCircleCheck />
+              Verified
+            </p>
+          )}
+          <FavoriteButton />
         </div>
       </div>
     </a>
