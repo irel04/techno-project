@@ -24,6 +24,7 @@ import PostaRental from "./pages/PostaRental";
 import { useEffect, useState } from "react";
 import { AuthProvider } from "./hooks/useAuth";
 import PrivateRoute from "./layout/PrivateRoute";
+import PublicOnlyRoute from "./layout/PublicOnlyRoute";
 
 
 const App = () => {
@@ -39,14 +40,7 @@ const App = () => {
             path="account"
             element={<CreateAccount />}
           />
-          <Route
-            path="login"
-            element={<Login />}
-          />
-          <Route
-            path="register"
-            element={<Register/>}
-          />
+
           <Route
             path="owner-register"
             element={<OwnerRegister />}
@@ -75,7 +69,7 @@ const App = () => {
             path="terms"
             element={<TermsofService />}
           />
-          
+
           <Route
             path="favorites"
             element={<Favorites />}
@@ -92,16 +86,30 @@ const App = () => {
             path="owner/id"
             element={<SpecificOwnerPage />}
           />
+
+          {/* This routes needed Authentication */}
+          <Route element={<PrivateRoute redirectTo="/" />}>
+            <Route
+              path="profile"
+              element={<Profile />}
+            />
+          </Route>
+
+          {/* Public use only for login and register */}
+          <Route element={<PublicOnlyRoute redirectTo="/" />}>
+            <Route
+              path="login"
+              element={<Login />}
+            />
+            <Route
+              path="register"
+              element={<Register />}
+            />
+          </Route>
+
         </Route>
 
-        {/* Needs Authentication */}
-        <Route element={<PrivateRoute redirectTo="/" />}>
-          <Route
-            path="profile"
-            element={<Profile />}
-          />
-
-        </Route>
+        
 
 
         {/* For business layout */}
@@ -119,15 +127,6 @@ const App = () => {
       </Routes>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
         transition:Bounce
       />
     </AuthProvider>

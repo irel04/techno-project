@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import logo from "../assets/logo.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import { useAuth } from "../hooks/useAuth";
 
 const schema = yup.object({
   email: yup.string().required().max(50).label("Email"),
@@ -14,6 +15,8 @@ const schema = yup.object({
 })
 
 function LoginPopup({ onClose }) {
+
+  const { login } = useAuth()
   
   // Initialized useForm 
   const { register, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm({
@@ -39,33 +42,22 @@ function LoginPopup({ onClose }) {
 
   // Functions for sign in 
   const handleSignIn = async (data, e)  => {
-    try { 
-
-      const loading = toast.loading("Please wait...")
-      const { error: signinError, data: userData } = await supabase.auth.signInWithPassword(data)
-
-
-      if(signinError){
-        toast.dismiss(loading)
-        throw signinError
-      }
-
-      toast.dismiss(loading)
-      toast.success("Login Successfully")
-      console.log(userData);
-
+    try {
+      await login(data)
+      reset(data)
+      onClose(false)
     } catch (error) {
-      console.error(error.message)
-      toast.error(error.message)
-      // onClose(true)
+      console.error(error)
     }
+    
+
   }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <form
         ref={popupRef}
-        // onSubmit={handleSubmit(handleSignIn)}
+        onSubmit={handleSubmit(handleSignIn)}
         className="bg-white rounded p-5 flex flex-col gap-3 w-full md:max-w-[30rem] mx-6"
       >
         <div className="flex gap-2 items-center justify-center">

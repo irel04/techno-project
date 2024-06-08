@@ -7,6 +7,8 @@ import Button from "../components/Button";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 
 const schema = yup.object({
@@ -16,19 +18,33 @@ const schema = yup.object({
 
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  
+  const navigate = useNavigate()
 
   // Initialized useForm 
-  const { register, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange"
   })
+
+  const { login } = useAuth()
+
+  const handleSignin = async(data) => {
+    
+    try {
+      await login(data)
+      navigate("/")
+    } catch (error) {
+      console.error(error)
+    }
+    
+  }
 
   return (
     <div className="flex flex-col justify-center items-center my-[5rem] md:my-[2rem]">
       <form
         className=" bg-white md:shadow-custom  rounded md:w-[30rem] p-5 flex flex-col gap-3"
+        onSubmit={handleSubmit(handleSignin)}
       >
         {/* Logo */}
         <div className="flex gap-2 items-center justify-center">
