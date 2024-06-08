@@ -39,6 +39,7 @@ function LoginPopup({ onClose }) {
     };
   }, []);
   
+  
 
   // Functions for sign in 
   const handleSignIn = async (data, e)  => {

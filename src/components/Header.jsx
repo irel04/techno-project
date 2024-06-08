@@ -6,6 +6,7 @@ import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import LoginPopup from "./LoginPopup";
 import { MdAccountCircle } from "react-icons/md";
 import { useAuth } from "../hooks/useAuth";
+import { supabase } from "../utils/supabase";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,9 +21,7 @@ function Header() {
 
   const { isAuthenticated } = useAuth()
 
-  useEffect(() => {
-    console.log(isAuthenticated);
-  }, [])
+  
 
   const handleLoginButtonClick = () => {
     if (isAuthenticated) {

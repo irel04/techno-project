@@ -18,13 +18,12 @@ export const AuthProvider = ({ children }) => {
 
             
             const { error: signinError, data: userData } = await supabase.auth.signInWithPassword(data)
-            const { data: userInfo } = await supabase.from("renters").select("*")
-            console.log(userInfo);
+            const { data: userInfo } = await supabase.from("renters").select("*").eq("credential_id", userData.user?.id)
             if (signinError) {
                 throw signinError
             }
 
-            toast.update(loading, {render: `Welcome back, `, isLoading: false, type: "success", autoClose:autoClose})
+            toast.update(loading, {render: `Welcome back, ${userInfo[0]?.first_name}`, isLoading: false, type: "success", autoClose:autoClose})
             setIsAuthenticated(true)
             
 
