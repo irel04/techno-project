@@ -21,10 +21,14 @@ import SpecificOwnerPage from "./pages/SpecificOwnerPage";
 import SpecificDormPage from "./pages/SpecificDormPage";
 import OwnerRegister from "./pages/OwnerRegister";
 import PostaRental from "./pages/PostaRental";
+import { useEffect, useState } from "react";
+import { AuthProvider } from "./hooks/useAuth";
+import PrivateRoute from "./layout/PrivateRoute";
+
 
 const App = () => {
   return (
-    <>
+    <AuthProvider>
       <Routes>
         <Route element={<AppLayout />}>
           <Route
@@ -41,7 +45,7 @@ const App = () => {
           />
           <Route
             path="register"
-            element={<Register />}
+            element={<Register/>}
           />
           <Route
             path="owner-register"
@@ -71,10 +75,7 @@ const App = () => {
             path="terms"
             element={<TermsofService />}
           />
-          <Route
-            path="profile"
-            element={<Profile />}
-          />
+          
           <Route
             path="favorites"
             element={<Favorites />}
@@ -92,6 +93,16 @@ const App = () => {
             element={<SpecificOwnerPage />}
           />
         </Route>
+
+        {/* Needs Authentication */}
+        <Route element={<PrivateRoute redirectTo="/" />}>
+          <Route
+            path="profile"
+            element={<Profile />}
+          />
+
+        </Route>
+
 
         {/* For business layout */}
         <Route
@@ -119,7 +130,7 @@ const App = () => {
         theme="light"
         transition:Bounce
       />
-    </>
+    </AuthProvider>
   );
 };
 

@@ -4,8 +4,6 @@ import { supabase } from "../utils/supabase";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-
 import logo from "../assets/logo.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -44,7 +42,7 @@ function LoginPopup({ onClose }) {
     try { 
 
       const loading = toast.loading("Please wait...")
-      const { error: signinError } = await supabase.auth.signInWithPassword(data)
+      const { error: signinError, data: userData } = await supabase.auth.signInWithPassword(data)
 
 
       if(signinError){
@@ -54,6 +52,7 @@ function LoginPopup({ onClose }) {
 
       toast.dismiss(loading)
       toast.success("Login Successfully")
+      console.log(userData);
 
     } catch (error) {
       console.error(error.message)
@@ -66,7 +65,7 @@ function LoginPopup({ onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <form
         ref={popupRef}
-        onSubmit={handleSubmit(handleSignIn)}
+        // onSubmit={handleSubmit(handleSignIn)}
         className="bg-white rounded p-5 flex flex-col gap-3 w-full md:max-w-[30rem] mx-6"
       >
         <div className="flex gap-2 items-center justify-center">
