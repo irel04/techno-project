@@ -145,7 +145,7 @@ function Profile() {
                 </Button>
               </>
             ) : Array.from({length: 5}).map((_, index) => (
-              <CustomInputSkeleton/>
+              <CustomInputSkeleton key={index}/>
             ))}
           </form>
           <ChangePassword/>
