@@ -3,8 +3,10 @@ import { FaStar } from "react-icons/fa";
 import FavoriteButton from "./FavoriteButton";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaFire } from "react-icons/fa";
+import { useEffect } from "react";
 
-function Dorm({ img, dormName, location, ownerName, price, status, link }) {
+function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, status="new" }) {
+  
   return (
     <a
       className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2 cursor-pointer"
@@ -43,7 +45,7 @@ function Dorm({ img, dormName, location, ownerName, price, status, link }) {
               Newly Listed
             </p>
           )}
-          {status === "verified" && (
+          {isVerfied && (
             <p className="flex gap-2 items-center bg-primary text-white px-2 py-1 rounded max-w-fit font-semibold text-sm">
               <FaCircleCheck />
               Verified

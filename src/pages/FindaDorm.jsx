@@ -5,7 +5,6 @@ import Filter from "../components/Filter";
 import Select from "../components/Select";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
-import { dormSchema } from "../schema/dorms";
 
 const dorms = [
   {
@@ -84,16 +83,16 @@ function FindaDorm() {
         const { data: dorms, error: dormError } = await supabase.from("properties").select(`
           id,
           dorm_name,
-          lease_providers (
+          provider : lease_providers (
             last_name,
             first_name,
             isVerified
           ),
-          rent_rates(
-            actual_rate
+          rates: rent_rates(
+            from
           ),
           ratings,
-          addresses_property(
+          location: addresses_property(
             province,
             city,
             barangay,
@@ -103,16 +102,29 @@ function FindaDorm() {
           )
             `)
         
-        if(dormError){
+        if(dormError|| !dorms.length){
           throw dormError
         }
 
-        const structure = {...dormSchema, }
-
-        setDormsData(dorms)
-        console.log(dorms)
+        // Render data
+        setDormsData(dorms.map((dorm) => {
+          const {street, barangay, city, province} = dorm.location
+          const { last_name, first_name } = dorm.dorm_name
+          const { isVerified } = dorm.provider
+          return {
+            img: "",
+            dormName: dorm.dorm_name,
+            location: `${street}, ${barangay}, ${city}, ${province}`,
+            ownerName: `${first_name, last_name}`,
+            price: dorm.rates.from,
+            rating: dorm.ratings,
+            isVerified: isVerified,
+            link: `/dorm/${dorm.id}`,
+          }
+        }))
       } catch (error) {
         console.error(error)
+        setDormsData([])
       }
     }
 
@@ -131,17 +143,18 @@ function FindaDorm() {
         </div>
       </div>
       <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {dormsData? dorms.map((dorm, index) => (
+        {dormsData? dormsData.map((dorm, index) => (
           <li key={index}>
             <Dorm
               img={dorm.img}
-              dormName={dorm.dorm_name}
+              dormName={dorm.dormName}
               location={dorm.location}
               ownerName={dorm.ownerName}
               price={dorm.price}
-              rating={dorm.ratings}
-              status={dorm.status}
+              rating={dorm.rating}
               link={dorm.link}
+              isVerfied={dorm.isVerified}
+
             />
           </li>
         )) : <p>Loading...</p>}
