@@ -110,13 +110,13 @@ function FindaDorm() {
         // Render data
         setDormsData(dorms.map((dorm) => {
           const {street, barangay, city, province} = dorm.location
-          const { last_name, first_name } = dorm.dorm_name
+          const { last_name, first_name } = dorm.provider
           const { isVerified } = dorm.provider
           return {
             img: "",
             dormName: dorm.dorm_name,
             location: `${street}, ${barangay}, ${city}, ${province}`,
-            ownerName: `${first_name, last_name}`,
+            ownerName: `${first_name} ${last_name}`,
             price: dorm.rates.from,
             rating: dorm.ratings,
             isVerified: isVerified,
