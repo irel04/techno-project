@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const Input = ({ label, required=false, type = "text", placeholder, register, name, error, maxLength }) => {
+const Input = ({ label, required=false, type = "text", placeholder, register, name, error, maxLength, readOnly=false }) => {
   
   const inputId = `input_${Math.random().toString(36).substr(2, 9)}`;
   
@@ -21,7 +21,8 @@ const Input = ({ label, required=false, type = "text", placeholder, register, na
         id={inputId}
         placeholder={placeholder}
         maxLength={maxLength}
-        className="w-full rounded border border-[#6F7070] p-2 bg-transparent text-sm text-black	"
+        className="w-full rounded border border-[#6F7070] p-2 bg-transparent text-sm text-black"
+        readOnly={readOnly}
       />
       {<p className="text-rose-500">{error?.message}</p> }
     </div>
