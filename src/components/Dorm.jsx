@@ -20,26 +20,26 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
   }
 
   return (
-    <div className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2">
+    <div className="bg-white shadow-custom w-full h-full lg:max-w-[25rem] rounded flex flex-col gap-2">
       <img
         src={img ? ASSETS_DORMS + img : defaultImg}
-        className="h-[10rem] w-full object-cover cursor-pointer"
+        className="h-[10rem] w-full object-cover cursor-pointer rounded-t"
         onClick={handleClickDorm}
       />
 
-      <div className="flex flex-col gap-2 p-3">
+      <div className="flex flex-col gap-2 p-3 flex-1">
         <div className="flex justify-between cursor-pointer" onClick={handleClickDorm}>
-          <div className="flex flex-col leading-none">
+          <div className="flex flex-col leading-none flex-1">
             <h1 className="text-xl font-bold">{dormName}</h1>
-            <p className="flex items-center gap-1 text-sm">
+            <p className="flex items-center gap-1 text-sm text-gray-600 py-3 px-5">
               <GrLocation />
               {location}
             </p>
             <p className="text-primary font-semibold">{ownerName}</p>
           </div>
 
-          <div className="">
-            <p className="text-xs">Rent Starts At</p>
+          <div className="text-right">
+            <p className="text-xs text-gray-500">Rent Starts At</p>
             <p className="text-xs">
               PHP{" "}
               <span className="text-2xl text-primary font-extrabold">
@@ -48,19 +48,21 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
             </p>
           </div>
         </div>
-        <div className="flex justify-between">
-          {status === "new" && (
-            <p className="flex gap-2 items-center bg-secondary px-2 py-1 rounded max-w-fit font-semibold text-sm">
-              <FaFire />
-              Newly Listed
-            </p>
-          )}
+        <div className="flex justify-between items-center mt-2">
+          <div className="flex gap-3">
           {isVerfied && (
-            <p className="flex gap-2 items-center bg-primary text-white px-2 py-1 rounded max-w-fit font-semibold text-sm">
+            <p className="flex items-center bg-primary text-white px-2 py-1 rounded font-semibold text-sm">
               <FaCircleCheck />
-              Verified
+              <span className="ml-1">Verified</span>
             </p>
           )}
+          {status === "new" && (
+            <p className="flex items-center bg-secondary text-black px-2 py-1 rounded font-semibold text-sm">
+              <FaFire />
+              <span className="ml-1">Newly Listed</span>
+            </p>
+          )}
+          </div>
           <FavoriteButton />
         </div>
       </div>
