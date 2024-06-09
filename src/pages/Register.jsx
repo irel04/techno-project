@@ -8,6 +8,7 @@ import logo from "../assets/logo.png";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { supabase } from "../utils/supabase";
+import { autoClose } from "../utils/constant";
 
 // yup validation schema, we'll use this as resolver along with useForm hook
 // the name of the object inside should be the same on what you are putting inside the <Input/> component
@@ -30,7 +31,7 @@ const defaultValues = {
   password: ""
 }
 
-const Register = () => {
+const Register = ( ) => {
 
   const navigate = useNavigate()
 
@@ -58,13 +59,13 @@ const Register = () => {
 
     try {
       
-      const { error: signUpError } = await supabase.auth.signUp(userCredential)
+      const { error: signUpError, data } = await supabase.auth.signUp(userCredential)
       if(signUpError){
         throw new Error(`Signup Error: ${signUpError.message}`)
       }
 
       // feed basic info
-      const { error: registrationError } = await supabase.from('renters').insert([userBasicInfo])
+      const { error: registrationError } = await supabase.from('renters').insert([{...userBasicInfo, credential_id: data.user.id}])
       if(registrationError){
         throw new Error(`Database Error: ${registrationError.message}`)
       }
@@ -80,29 +81,19 @@ const Register = () => {
 
   // Register function for invoking submit button
   const handleRegister = async () => {
+    const loading = toast.loading("Please wait...")
+
     try {
-      await toast.promise(
-        signupNewUser,
-        {
-          success: {
-            render({data}){
-              return data.message
-            }
-          },
-          pending: "Please wait...",
-          error: {
-            render({error}){
-              throw error
-            }
-          }
-        }
-      )
+      await signupNewUser()
+
+      toast.update(loading, {render: "Account created successfully", type:"success", isLoading:false, autoClose: autoClose})
 
       navigate("/")
       
     } catch (error) {
       console.error(error)
-      toast.error(error.message)
+      toast.update(loading, {render: error.message, type:"error", isLoading:false, autoClose: autoClose})
+
     }
 
 

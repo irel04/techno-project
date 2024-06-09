@@ -5,10 +5,11 @@ import Link from "./Link";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
 import LoginPopup from "./LoginPopup";
 import { MdAccountCircle } from "react-icons/md";
+import { useAuth } from "../hooks/useAuth";
+import { supabase } from "../utils/supabase";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const navigate = useNavigate();
   const loginPopupRef = useRef(null);
@@ -18,18 +19,22 @@ function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const { isAuthenticated } = useAuth()
+
+  
+
   const handleLoginButtonClick = () => {
-    if (isLoggedIn) {
+    if (isAuthenticated) {
       navigate("/profile");
     } else {
       setShowLoginPopup(true);
+      // navigate("/login")
     }
   };
 
   const handleCloseLoginPopup = (success) => {
     setShowLoginPopup(false);
     if (success) {
-      setIsLoggedIn(true);
       navigate("/profile");
     }
   };
@@ -79,7 +84,7 @@ function Header() {
 
       {isMenuOpen && (
         <ul className="absolute top-16 left-0 w-full bg-primary flex flex-col items-center md:hidden text-text-color">
-          {isLoggedIn ? (
+          {isAuthenticated ? (
             <>
               <li>
                 <Link
@@ -132,7 +137,7 @@ function Header() {
       )}
 
       <ul className="hidden md:flex gap-10 items-center">
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <>
             <li>
               <Link

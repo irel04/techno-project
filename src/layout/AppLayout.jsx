@@ -6,11 +6,9 @@ function AppLayout() {
   return (
     <main className="overflow-x-hidden w-screen h-screen">
       <Header />
-
       <div className="mx-[5%] my-[3%]">
         <Outlet />
       </div>
-
       <Footer />
     </main>
   );
