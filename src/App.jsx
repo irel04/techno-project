@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { AuthProvider } from "./hooks/useAuth";
 import PrivateRoute from "./layout/PrivateRoute";
 import PublicOnlyRoute from "./layout/PublicOnlyRoute";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 
 const App = () => {
@@ -79,7 +80,7 @@ const App = () => {
             element={<ScheduledVisits />}
           />
           <Route
-            path="dorm/id"
+            path="dorm/:id"
             element={<SpecificDormPage />}
           />
           <Route
