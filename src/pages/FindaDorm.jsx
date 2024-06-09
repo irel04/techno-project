@@ -5,6 +5,7 @@ import Filter from "../components/Filter";
 import Select from "../components/Select";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
+import DormListSkeleton from "../components/skeletons/DormListSkeleton";
 
 const dorms = [
   {
@@ -143,7 +144,7 @@ function FindaDorm() {
         </div>
       </div>
       <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {dormsData? dormsData.map((dorm, index) => (
+        {dormsData? dormsData.length? dormsData.map((dorm, index) => (
           <li key={index}>
             <Dorm
               img={dorm.img}
@@ -157,7 +158,10 @@ function FindaDorm() {
 
             />
           </li>
-        )) : <p>Loading...</p>}
+        )) : <p>No post yet...</p> : Array.from({length: 4}).map((_, index) => (
+          <DormListSkeleton key={index}/>
+        ))}
+        
       </ul>
     </main>
   );
