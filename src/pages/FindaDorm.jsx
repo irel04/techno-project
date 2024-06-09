@@ -1,5 +1,4 @@
 import Dorm from "../components/Dorm";
-import img from "../assets/owner.png";
 import SearchBar from "../components/SearchBar";
 import Filter from "../components/Filter";
 import Select from "../components/Select";
@@ -7,58 +6,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import DormListSkeleton from "../components/skeletons/DormListSkeleton";
 
-const dorms = [
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-];
 
 const options = [
   "Php 1000 - 1500",
