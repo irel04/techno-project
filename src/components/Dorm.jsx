@@ -4,21 +4,26 @@ import FavoriteButton from "./FavoriteButton";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaFire } from "react-icons/fa";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, status="new" }) {
   
+  const navigate = useNavigate()
+
+  const handleClickDorm = () => {
+    navigate(link)
+  }
+
   return (
-    <a
-      className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2 cursor-pointer"
-      href={link}
-    >
+    <div className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2">
       <img
         src={img}
-        className="h-[10rem] w-full object-cover"
+        className="h-[10rem] w-full object-cover cursor-pointer"
+        onClick={handleClickDorm}
       />
 
       <div className="flex flex-col gap-2 p-3">
-        <div className="flex justify-between">
+        <div className="flex justify-between cursor-pointer" onClick={handleClickDorm}>
           <div className="flex flex-col leading-none">
             <h1 className="text-xl font-bold">{dormName}</h1>
             <p className="flex items-center gap-1 text-sm">
@@ -54,7 +59,7 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
           <FavoriteButton />
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 
