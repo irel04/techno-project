@@ -106,7 +106,7 @@ function FindaDorm() {
 
             />
           </li>
-        )) : <p>No post yet...</p> : Array.from({length: 4}).map((_, index) => (
+        )) : <p>No post yet...</p> : Array.from({length: 3}).map((_, index) => (
           <DormListSkeleton key={index}/>
         ))}
         
