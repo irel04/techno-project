@@ -39,7 +39,6 @@ export const AuthProvider = ({ children }) => {
 
             toast.update(loading, {render: `Welcome back, ${userInfo[0]?.first_name} `, isLoading: false, type: "success", autoClose:autoClose})
             setIsAuthenticated(true)
-            
 
         } catch (error) {
             console.error(error.message)
