@@ -20,7 +20,7 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
   }
 
   return (
-    <div className="bg-white shadow-custom w-full h-full lg:max-w-[25rem] rounded flex flex-col gap-2">
+    <div className="bg-white shadow-custom w-full h-full rounded flex flex-col gap-2">
       <img
         src={img ? ASSETS_DORMS + img : defaultImg}
         className="h-[10rem] w-full object-cover cursor-pointer rounded-t"
@@ -31,7 +31,7 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
         <div className="flex justify-between cursor-pointer" onClick={handleClickDorm}>
           <div className="flex flex-col leading-none flex-1">
             <h1 className="text-xl font-bold">{dormName}</h1>
-            <p className="flex items-center gap-1 text-sm text-gray-600 py-3 px-5">
+            <p className="flex items-center gap-2 text-sm text-gray-600 py-5">
               <GrLocation />
               {location}
             </p>

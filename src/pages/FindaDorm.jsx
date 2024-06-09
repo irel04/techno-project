@@ -63,7 +63,7 @@ function FindaDorm() {
           return {
             img: dorm.cover_photo,
             dormName: dorm.dorm_name,
-            location: `${street}, ${barangay}, ${city}, ${province}`,
+            location: `${city}, ${province}`,
             ownerName: `${first_name} ${last_name}`,
             price: dorm.rates.from,
             rating: dorm.ratings,
@@ -91,9 +91,9 @@ function FindaDorm() {
           <Filter />
         </div>
       </div>
-      <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {dormsData? dormsData.length? dormsData.map((dorm, index) => (
-          <li key={index}>
+          <li key={index} >
             <Dorm
               img={dorm.img}
               dormName={dorm.dormName}
