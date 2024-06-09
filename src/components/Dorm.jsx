@@ -5,9 +5,14 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { FaFire } from "react-icons/fa";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ASSETS_DORMS } from "../utils/constant";
+import defaultImg from "../assets/owner.png";
+
 
 function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, status="new" }) {
   
+
+
   const navigate = useNavigate()
 
   const handleClickDorm = () => {
@@ -17,7 +22,7 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
   return (
     <div className="bg-white shadow-custom w-full lg:max-w-[25rem] h-[18rem] max-h-[25rem] rounded flex flex-col gap-2">
       <img
-        src={img}
+        src={img ? ASSETS_DORMS + img : defaultImg}
         className="h-[10rem] w-full object-cover cursor-pointer"
         onClick={handleClickDorm}
       />

@@ -92,6 +92,7 @@ function FindaDorm() {
           rates: rent_rates(
             from
           ),
+          cover_photo,
           ratings,
           location: addresses_property(
             province,
@@ -113,7 +114,7 @@ function FindaDorm() {
           const { last_name, first_name } = dorm.provider
           const { isVerified } = dorm.provider
           return {
-            img: "",
+            img: dorm.cover_photo,
             dormName: dorm.dorm_name,
             location: `${street}, ${barangay}, ${city}, ${province}`,
             ownerName: `${first_name} ${last_name}`,
