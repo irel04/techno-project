@@ -11,6 +11,17 @@ export const AuthProvider = ({ children }) => {
     const [userData] = useLocalStorage(spStorageKey, null)
     const [isAuthenticated, setIsAuthenticated] = useState(() => !!userData?.expires_at)
 
+    // Check token expiration
+    useEffect(() => {
+        const expiredAt = userData?.expires_at 
+        const currentDate = Math.floor(Date.now() / 1000);
+
+        if(currentDate>expiredAt){
+            setIsAuthenticated(false)
+        }
+
+    }, [isAuthenticated])
+
 
     const login = async (data) => {
         const loading = toast.loading("Please wait...")
@@ -23,7 +34,7 @@ export const AuthProvider = ({ children }) => {
                 throw signinError
             }
 
-            toast.update(loading, {render: `Welcome back, ${userInfo[0]?.first_name}`, isLoading: false, type: "success", autoClose:autoClose})
+            toast.update(loading, {render: `Welcome back, ${userInfo[0]?.first_name} `, isLoading: false, type: "success", autoClose:autoClose})
             setIsAuthenticated(true)
             
 
