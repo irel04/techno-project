@@ -11,7 +11,7 @@ function PostmyDorm() {
   return (
     <main className="flex flex-col lg:gap-[10rem] items-center justify-center my-[3rem] md:my-[5rem] lg:my-[10rem]">
       <section className="flex flex-col gap-5 items-center justify-center md:mx-[15%]">
-        <p className="text-2xl font-bold">
+        <p className="text-center lg:text-left text-2xl font-bold">
           Tired of relying on unorganized platforms to find tenants?
         </p>
         <h1 className="text-center text-primary text-5xl font-extrabold">
