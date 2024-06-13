@@ -17,7 +17,7 @@ function OwnerHeader() {
         <Link to="/business-side/post-rental">
           <button className="bg-secondary text-text-color py-2 px-4 rounded-lg flex items-center gap-2">
             <MdAddCircleOutline className="text-xl" />
-            <span>Post a Rental</span>
+            <span> Post a Dormitory</span>
           </button>
         </Link>
 

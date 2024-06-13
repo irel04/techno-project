@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { Tooltip } from 'react-tooltip';
-import { MdInfoOutline, MdAdd, MdRemove } from 'react-icons/md';
+import React, { useState } from "react";
+import { Tooltip } from "react-tooltip";
+import { MdInfoOutline, MdAdd, MdRemove } from "react-icons/md";
 
 const PostaRental = () => {
   const [formData, setFormData] = useState({
     pictures: [],
-    price: '',
-    description: '',
-    features: [''],
-    amenities: [''],
-    paymentTerms: '',
-    advancePayments: '',
-    securityDeposit: '',
-    minimumStay: '',
-    electricityBills: '',
-    waterBills: '',
-    associationDues: '',
-    nearLandmarks: [''],
-    gmapsLink: '',
+    price: "",
+    description: "",
+    features: [""],
+    amenities: [""],
+    paymentTerms: "",
+    advancePayments: "",
+    securityDeposit: "",
+    minimumStay: "",
+    electricityBills: "",
+    waterBills: "",
+    associationDues: "",
+    nearLandmarks: [""],
+    gmapsLink: "",
   });
 
   const handleInputChange = (e) => {
@@ -33,7 +33,7 @@ const PostaRental = () => {
   };
 
   const addField = (field) => {
-    setFormData({ ...formData, [field]: [...formData[field], ''] });
+    setFormData({ ...formData, [field]: [...formData[field], ""] });
   };
 
   const removeField = (index, field) => {
@@ -48,22 +48,47 @@ const PostaRental = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { price, description, paymentTerms, advancePayments, securityDeposit, minimumStay, electricityBills, waterBills, associationDues } = formData;
-    if (!price || !description || !paymentTerms || !advancePayments || !securityDeposit || !minimumStay || !electricityBills || !waterBills || !associationDues) {
-      alert('Please fill in all required fields.');
+    const {
+      price,
+      description,
+      paymentTerms,
+      advancePayments,
+      securityDeposit,
+      minimumStay,
+      electricityBills,
+      waterBills,
+      associationDues,
+    } = formData;
+    if (
+      !price ||
+      !description ||
+      !paymentTerms ||
+      !advancePayments ||
+      !securityDeposit ||
+      !minimumStay ||
+      !electricityBills ||
+      !waterBills ||
+      !associationDues
+    ) {
+      alert("Please fill in all required fields.");
       return;
     }
-    console.log('Form submitted', formData);
+    console.log("Form submitted", formData);
   };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Post a Rental</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">
+        Post a Dormitory
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-2">
             Pictures (minimum of 3)
-            <MdInfoOutline data-tip="Upload at least 3 pictures of the rental" className="inline ml-2 text-gray-400" />
+            <MdInfoOutline
+              data-tip="Upload at least 3 pictures of the rental"
+              className="inline ml-2 text-gray-400"
+            />
           </label>
           <input
             type="file"
@@ -75,15 +100,23 @@ const PostaRental = () => {
           />
           <div className="flex mt-4 gap-4">
             {Array.from(formData.pictures).map((file, index) => (
-              <img key={index} src={URL.createObjectURL(file)} alt={`Preview ${index}`} className="w-24 h-24 object-cover rounded-lg shadow-md" />
+              <img
+                key={index}
+                src={URL.createObjectURL(file)}
+                alt={`Preview ${index}`}
+                className="w-24 h-24 object-cover rounded-lg shadow-md"
+              />
             ))}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
-              Price 
-              <MdInfoOutline data-tip="Enter the price of the rental" className="inline ml-2 text-gray-400" />
+              Price
+              <MdInfoOutline
+                data-tip="Enter the price of the rental"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -97,8 +130,11 @@ const PostaRental = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
-              Description 
-              <MdInfoOutline data-tip="Provide a detailed description of the rental" className="inline ml-2 text-gray-400" />
+              Description
+              <MdInfoOutline
+                data-tip="Provide a detailed description of the rental"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <textarea
               name="description"
@@ -114,47 +150,90 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Features
-              <MdInfoOutline data-tip="List the features of the rental" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="List the features of the rental"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             {formData.features.map((feature, index) => (
-              <div key={index} className="flex items-center mb-2">
+              <div
+                key={index}
+                className="flex items-center mb-2"
+              >
                 <input
                   type="text"
                   value={feature}
-                  onChange={(e) => handleDynamicInputChange(index, e, 'features')}
+                  onChange={(e) =>
+                    handleDynamicInputChange(index, e, "features")
+                  }
                   placeholder="e.g., Wi-Fi, Air Conditioning..."
                   className="w-full py-2 px-3 border border-gray-300 rounded-lg"
                 />
-                <button type="button" onClick={() => removeField(index, 'features')} className="ml-2 text-red-500"><MdRemove /></button>
+                <button
+                  type="button"
+                  onClick={() => removeField(index, "features")}
+                  className="ml-2 text-red-500"
+                >
+                  <MdRemove />
+                </button>
               </div>
             ))}
-            <button type="button" onClick={() => addField('features')} className="mt-2 text-blue-500"><MdAdd /> Add Feature</button>
+            <button
+              type="button"
+              onClick={() => addField("features")}
+              className="mt-2 text-blue-500"
+            >
+              <MdAdd /> Add Feature
+            </button>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Amenities
-              <MdInfoOutline data-tip="List the amenities available" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="List the amenities available"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             {formData.amenities.map((amenity, index) => (
-              <div key={index} className="flex items-center mb-2">
+              <div
+                key={index}
+                className="flex items-center mb-2"
+              >
                 <input
                   type="text"
                   value={amenity}
-                  onChange={(e) => handleDynamicInputChange(index, e, 'amenities')}
+                  onChange={(e) =>
+                    handleDynamicInputChange(index, e, "amenities")
+                  }
                   placeholder="e.g., Gym, Pool..."
                   className="w-full py-2 px-3 border border-gray-300 rounded-lg"
                 />
-                <button type="button" onClick={() => removeField(index, 'amenities')} className="ml-2 text-red-500"><MdRemove /></button>
+                <button
+                  type="button"
+                  onClick={() => removeField(index, "amenities")}
+                  className="ml-2 text-red-500"
+                >
+                  <MdRemove />
+                </button>
               </div>
             ))}
-            <button type="button" onClick={() => addField('amenities')} className="mt-2 text-blue-500"><MdAdd /> Add Amenity</button>
+            <button
+              type="button"
+              onClick={() => addField("amenities")}
+              className="mt-2 text-blue-500"
+            >
+              <MdAdd /> Add Amenity
+            </button>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
-              Payment Terms 
-              <MdInfoOutline data-tip="Specify the payment terms" className="inline ml-2 text-gray-400" />
+              Payment Terms
+              <MdInfoOutline
+                data-tip="Specify the payment terms"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -169,7 +248,10 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Advance Payments
-              <MdInfoOutline data-tip="Specify the advance payment terms" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="Specify the advance payment terms"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -185,7 +267,10 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Security Deposit
-              <MdInfoOutline data-tip="Specify the security deposit amount" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="Specify the security deposit amount"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -199,7 +284,10 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Minimum Stay
-              <MdInfoOutline data-tip="Specify the minimum stay duration" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="Specify the minimum stay duration"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -215,7 +303,10 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Electricity Bills
-              <MdInfoOutline data-tip="Provide information about electricity bills" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="Provide information about electricity bills"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -229,7 +320,10 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Water Bills
-              <MdInfoOutline data-tip="Provide information about water bills" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="Provide information about water bills"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -245,7 +339,10 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Association Dues
-              <MdInfoOutline data-tip="Specify if association dues are applicable" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="Specify if association dues are applicable"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             <input
               type="text"
@@ -259,27 +356,50 @@ const PostaRental = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Near Landmarks
-              <MdInfoOutline data-tip="List any nearby landmarks" className="inline ml-2 text-gray-400" />
+              <MdInfoOutline
+                data-tip="List any nearby landmarks"
+                className="inline ml-2 text-gray-400"
+              />
             </label>
             {formData.nearLandmarks.map((landmark, index) => (
-              <div key={index} className="flex items-center mb-2">
+              <div
+                key={index}
+                className="flex items-center mb-2"
+              >
                 <input
                   type="text"
                   value={landmark}
-                  onChange={(e) => handleDynamicInputChange(index, e, 'nearLandmarks')}
+                  onChange={(e) =>
+                    handleDynamicInputChange(index, e, "nearLandmarks")
+                  }
                   placeholder="e.g., Schools, Malls..."
                   className="w-full py-2 px-3 border border-gray-300 rounded-lg"
                 />
-                <button type="button" onClick={() => removeField(index, 'nearLandmarks')} className="ml-2 text-red-500"><MdRemove /></button>
+                <button
+                  type="button"
+                  onClick={() => removeField(index, "nearLandmarks")}
+                  className="ml-2 text-red-500"
+                >
+                  <MdRemove />
+                </button>
               </div>
             ))}
-            <button type="button" onClick={() => addField('nearLandmarks')} className="mt-2 text-blue-500"><MdAdd /> Add Landmark</button>
+            <button
+              type="button"
+              onClick={() => addField("nearLandmarks")}
+              className="mt-2 text-blue-500"
+            >
+              <MdAdd /> Add Landmark
+            </button>
           </div>
         </div>
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-2">
             Google Maps Embed Link
-            <MdInfoOutline data-tip="Provide a link to the Google Maps embed" className="inline ml-2 text-gray-400" />
+            <MdInfoOutline
+              data-tip="Provide a link to the Google Maps embed"
+              className="inline ml-2 text-gray-400"
+            />
           </label>
           <input
             type="text"
