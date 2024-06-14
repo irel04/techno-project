@@ -3,7 +3,7 @@ import arrowRightSvg from "/assets/arrow-right.svg";
 import { supabase } from "../utils/supabase";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { loading_message } from "../utils/messages";
+import { loading_message } from "../utils/helper";
 import logo from "../assets/logo.png";
 import Input from "../components/Input";
 import Button from "../components/Button";

@@ -7,34 +7,25 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { spStorageKey } from "../utils/constant";
+import { PROFILE_PHOTO, autoClose, spStorageKey } from "../utils/constant";
 import CustomInputSkeleton from "../components/skeletons/CustomInputSkeleton";
+import { toast } from "react-toastify";
+import { customToastParameter } from "../utils/helper";
 
 const schema = yup.object({
-  firstName: yup.string().required().max(50).label("First Name"),
-  lastName: yup.string().required().max(50).label("Last Name"),
-  bday: yup.string().required().label("Birthday"),
-  number: yup.string().max(12).label("Contact Number")
+  first_name: yup.string().required().max(50).label("First Name"),
+  last_name: yup.string().required().max(50).label("Last Name"),
+  birthday: yup.string().required().label("Birthday"),
+  contact_number: yup.string().max(12).label("Contact Number"),
+  profile_photo: yup.string().label("Profile photo")
 })
 
 const passwordSchema = yup.object({
-  email: yup.string().max(50).required().label("Email"),
-  password: yup.string().required().label("Password").max(50),
-  newPassword: yup.string().required().label("New Password").max(51),
-  confirmPassword: yup.string().required().label("Confirm Password").max(51),
+  password: yup.string().required("New password is required").min(10, "Minimum 10 charcters").max(30, "Maximum character exceeded"),
+  confirmPassword: yup.string().required("Please confirm your password").min(10, "Minimum 10 charcters").max(30, "Maximum character exceeded").oneOf([yup.ref('password'), null], 'Passwords must match'),
 })
 
 function Profile() {
-
-  // Initialized useForm hook
-  const { register, formState: { errors }, reset, handleSubmit, setValue } = useForm({
-    resolver: yupResolver(schema),
-    mode: "onChange"
-  })
-
-  const handleUpdateProfile = async () => {
-    console.log("Hi Raven")
-  }
 
   // User id
   const [user] = useLocalStorage(spStorageKey, null)
@@ -42,36 +33,64 @@ function Profile() {
   // states
   const [isLoading, setIsLoading] = useState(false)
 
-  // Call details
-  useEffect(() => {
-    const fetchUserData = async() => {
-      setIsLoading(true)
-      const {id: credential_id} = user.user
+  
 
-      try {
-        const {data: renters, error} = await supabase.from("renters").select("*").eq("credential_id", credential_id) .eq('is_active', true)
-        
-        if(error){
-          throw error
-        }
+  const fetchUserData = async() => {
+    setIsLoading(true)
+    const {id: credential_id} = user.user
 
-        const {first_name, last_name, email, contact_number, birthday} = renters[0]
-
-        setValue("firstName", first_name)
-        setValue("lastName", last_name)
-        setValue("bday", birthday)
-        setValue("number", contact_number),
-        setValue("email", email)
-        setIsLoading(false)
-
-      } catch (error) {
-        console.error(error)
+    try {
+      const {data: renters, error} = await supabase.from("renters").select("*").eq("credential_id", credential_id).eq('is_active', true)
+      
+      if(error){
+        throw error
       }
 
+      const data = renters[0]
+      setIsLoading(false)
+
+      return data
+
+    } catch (error) {
+      console.error(error)
     }
 
-    fetchUserData()
-  }, [])
+  }
+
+  // Initialized useForm hook
+  const { register, formState: { errors, isDirty}, reset, handleSubmit, getValues } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    defaultValues: async () => await fetchUserData()
+  })
+
+  
+
+  // Profile photo
+  const displayPhoto = getValues("profile_photo")
+
+  
+  // Submit event
+  const handleUpdateProfile = async (data) => {
+    const loading = toast.loading("Updating...")
+    try {
+      const { id: credential_id } = user.user
+      const currentDate = new Date().toISOString()
+      
+      const { error } = await supabase.from("renters").update({...data, updated_at: currentDate}).eq("credential_id", credential_id).eq('is_active', true)
+      
+      if(error){
+        throw error
+      }
+      reset(data)
+      toast.update(loading, customToastParameter("Profile updated successfully", "success"))
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter(error.message, "error"))
+    }
+  }
+
+  
 
 
   return (
@@ -79,8 +98,8 @@ function Profile() {
       <section className="w-full gap-5 lg:gap-10 flex flex-col md:flex-row">
         <div className="flex flex-col gap-5 items-center ">
           <img
-            src={logo}
-            className="rounded-3xl w-[10rem] h-[10rem] object-cover"
+            src={displayPhoto? PROFILE_PHOTO + displayPhoto : logo}
+            className="rounded-3xl w-[8rem] h-[8rem] object-cover"
           />
           <Button
             color="primary"
@@ -99,17 +118,17 @@ function Profile() {
                   label="First Name"
                   placeholder=""
                   register={register}
-                  name={"firstName"}
-                  error={errors.firstName}
+                  name={"first_name"}
+                  error={errors.first_name}
                   maxLength={51}
                 />
 
                 <Input
                   label="Last Name"
                   register={register}
-                  name={"lastName"}
+                  name={"last_name"}
                   maxLength={51}
-                  error={errors.lastName}
+                  error={errors.last_name}
                 />
 
                 <Input
@@ -125,21 +144,23 @@ function Profile() {
                   label="Birthday"
                   type="date"
                   register={register}
-                  name={"bday"}
-                  error={errors.bday}
+                  name={"birthday"}
+                  error={errors.birthday}
                 />
 
                 <Input
                   label="Contact Number"
-                  type="number"
+                  type="contact_number"
                   register={register}
                   maxLength={12}
-                  name={"number"}
+                  name={"contact_number"}
                 />
 
                 <Button
                   className="w-fit px-5 ml-auto"
-                  color="primary"
+                  color={isDirty ? "primary" : "greyscale"}
+                  disabled={!isDirty}
+
                 >
                   Save
                 </Button>
@@ -158,13 +179,36 @@ function Profile() {
 const ChangePassword = () => {
 
   // Initialized useForm hook
-  const { register, formState: { errors }, reset, handleSubmit, set} = useForm({
+  const { register, formState: { errors, isDirty }, reset, handleSubmit, set} = useForm({
     resolver: yupResolver(passwordSchema),
-    mode: "onChange"
+    mode: "onChange",
+    defaultValues: {
+      password: "",
+      confirmPassword: ""
+    }
   })
 
-  const handleChangePassword = async () => {
-    console.log("Password changed")
+  const handleChangePassword = async (data) => {
+    const loading = toast.loading("Updating...")
+    try {
+      
+      console.log(data)
+
+      const { error } = await supabase.auth.updateUser({
+        password: data.password
+      })
+
+      if(error){
+        throw error
+      }
+      
+      toast.update(loading, customToastParameter("Password updated", "success"))
+      reset(data)
+
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter(error.message, "error"))
+    }
   }
 
   useEffect(()=>{
@@ -175,11 +219,15 @@ const ChangePassword = () => {
     <form onSubmit={handleSubmit(handleChangePassword)} className="rounded pt-0 p-5 flex flex-col gap-3">
       <h1 className="font-bold text-xl">Security Information</h1>
 
-      <Input label="Current Password" error={errors.password} maxLength={51} register={register} name={"password"} />
-      <Input label="New Password" error={errors.newPassword} maxLength={51} register={register} name={"newPassword"} />
+      {/* <Input label="Current Password" error={errors.password} maxLength={51} register={register} name={"password"} /> */}
+      <Input label="New Password" error={errors.password} maxLength={51} register={register} name={"password"} />
       <Input label="Confirm New Password" error={errors.confirmPassword} maxLength={51} register={register} name={"confirmPassword"} />
 
-      <Button className="w-fit px-5 ml-auto" color="primary">
+      <Button
+        className="w-fit px-5 ml-auto"
+        color={isDirty ? "primary" : "greyscale"}
+        disabled={!isDirty}
+      >
         Save
       </Button>
     </form>
