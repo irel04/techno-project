@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 function PostmyDorm() {
   const navigate = useNavigate();
-  const navigateToRegister = () => navigate("/account");
+  const navigateToRegister = () => {
+    console.log("Navigating to /owner-register");
+    navigate("/owner-register");
+  };
 
   return (
     <main className="flex flex-col lg:gap-[10rem] items-center justify-center my-[3rem] md:my-[5rem] lg:my-[10rem]">
@@ -12,7 +15,7 @@ function PostmyDorm() {
           Tired of relying on unorganized platforms to find tenants?
         </p>
         <h1 className="text-center text-primary text-5xl font-extrabold">
-          Be part of the DormFiner.PH rental family
+          Be part of the DormFinder.PH rental family
         </h1>
         <p className="text-xl text-center">
           Join DormFinder.Ph: Your centralized hub for streamlined rental
