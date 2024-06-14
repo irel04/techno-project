@@ -29,6 +29,8 @@ function Profile() {
 
   // User id
   const [user] = useLocalStorage(spStorageKey, null)
+  const { id: credential_id } = user.user
+
 
   // states
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +39,7 @@ function Profile() {
 
   const fetchUserData = async() => {
     setIsLoading(true)
-    const {id: credential_id} = user.user
+    
 
     try {
       const {data: renters, error} = await supabase.from("renters").select("*").eq("credential_id", credential_id).eq('is_active', true)
@@ -74,7 +76,6 @@ function Profile() {
   const handleUpdateProfile = async (data) => {
     const loading = toast.loading("Updating...")
     try {
-      const { id: credential_id } = user.user
       const currentDate = new Date().toISOString()
       
       const { error } = await supabase.from("renters").update({...data, updated_at: currentDate}).eq("credential_id", credential_id).eq('is_active', true)
@@ -90,6 +91,34 @@ function Profile() {
     }
   }
 
+  const handleUpdatePhoto = async (e) => {
+    const file = e.target.files[0]
+    const { id: credential_id } = user.user
+
+    const loading = toast.loading("Updating photo...")
+    
+    try {
+      
+      const { error: fileUploadError } = await supabase.storage.from("assets").upload("renters", file, {contentType: "image/*", upsert: true})
+
+      if(fileUploadError){
+        throw fileUploadError
+      }
+
+      const { error: fileNameError } = await supabase.from("renters").update({ "profile_photo": file.name }).eq("credential_id", credential_id).eq("isActive", true)
+
+      if(fileNameError){
+        throw fileNameError
+      }
+
+      toast.update(loading, customToastParameter("Upload Successfully", "success"))
+
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter(error.message, "error"))
+    }
+
+  }  
   
 
 
@@ -101,12 +130,14 @@ function Profile() {
             src={displayPhoto? PROFILE_PHOTO + displayPhoto : logo}
             className="rounded-3xl w-[8rem] h-[8rem] object-cover"
           />
-          <Button
+          <label
             color="primary"
-            className="max-w-fit px-10"
+            className="whitespace-nowrap px-4 flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full bg-primary text-white cursor-pointer"
+            htmlFor="profileImg"
           >
             Upload image
-          </Button>
+          </label>
+          <input id="profileImg" type="file" accept="image/*" className="hidden" onChange={handleUpdatePhoto}/>
         </div>
 
         <div className="w-full">
