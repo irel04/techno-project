@@ -65,7 +65,7 @@ const Register = ( ) => {
       }
 
       // feed basic info
-      const { error: registrationError } = await supabase.from('renters').insert([{...userBasicInfo, credential_id: data.user.id}])
+      const { error: registrationError } = await supabase.from('renters').insert([{...userBasicInfo, user_id: data.user.id}])
       if(registrationError){
         throw new Error(`Database Error: ${registrationError.message}`)
       }
