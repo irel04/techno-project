@@ -17,7 +17,8 @@ const schema = yup.object({
   last_name: yup.string().required().max(50).label("Last Name"),
   birthday: yup.string().required().label("Birthday"),
   contact_number: yup.string().max(12).label("Contact Number"),
-  profile_photo: yup.string().label("Profile photo")
+  profile_photo: yup.string().label("Profile photo"),
+  email: yup.string().label("Email").required().email()
 })
 
 const passwordSchema = yup.object({
@@ -29,7 +30,7 @@ function Profile() {
 
   // User id
   const [user] = useLocalStorage(spStorageKey, null)
-  const { id: credential_id } = user.user
+  const { id: user_id } = user.user
 
 
   // states
@@ -42,16 +43,16 @@ function Profile() {
     
 
     try {
-      const {data: renters, error} = await supabase.from("renters").select("*").eq("credential_id", credential_id).eq('is_active', true)
+      const {data: renters, error} = await supabase.from("renters").select("*").eq("user_id", user_id).eq('is_active', true)
       
       if(error){
         throw error
       }
 
-      const data = renters[0]
+      const renter = renters[0]
       setIsLoading(false)
 
-      return data
+      return renter
 
     } catch (error) {
       console.error(error)
@@ -69,7 +70,25 @@ function Profile() {
   
 
   // Profile photo
-  const displayPhoto = getValues("profile_photo")
+  const [displayPhoto, setDisplayPhoto] = useState(null)
+
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+      
+      const { profile_photo } = await fetchUserData()
+
+      if(profile_photo){
+        setDisplayPhoto(profile_photo)
+      } else {
+        setDisplayPhoto(null)
+      }
+
+    }
+
+    fetchProfile()
+
+  }, [displayPhoto])
 
   
   // Submit event
@@ -78,11 +97,14 @@ function Profile() {
     try {
       const currentDate = new Date().toISOString()
       
-      const { error } = await supabase.from("renters").update({...data, updated_at: currentDate}).eq("credential_id", credential_id).eq('is_active', true)
+      const { error } = await supabase.from("renters").update({...data, updated_at: currentDate}).eq("user_id", user_id).eq('is_active', true)
       
-      if(error){
+      
+      if(error ){
         throw error
       }
+
+
       reset(data)
       toast.update(loading, customToastParameter("Profile updated successfully", "success"))
     } catch (error) {
@@ -93,7 +115,7 @@ function Profile() {
 
   const handleUpdatePhoto = async (e) => {
     const file = e.target.files[0]
-    const { id: credential_id } = user.user
+    const { id: user_id } = user.user
 
     const loading = toast.loading("Updating photo...")
     
@@ -105,12 +127,12 @@ function Profile() {
         throw fileUploadError
       }
 
-      const { error: fileNameError } = await supabase.from("renters").update({ "profile_photo": file.name }).eq("credential_id", credential_id).eq("is_active", true)
+      const { error: fileNameError } = await supabase.from("renters").update({ "profile_photo": file.name }).eq("user_id", user_id).eq("is_active", true)
 
       if(fileNameError){
         throw fileNameError
       }
-
+      setDisplayPhoto(file.name)
       toast.update(loading, customToastParameter("Upload Successfully", "success"))
 
     } catch (error) {
@@ -119,7 +141,8 @@ function Profile() {
     }
 
   }  
-  
+
+
 
 
   return (
