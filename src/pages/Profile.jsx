@@ -99,13 +99,13 @@ function Profile() {
     
     try {
       
-      const { error: fileUploadError } = await supabase.storage.from("assets").upload("renters", file, {contentType: "image/*", upsert: true})
+      const { error: fileUploadError } = await supabase.storage.from("assets").upload(`renters/${file.name}`, file, {contentType: "image/*", upsert: true})
 
       if(fileUploadError){
         throw fileUploadError
       }
 
-      const { error: fileNameError } = await supabase.from("renters").update({ "profile_photo": file.name }).eq("credential_id", credential_id).eq("isActive", true)
+      const { error: fileNameError } = await supabase.from("renters").update({ "profile_photo": file.name }).eq("credential_id", credential_id).eq("is_active", true)
 
       if(fileNameError){
         throw fileNameError
