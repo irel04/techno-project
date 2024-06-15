@@ -15,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import FavoriteButton from "../components/FavoriteButton";
 import { supabase } from "../utils/supabase";
 import { ASSETS_DORMS } from "../utils/constant";
+import DormPageSkeleton from "../components/skeletons/DormPageSkeleton";
 
 const photos = [
   "https://via.placeholder.com/300",
@@ -117,7 +118,8 @@ function SpecificDormPage() {
 
   return (
     <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
-      {isLoading ? <p>Please wait...</p> :
+      
+{isLoading ? <DormPageSkeleton/> :
         <>
           {/* Directory */}
           <div className="flex gap-4 items-center">
