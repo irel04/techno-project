@@ -11,6 +11,7 @@ import { PROFILE_PHOTO, autoClose, spStorageKey } from "../utils/constant";
 import CustomInputSkeleton from "../components/skeletons/CustomInputSkeleton";
 import { toast } from "react-toastify";
 import { customToastParameter } from "../utils/helper";
+import Skeleton from "react-loading-skeleton";
 
 const schema = yup.object({
   first_name: yup.string().required().max(50).label("First Name"),
@@ -142,24 +143,23 @@ function Profile() {
 
   }  
 
-
-
-
   return (
     <main className="flex flex-col lg:gap-[10rem] items-center justify-center my-[3rem] md:my-[5rem] lg:mx-[5%]">
       <section className="w-full gap-5 lg:gap-10 flex flex-col md:flex-row">
         <div className="flex flex-col gap-5 items-center ">
-          <img
-            src={displayPhoto? PROFILE_PHOTO + displayPhoto : logo}
-            className="rounded-3xl w-[8rem] h-[8rem] object-cover"
-          />
-          <label
-            color="primary"
-            className="whitespace-nowrap px-4 flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full bg-primary text-white cursor-pointer"
-            htmlFor="profileImg"
-          >
-            Upload image
-          </label>
+          {isLoading ?
+            <>
+              <Skeleton className="rounded-3xl w-[8rem] h-[8rem] object-cover" />
+              <Skeleton className="whitespace-nowrap px-4 flex gap-2 items-center py-2 rounded relative text-center w-28" />
+            </> :
+            <>
+              <img src={displayPhoto ? PROFILE_PHOTO + displayPhoto : logo} className="rounded-3xl w-[8rem] h-[8rem] object-cover" />
+              <label htmlFor="profileImg" color="primary" className="whitespace-nowrap px-4 flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full bg-primary text-white cursor-pointer">
+                Upload image
+              </label>
+            </>
+          }
+          
           <input id="profileImg" type="file" accept="image/*" className="hidden" onChange={handleUpdatePhoto}/>
         </div>
 
