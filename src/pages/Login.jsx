@@ -82,6 +82,7 @@ const Login = () => {
             placeholder=""
             register={register}
             name={"email"}
+            error={errors.email}
           />
 
           <Input
@@ -90,6 +91,7 @@ const Login = () => {
             type="password"
             name={"password"}
             register={register}
+            error={errors.password}
           />
         </div>
 
