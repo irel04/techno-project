@@ -55,6 +55,7 @@ function FindaDorm() {
           throw dormError
         }
 
+
         // Render data
         setDormsData(dorms.map((dorm) => {
           const {street, barangay, city, province} = dorm.location
