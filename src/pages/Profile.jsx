@@ -34,10 +34,10 @@ function Profile() {
   const { id: user_id } = user.user
 
   // states
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const fetchUserData = async() => {
-    setIsLoading(true)
+    // setIsLoading(true)
     
 
     try {
