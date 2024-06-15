@@ -80,7 +80,7 @@ const App = () => {
             element={<ScheduledVisits />}
           />
           <Route
-            path="dorm/:id"
+            path="dorm/:dormId"
             element={<SpecificDormPage />}
           />
           <Route

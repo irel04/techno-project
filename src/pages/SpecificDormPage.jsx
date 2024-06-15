@@ -7,12 +7,14 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { GrLocation } from "react-icons/gr";
 import SlideshowModal from "../components/SlideshowModal";
 import Button from "../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GoogleMap from "../components/GoogleMap";
 import dormOwnerPicture from "../assets/default.jpg";
 import Input from "../components/Input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FavoriteButton from "../components/FavoriteButton";
+import { supabase } from "../utils/supabase";
+import { ASSETS_DORMS } from "../utils/constant";
 
 const photos = [
   "https://via.placeholder.com/300",
@@ -54,6 +56,62 @@ function SpecificDormPage() {
     setIsVisitPopupOpen(false);
   };
 
+  // dorm id
+  const { dormId } = useParams()
+
+  // call data 
+  const [dormDetails, setDormDetails] = useState([])
+  const [images, setImages] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+
+    const fetchDormById = async () => {
+
+      try {
+        const { data: dormsInfo, error: dormError } = await supabase.from("properties").select(`
+          id,
+          dorm_name,
+          provider: lease_providers (
+            last_name,
+            first_name,
+            isVerified
+          ),
+          rates: rent_rates(
+            from
+          ),
+          images: properties_images(image_name)
+          ratings,
+          location: addresses_property(
+            province,
+            city,
+            barangay,
+            street
+          )`).eq("id", dormId)
+
+        if(dormError){
+          throw dormError
+        }
+
+        setImages(dormsInfo[0].images.map(img => img.image_name))
+
+        setDormDetails(dormsInfo)
+
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchDormById()
+
+
+
+  }, [dormId])
+
+
+
+
+
   return (
     <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
       {/* Directory */}
@@ -69,7 +127,7 @@ function SpecificDormPage() {
         <div className="grid grid-cols-3 gap-4">
           <div className="col-span-3 md:col-span-2 md:h-[300px] lg:h-[500px] overflow-hidden">
             <img
-              src={photos[0]}
+              src={images.length ?  `${ASSETS_DORMS}${dormId}/${images[0]}` : photos[0]}
               alt="Gallery 0"
               className="w-full h-full object-cover"
             />
@@ -77,14 +135,14 @@ function SpecificDormPage() {
           <div className="hidden col-span-1  md:h-[300px] lg:h-[500px] md:flex flex-col gap-4">
             <div className="h-1/2 overflow-hidden">
               <img
-                src={photos[1]}
+                src={images.length ?  `${ASSETS_DORMS}${dormId}/${images[1]}` : photos[1]}
                 alt="Gallery 1"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="h-1/2 overflow-hidden">
               <img
-                src={photos[2]}
+                src={images.length ?  `${ASSETS_DORMS}${dormId}/${images[2]}` : photos[2]}
                 alt="Gallery 2"
                 className="w-full h-full object-cover"
               />
