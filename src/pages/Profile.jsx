@@ -33,11 +33,8 @@ function Profile() {
   const [user] = useLocalStorage(spStorageKey, null)
   const { id: user_id } = user.user
 
-
   // states
   const [isLoading, setIsLoading] = useState(false)
-
-  
 
   const fetchUserData = async() => {
     setIsLoading(true)
@@ -276,7 +273,6 @@ const ChangePassword = () => {
       {/* <Input label="Current Password" error={errors.password} maxLength={51} register={register} name={"password"} /> */}
       <Input label="New Password" error={errors.password} maxLength={51} register={register} name={"password"} />
       <Input label="Confirm New Password" error={errors.confirmPassword} maxLength={51} register={register} name={"confirmPassword"} />
-
       <Button
         className="w-fit px-5 ml-auto"
         color={isDirty ? "primary" : "greyscale"}
