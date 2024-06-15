@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
             
             const { error: signinError, data: userData } = await supabase.auth.signInWithPassword(data)
-            const { data: userInfo } = await supabase.from("renters").select("*").eq("credential_id", userData.user?.id)
+            const { data: userInfo } = await supabase.from("renters").select("*").eq("user_id", userData.user?.id)
             if (signinError) {
                 throw signinError
             }
