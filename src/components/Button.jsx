@@ -1,4 +1,4 @@
-function Button({ children, color, type = "submit", onClick, className, disabled=false }) {
+function Button({ children, color, type = "submit", onClick=null, className, disabled=false }) {
   let buttonClass =
     "whitespace-nowrap px-4 flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full";
 
@@ -14,6 +14,11 @@ function Button({ children, color, type = "submit", onClick, className, disabled
   buttonClass += className ? ` ${className}` : "";
 
   const eventHandler = (e) => {
+    
+    if(!onClick){
+      return null
+    }
+
     e.preventDefault();
     onClick(1);
   };
@@ -22,7 +27,7 @@ function Button({ children, color, type = "submit", onClick, className, disabled
     <button
       className={buttonClass}
       // color={color}
-      // onClick={eventHandler}
+      onClick={eventHandler}
       type={type}
       disabled={disabled}
     >
