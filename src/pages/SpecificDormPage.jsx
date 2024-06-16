@@ -14,11 +14,15 @@ import Input from "../components/Input";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import FavoriteButton from "../components/FavoriteButton";
 import { supabase } from "../utils/supabase";
-import { ASSETS_DORMS } from "../utils/constant";
+import { ASSETS_DORMS, spStorageKey } from "../utils/constant";
 import DormPageSkeleton from "../components/skeletons/DormPageSkeleton";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useLocalStorage } from "../hooks/useLocalStorage"
+import { toast } from "react-toastify";
+import { customToastParameter, formatDateYYMMDD } from "../utils/helper";
+import { useAuth } from "../hooks/useAuth";
 
 
 // Nakabind to sa slideshow modal as default image
@@ -40,8 +44,7 @@ function SpecificDormPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [isInquirePopupOpen, setIsInquirePopupOpen] = useState(false);
   const [isVisitPopupOpen, setIsVisitPopupOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-
+  const { isAuthenticated } = useAuth()
 
   // Initialized form 
   const { register, formState: { errors, isDirty }, reset, handleSubmit } = useForm({
@@ -52,6 +55,7 @@ function SpecificDormPage() {
   // dorm id
   const { dormId } = useParams()
   const [owner] = useSearchParams()
+  const [credentials] = useLocalStorage(spStorageKey, null)
 
 
   // const openInquirePopup = () => {
@@ -135,7 +139,34 @@ function SpecificDormPage() {
 
 
   const handleScheduleVisit = async (data) => {
-    console.log(data)
+    const { id: user_id } = credentials.user
+
+    const loading = toast.loading("Booking a schedule")
+
+    try {
+      const { data: renter, error: renterError } = await supabase.from("renters").select("id").eq("user_id", user_id)
+
+      if(renterError){
+        throw renterError
+      }
+
+      const { error: createScheduleError } = await supabase.from("renter_schedule").insert({...data, renter_id: renter[0].id, property_id: dormId})
+
+      if(createScheduleError){
+
+        if(createScheduleError.code === "23505"){
+          throw new Error("You already booked a schedule")
+        }
+
+        throw createScheduleError
+      }
+
+      toast.update(loading, customToastParameter("Booked successfully", "success"))
+      closeVisitPopup()
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter(error.message, "error"))
+    }
   }
 
 
@@ -255,7 +286,7 @@ function SpecificDormPage() {
             {isVisitPopupOpen && (
               <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
                 <div className="flex flex-col gap-2 bg-white p-8 rounded w-full m-4 md:w-[30rem] max-w-[30rem]">
-                  {isLoggedIn ? (
+                  {isAuthenticated ? (
                     <form onSubmit={handleSubmit(handleScheduleVisit)}>
                       <h2 className="text-2xl font-bold text-center ">
                         Schedule Visit
@@ -267,6 +298,8 @@ function SpecificDormPage() {
                         register={register}
                         error={errors.date}
                         placeholder="Select Date"
+                        maxDateTime={"2028-12-31"}
+                        minDateTime={formatDateYYMMDD()}
                         required
                       />
                       <Input

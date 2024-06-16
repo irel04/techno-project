@@ -12,18 +12,18 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => !!userData?.expires_at)
 
     // Check token expiration
-    // useEffect(() => {
-    //     const expiredAt = userData?.expires_at 
-    //     const currentDate = Math.floor(Date.now() / 1000);
+    useEffect(() => {
+        const expiredAt = userData?.expires_at 
+        const currentDate = Math.floor(Date.now() / 1000);
 
-    //     if(currentDate>expiredAt){
-    //         logout()
-    //         setIsAuthenticated(false)
-    //     }
+        if(currentDate>expiredAt){
+            logout()
+            setIsAuthenticated(false)
+        }
 
-    //     console.log(currentDate, expiredAt)
+        console.log(currentDate, expiredAt)
 
-    // }, [isAuthenticated])
+    }, [isAuthenticated])
 
 
     const login = async (data) => {
