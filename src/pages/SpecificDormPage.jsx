@@ -16,6 +16,9 @@ import FavoriteButton from "../components/FavoriteButton";
 import { supabase } from "../utils/supabase";
 import { ASSETS_DORMS } from "../utils/constant";
 import DormPageSkeleton from "../components/skeletons/DormPageSkeleton";
+import * as yup from 'yup';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 
 // Nakabind to sa slideshow modal as default image
@@ -27,11 +30,24 @@ export const photos = [
   "https://via.placeholder.com/304",
 ];
 
+const scheduleVisitSchema = yup.object({
+  time: yup.string().required("Pick your preferred time"),
+  date: yup.string().required("Pick your preferred date"),
+
+})
+
 function SpecificDormPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [isInquirePopupOpen, setIsInquirePopupOpen] = useState(false);
   const [isVisitPopupOpen, setIsVisitPopupOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+
+  // Initialized form 
+  const { register, formState: { errors, isDirty }, reset, handleSubmit } = useForm({
+    resolver: yupResolver(scheduleVisitSchema),
+    mode: "onChange"
+  })
 
   // dorm id
   const { dormId } = useParams()
@@ -64,7 +80,6 @@ function SpecificDormPage() {
     setIsVisitPopupOpen(false);
   };
 
-  
 
   // call data 
   const [dormDetails, setDormDetails] = useState([])
@@ -119,13 +134,16 @@ function SpecificDormPage() {
   }, [dormId])
 
 
+  const handleScheduleVisit = async (data) => {
+    console.log(data)
+  }
 
 
 
   return (
     <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
-      
-{isLoading ? <DormPageSkeleton/> :
+
+      {isLoading ? <DormPageSkeleton /> :
         <>
           {/* Directory */}
           <div className="flex gap-4 items-center">
@@ -238,37 +256,44 @@ function SpecificDormPage() {
               <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
                 <div className="flex flex-col gap-2 bg-white p-8 rounded w-full m-4 md:w-[30rem] max-w-[30rem]">
                   {isLoggedIn ? (
-                    <>
+                    <form onSubmit={handleSubmit(handleScheduleVisit)}>
                       <h2 className="text-2xl font-bold text-center ">
                         Schedule Visit
                       </h2>
                       <Input
                         type="date"
                         label="Select Date"
+                        name={"date"}
+                        register={register}
+                        error={errors.date}
                         placeholder="Select Date"
                         required
                       />
                       <Input
                         type="time"
                         label="Select Time"
+                        name={"time"}
+                        register={register}
+                        error={errors.time}
                         placeholder="Select Time"
                         required
                       />
                       <div className="mt-2 flex gap-2">
                         <Button
                           color="primary"
-                          onClick={closeVisitPopup}
+                        // onClick={closeVisitPopup}
                         >
                           Book Now
                         </Button>
                         <Button
                           color="white"
+                          type="button"
                           onClick={closeVisitPopup}
                         >
                           Cancel
                         </Button>
                       </div>
-                    </>
+                    </form>
                   ) : (
                     <div className="text-center">
                       <p className="text-lg font-semibold mb-4">
@@ -378,7 +403,7 @@ function SpecificDormPage() {
 
             {/* Map */}
             <div className="mt-4 w-full">
-              <GoogleMap src={dormDetails[0].location.link?? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123552.89649011318!2d120.99793040419922!3d14.597479520235341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b795a0e244e5%3A0x6a1a7885c2c5109!2sArt%20In%20Island!5e0!3m2!1sen!2sph!4v1717234973176!5m2!1sen!2sph"} />
+              <GoogleMap src={dormDetails[0].location.link ?? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123552.89649011318!2d120.99793040419922!3d14.597479520235341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b795a0e244e5%3A0x6a1a7885c2c5109!2sArt%20In%20Island!5e0!3m2!1sen!2sph!4v1717234973176!5m2!1sen!2sph"} />
             </div>
           </section>
 
