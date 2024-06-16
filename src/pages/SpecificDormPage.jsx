@@ -11,13 +11,15 @@ import { useEffect, useState } from "react";
 import GoogleMap from "../components/GoogleMap";
 import dormOwnerPicture from "../assets/default.jpg";
 import Input from "../components/Input";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import FavoriteButton from "../components/FavoriteButton";
 import { supabase } from "../utils/supabase";
 import { ASSETS_DORMS } from "../utils/constant";
 import DormPageSkeleton from "../components/skeletons/DormPageSkeleton";
 
-const photos = [
+
+// Nakabind to sa slideshow modal as default image
+export const photos = [
   "https://via.placeholder.com/300",
   "https://via.placeholder.com/301",
   "https://via.placeholder.com/302",
@@ -30,6 +32,11 @@ function SpecificDormPage() {
   // const [isInquirePopupOpen, setIsInquirePopupOpen] = useState(false);
   const [isVisitPopupOpen, setIsVisitPopupOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  // dorm id
+  const { dormId } = useParams()
+  const [owner] = useSearchParams()
+
 
   // const openInquirePopup = () => {
   //   setIsInquirePopupOpen(true);
@@ -46,7 +53,7 @@ function SpecificDormPage() {
   };
 
   const navigateToOwnerPage = () => {
-    navigate("/owner/id");
+    navigate(`/owner/${owner.get("owner")}`);
   };
 
   const openVisitPopup = () => {
@@ -57,8 +64,7 @@ function SpecificDormPage() {
     setIsVisitPopupOpen(false);
   };
 
-  // dorm id
-  const { dormId } = useParams()
+  
 
   // call data 
   const [dormDetails, setDormDetails] = useState([])
@@ -170,8 +176,9 @@ function SpecificDormPage() {
 
             {isModalOpen && (
               <SlideshowModal
-                photos={photos}
+                photos={images}
                 onClose={() => setIsModalOpen(false)}
+                dormId={dormId}
               />
             )}
           </div>

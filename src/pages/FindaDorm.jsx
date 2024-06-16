@@ -32,6 +32,7 @@ function FindaDorm() {
           id,
           dorm_name,
           provider : lease_providers (
+            id,
             last_name,
             first_name,
             isVerified
@@ -59,7 +60,7 @@ function FindaDorm() {
         // Render data
         setDormsData(dorms.map((dorm) => {
           const {street, barangay, city, province} = dorm.location
-          const { last_name, first_name } = dorm.provider
+          const { id: ownerId, last_name, first_name } = dorm.provider
           const { isVerified } = dorm.provider
           return {
             img: dorm.cover_photo,
@@ -69,7 +70,7 @@ function FindaDorm() {
             price: dorm.rates.from,
             rating: dorm.ratings,
             isVerified: isVerified,
-            link: `/dorm/${dorm.id}`,
+            link: `/dorm/${dorm.id}?owner=${ownerId}`,
           }
         }))
       } catch (error) {
