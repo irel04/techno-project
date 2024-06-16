@@ -68,9 +68,10 @@ function SpecificDormPage() {
     navigate("/login");
   };
 
-  const navigateToOwnerPage = () => {
+  const navigateToOwnerPage = (ownerId) => {
     navigate(`/owner/${owner.get("owner")}`);
   };
+  
 
   const openVisitPopup = () => {
     setIsVisitPopupOpen(true);
