@@ -3,6 +3,8 @@ import { useLocalStorage } from "./useLocalStorage"
 import { toast } from 'react-toastify';
 import { supabase } from '../utils/supabase';
 import { autoClose, spStorageKey } from '../utils/constant';
+import { customToastParameter } from '../utils/helper';
+import { useNavigate } from 'react-router-dom';
 
 
 const AuthContext = createContext();
@@ -11,20 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [userData] = useLocalStorage(spStorageKey, null)
     const [isAuthenticated, setIsAuthenticated] = useState(() => !!userData?.expires_at)
 
-    // Check token expiration
-    useEffect(() => {
-        const expiredAt = userData?.expires_at 
-        const currentDate = Math.floor(Date.now() / 1000);
-
-        if(currentDate>expiredAt){
-            logout()
-            setIsAuthenticated(false)
-        }
-
-        console.log(currentDate, expiredAt)
-
-    }, [isAuthenticated])
-
+    const navigate = useNavigate()
 
     const login = async (data) => {
         const loading = toast.loading("Please wait...")
@@ -49,7 +38,23 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = async () => {
-        await supabase.auth.signOut()
+        const loading = toast.loading("Logging out...")
+        try {
+            const { error } = await supabase.auth.signOut()
+
+            if(error){
+                throw error
+            }
+            
+            
+            setIsAuthenticated(false)
+            toast.update(loading, customToastParameter("Token Expired", "info"))
+            navigate("/")
+            
+        } catch (error) {  
+            console.error(error)
+            toast.update(loading, customToastParameter(error.message, "error"))
+        }
     }
 
     const value = useMemo(() => (
@@ -59,6 +64,21 @@ export const AuthProvider = ({ children }) => {
             login
         }
     ))
+
+
+     // Check token expiration
+     useEffect(() => {
+        const expiredAt = userData?.expires_at 
+        const currentDate = Math.floor(Date.now() / 1000);
+        
+        if(currentDate>expiredAt){
+            logout()
+            setIsAuthenticated(false)
+        }
+
+        // console.log(currentDate, expiredAt)
+
+    }, [userData, isAuthenticated])
 
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

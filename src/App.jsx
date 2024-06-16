@@ -129,6 +129,7 @@ const App = () => {
       <ToastContainer
         position="top-right"
         transition:Bounce
+        limit={2}
       />
     </AuthProvider>
   );
