@@ -53,7 +53,6 @@ function SpecificDormPage() {
   const { dormId } = useParams()
   const [owner] = useSearchParams()
 
-
   // const openInquirePopup = () => {
   //   setIsInquirePopupOpen(true);
   // };
@@ -68,10 +67,6 @@ function SpecificDormPage() {
     navigate("/login");
   };
 
-  const navigateToOwnerPage = (ownerId) => {
-    navigate(`/owner/${owner.get("owner")}`);
-  };
-  
 
   const openVisitPopup = () => {
     setIsVisitPopupOpen(true);
@@ -96,6 +91,7 @@ function SpecificDormPage() {
           id,
           dorm_name,
           provider: lease_providers (
+            id,
             last_name,
             first_name,
             isVerified
@@ -138,6 +134,12 @@ function SpecificDormPage() {
   const handleScheduleVisit = async (data) => {
     console.log(data)
   }
+
+  const navigateToOwnerPage = () => {
+    if (dormDetails.length > 0 && dormDetails[0].provider) {
+      navigate(`/owner/${dormDetails[0].provider.id}`);
+    }
+  };
 
 
 
