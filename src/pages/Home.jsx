@@ -18,49 +18,11 @@ import SearchBar from "../components/SearchBar";
 import Select from "../components/Select";
 import HowItWorks from "../components/HowItWorks";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "../utils/supabase";
+import DormListSkeleton from "../components/skeletons/DormListSkeleton";
 
-const dorms = [
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-];
+
 
 const howItWorks = [
   {
@@ -118,6 +80,63 @@ function Home() {
   const navigate = useNavigate();
   const navigateToRegister = () => navigate("/account");
   const navigateToAbout = () => navigate("/about");
+  const [dormsData, setDormsData] = useState(null);
+
+  useEffect(() => {
+    const fetchDorms = async () => {
+      try {
+        const { data: dorms, error: dormError } = await supabase.from("properties").select(`
+          id,
+          dorm_name,
+          provider : lease_providers (
+            last_name,
+            first_name,
+            isVerified
+          ),
+          rates: rent_rates(
+            from
+          ),
+          cover_photo,
+          ratings,
+          location: addresses_property(
+            province,
+            city,
+            barangay,
+            street,
+            longitude,
+            latitude
+          )
+            `)
+        
+        if(dormError){
+          throw dormError
+        }
+        const verifiedDorms = dorms.filter(dorm => dorm.provider.isVerified);
+
+       
+        setDormsData(verifiedDorms.map((dorm) => {
+          const {street, barangay, city, province} = dorm.location
+          const { last_name, first_name } = dorm.provider
+          return {
+            img: dorm.cover_photo,
+            dormName: dorm.dorm_name,
+            location: `${city}, ${province}`,
+            ownerName: `${first_name} ${last_name}`,
+            price: dorm.rates.from,
+            rating: dorm.ratings,
+            isVerified: dorm.provider.isVerified,
+            link: `/dorm/${dorm.id}`,
+          };
+        }));
+      } catch (error) {
+        console.error(error);
+        setDormsData([]);
+      }
+    };
+
+    fetchDorms(); 
+  }, []);
+
 
   return (
     <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem]">
@@ -145,7 +164,7 @@ function Home() {
       <section className="w-full flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="Featured Properties in DormFinder.PH" />
         <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-          {dorms.map((dorm, index) => (
+        {dormsData ? dormsData.length ? dormsData.map((dorm, index) => (
             <li key={index}>
               <Dorm
                 img={dorm.img}
@@ -154,13 +173,17 @@ function Home() {
                 ownerName={dorm.ownerName}
                 price={dorm.price}
                 rating={dorm.rating}
-                status={dorm.status}
                 link={dorm.link}
+                isVerified={dorm.isVerified}
+              
               />
             </li>
+          )) : <p>No posts yet...</p> : Array.from({ length: 3 }).map((_, index) => (
+            <DormListSkeleton key={index} />
           ))}
         </ul>
       </section>
+
 
       {/* Welcome Message */}
       <section className="flex flex-col gap-10 items-center justify-center">
