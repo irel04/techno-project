@@ -158,7 +158,7 @@ function SpecificDormPage() {
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-3 md:col-span-2 md:h-[300px] lg:h-[500px] overflow-hidden">
                 <img
-                  src={images.length ? `${ASSETS_DORMS}${dormId}/${images[0]}` : photos[0]}
+                  src={images.length ? `${ASSETS_DORMS}${dormId}/${images[2]}` : photos[0]}
                   alt="Gallery 0"
                   className="w-full h-full object-cover"
                 />
@@ -173,7 +173,7 @@ function SpecificDormPage() {
                 </div>
                 <div className="h-1/2 overflow-hidden">
                   <img
-                    src={images.length ? `${ASSETS_DORMS}${dormId}/${images[2]}` : photos[2]}
+                    src={images.length ? `${ASSETS_DORMS}${dormId}/${images[0]}` : photos[2]}
                     alt="Gallery 2"
                     className="w-full h-full object-cover"
                   />
