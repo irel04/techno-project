@@ -84,7 +84,7 @@ const App = () => {
             element={<SpecificDormPage />}
           />
           <Route
-            path="owner/id"
+            path="owner/:ownerId"
             element={<SpecificOwnerPage />}
           />
 
