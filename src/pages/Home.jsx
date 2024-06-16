@@ -1,10 +1,6 @@
 import HomeTitle from "../components/HomeTitle";
 import Dorm from "../components/Dorm";
 import dormImg from "../assets/dorm.jpg";
-import img from "../assets/dorm.jpg";
-import student from "../assets/student.jpg";
-import student1 from "../assets/student1.jpg";
-import student2 from "../assets/student2.jpg";
 import how1 from "../assets/how1.png";
 import how2 from "../assets/how2.png";
 import how3 from "../assets/how3.png";
@@ -48,26 +44,6 @@ const howItWorks = [
   },
 ];
 
-const rentersFeedback = [
-  {
-    img: student,
-    name: "Maria Santos",
-    feedback:
-      "Thanks to DormFinder.ph, I found a great student accommodation in no time.",
-  },
-  {
-    img: student1,
-    name: "Juan Dela Cruz",
-    feedback:
-      "The listings on DormFinder.ph are accurate and reliable, making my search hassle-free.",
-  },
-  {
-    img: student2,
-    name: "Anna Delos Reyes",
-    feedback:
-      "DormFinder.ph is a fantastic resource for finding quality dorms in Metro Manila.",
-  },
-];
 
 const options = [
   "Php 1000 - 1500",
@@ -81,6 +57,7 @@ function Home() {
   const navigateToRegister = () => navigate("/account");
   const navigateToAbout = () => navigate("/about");
   const [dormsData, setDormsData] = useState(null);
+  const [rentersFeedback, setRentersFeedback] = useState([]);
 
   useEffect(() => {
     const fetchDorms = async () => {
@@ -133,8 +110,38 @@ function Home() {
         setDormsData([]);
       }
     };
+//-------------------------------------------------------------------------------------
+    const fetchRentersFeedback = async () => {
+      try {
+        const { data: feedback, error: feedbackError } = await supabase
+          .from("renter_site_review")
+          .select(`
+            site_review,
+            renter: renters (
+              first_name,
+              last_name,
+              profile_photo
+            )
+          `);
 
-    fetchDorms(); 
+        if (feedbackError) {
+          throw feedbackError;
+        }
+
+        setRentersFeedback(feedback.map((item) => ({
+          img: item.renter.profile_photo,
+          name: `${item.renter.first_name} ${item.renter.last_name}`,
+          feedback: item.site_review,
+        })));
+      } catch (error) {
+        console.error(error);
+        setRentersFeedback([]);
+      }
+    };
+
+
+    fetchDorms();
+    fetchRentersFeedback();
   }, []);
 
 
@@ -264,15 +271,15 @@ function Home() {
       </section>
 
       {/* Renters Feedback */}
-      <section className="flex flex-col gap-10 items-center justify-center ">
+      <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="What Our Renters Say" />
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {rentersFeedback.map((rentersFeedback, index) => (
+          {rentersFeedback.map((feedback, index) => (
             <li key={index}>
               <RenterFeedback
-                img={rentersFeedback.img}
-                name={rentersFeedback.name}
-                feedback={rentersFeedback.feedback}
+                img={feedback.img}
+                name={feedback.name}
+                feedback={feedback.feedback}
               />
             </li>
           ))}
