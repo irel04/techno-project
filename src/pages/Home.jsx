@@ -50,6 +50,16 @@ const dorms = [
     status: "verified",
     link: "/dorm/id",
   },
+  {
+    img: img,
+    dormName: "Dorm Name",
+    location: "Location",
+    ownerName: "Owner Name",
+    price: "Price",
+    rating: "Rating",
+    status: "verified",
+    link: "/dorm/id",
+  },
 ];
 
 const howItWorks = [
@@ -131,6 +141,27 @@ function Home() {
         </div>
       </section>
 
+      {/* Featured Properties */}
+      <section className="w-full flex flex-col gap-10 items-center justify-center">
+        <HomeTitle title="Featured Properties in DormFinder.PH" />
+        <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          {dorms.map((dorm, index) => (
+            <li key={index}>
+              <Dorm
+                img={dorm.img}
+                dormName={dorm.dormName}
+                location={dorm.location}
+                ownerName={dorm.ownerName}
+                price={dorm.price}
+                rating={dorm.rating}
+                status={dorm.status}
+                link={dorm.link}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {/* Welcome Message */}
       <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="Dorms for Rent in the Metro Manila, Philippines" />
@@ -155,27 +186,6 @@ function Home() {
           className="h-[15rem] md:h-[25rem] align-middle"
         />
         <div className="bg-primary w-full h-[6rem]  md:h-[10rem]"></div>
-      </section>
-
-      {/* Featured Properties */}
-      <section className="w-full flex flex-col gap-10 items-center justify-center">
-        <HomeTitle title="Featured Properties in DormFinder.PH" />
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full items-center justify-center gap-10">
-          {dorms.map((dorm, index) => (
-            <li key={index}>
-              <Dorm
-                img={dorm.img}
-                dormName={dorm.dormName}
-                location={dorm.location}
-                ownerName={dorm.ownerName}
-                price={dorm.price}
-                rating={dorm.rating}
-                status={dorm.status}
-                link={dorm.link}
-              />
-            </li>
-          ))}
-        </ul>
       </section>
 
       {/* How it works */}
