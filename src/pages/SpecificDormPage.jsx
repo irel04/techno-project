@@ -50,8 +50,7 @@ function SpecificDormPage() {
   })
 
   // dorm id
-  const { dormId } = useParams()
-  const [owner] = useSearchParams()
+  const { dormId } = useParams()  
 
   // const openInquirePopup = () => {
   //   setIsInquirePopupOpen(true);
