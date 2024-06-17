@@ -29,16 +29,16 @@ const Login = () => {
 
   const { login } = useAuth()
 
-  const handleSignin = async(data) => {
-    
+  const handleSignin = async (data) => {
     try {
-      await login(data)
-      navigate("/")
+      await login(data);
+      toast.success('Login successful!');
+      navigate('/business-side'); 
     } catch (error) {
-      console.error(error)
+      console.error(error);
+      toast.error('Login failed!');
     }
-    
-  }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center my-[5rem] md:my-[2rem]">
