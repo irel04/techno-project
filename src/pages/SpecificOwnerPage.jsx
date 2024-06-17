@@ -35,7 +35,8 @@ function SpecificOwnerPage() {
           .select(`
             id, 
             dorm_name, 
-            ratings, 
+            ratings,
+            cover_photo,
             addresses_property (
               province, city, barangay, street
             ),
@@ -112,7 +113,7 @@ function SpecificOwnerPage() {
         {dormListings.map((dorm) => (
           <li key={dorm.id}>
             <Dorm
-              img={img} 
+              img={dorm.cover_photo} 
               dormName={dorm.dorm_name}
               location={`${dorm.addresses_property.street}, ${dorm.addresses_property.barangay}, ${dorm.addresses_property.city}, ${dorm.addresses_property.province}`} 
               ownerName={`${ownerDetails.first_name} ${ownerDetails.last_name}`}
