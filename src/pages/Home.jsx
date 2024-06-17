@@ -94,6 +94,8 @@ function Home() {
         setDormsData(verifiedDorms.map((dorm) => {
           const {street, barangay, city, province} = dorm.location
           const { last_name, first_name } = dorm.provider
+          const { isVerified } = dorm.provider
+
           return {
             img: dorm.cover_photo,
             dormName: dorm.dorm_name,
@@ -101,7 +103,7 @@ function Home() {
             ownerName: `${first_name} ${last_name}`,
             price: dorm.rates.from,
             rating: dorm.ratings,
-            isVerified: dorm.provider.isVerified,
+            isVerified: isVerified,
             link: `/dorm/${dorm.id}`,
           };
         }));
@@ -117,9 +119,11 @@ function Home() {
           .from("renter_site_review")
           .select(`
             site_review,
+            site_ratings,
             renter: renters (
               first_name,
               last_name,
+             
               profile_photo
             )
           `);
@@ -130,6 +134,7 @@ function Home() {
 
         setRentersFeedback(feedback.map((item) => ({
           img: item.renter.profile_photo,
+          rating: item.site_ratings, 
           name: `${item.renter.first_name} ${item.renter.last_name}`,
           feedback: item.site_review,
         })));
@@ -181,7 +186,7 @@ function Home() {
                 price={dorm.price}
                 rating={dorm.rating}
                 link={dorm.link}
-                isVerified={dorm.isVerified}
+                isVerfied={dorm.isVerified}
               
               />
             </li>
@@ -280,6 +285,7 @@ function Home() {
                 img={feedback.img}
                 name={feedback.name}
                 feedback={feedback.feedback}
+                rating={parseInt(feedback.rating)}
               />
             </li>
           ))}
