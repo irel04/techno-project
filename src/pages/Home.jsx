@@ -1,10 +1,6 @@
 import HomeTitle from "../components/HomeTitle";
 import Dorm from "../components/Dorm";
 import dormImg from "../assets/dorm.jpg";
-import img from "../assets/dorm.jpg";
-import student from "../assets/student.jpg";
-import student1 from "../assets/student1.jpg";
-import student2 from "../assets/student2.jpg";
 import how1 from "../assets/how1.png";
 import how2 from "../assets/how2.png";
 import how3 from "../assets/how3.png";
@@ -18,39 +14,9 @@ import SearchBar from "../components/SearchBar";
 import Select from "../components/Select";
 import HowItWorks from "../components/HowItWorks";
 import { useNavigate } from "react-router-dom";
-
-const dorms = [
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-  {
-    img: img,
-    dormName: "Dorm Name",
-    location: "Location",
-    ownerName: "Owner Name",
-    price: "Price",
-    rating: "Rating",
-    status: "verified",
-    link: "/dorm/id",
-  },
-];
+import { useState, useEffect } from "react";
+import { supabase } from "../utils/supabase";
+import DormListSkeleton from "../components/skeletons/DormListSkeleton";
 
 const howItWorks = [
   {
@@ -76,27 +42,6 @@ const howItWorks = [
   },
 ];
 
-const rentersFeedback = [
-  {
-    img: student,
-    name: "Maria Santos",
-    feedback:
-      "Thanks to DormFinder.ph, I found a great student accommodation in no time.",
-  },
-  {
-    img: student1,
-    name: "Juan Dela Cruz",
-    feedback:
-      "The listings on DormFinder.ph are accurate and reliable, making my search hassle-free.",
-  },
-  {
-    img: student2,
-    name: "Anna Delos Reyes",
-    feedback:
-      "DormFinder.ph is a fantastic resource for finding quality dorms in Metro Manila.",
-  },
-];
-
 const options = [
   "Php 1000 - 1500",
   "Php 1000 - 1500",
@@ -108,6 +53,102 @@ function Home() {
   const navigate = useNavigate();
   const navigateToRegister = () => navigate("/account");
   const navigateToAbout = () => navigate("/about");
+  const [dormsData, setDormsData] = useState(null);
+  const [rentersFeedback, setRentersFeedback] = useState([]);
+
+  useEffect(() => {
+    const fetchDorms = async () => {
+      try {
+        const { data: dorms, error: dormError } = await supabase.from(
+          "properties",
+        ).select(`
+          id,
+          dorm_name,
+          provider : lease_providers (
+            last_name,
+            first_name,
+            isVerified
+          ),
+          rates: rent_rates(
+            from
+          ),
+          cover_photo,
+          ratings,
+          location: addresses_property(
+            province,
+            city,
+            barangay,
+            street,
+            longitude,
+            latitude
+          )
+            `);
+
+        if (dormError) {
+          throw dormError;
+        }
+        const verifiedDorms = dorms.filter((dorm) => dorm.provider.isVerified);
+
+        setDormsData(
+          verifiedDorms.map((dorm) => {
+            const { street, barangay, city, province } = dorm.location;
+            const { last_name, first_name } = dorm.provider;
+            const { isVerified } = dorm.provider;
+
+            return {
+              img: dorm.cover_photo,
+              dormName: dorm.dorm_name,
+              location: `${city}, ${province}`,
+              ownerName: `${first_name} ${last_name}`,
+              price: dorm.rates.from,
+              rating: dorm.ratings,
+              isVerified: isVerified,
+              link: `/dorm/${dorm.id}`,
+            };
+          }),
+        );
+      } catch (error) {
+        console.error(error);
+        setDormsData([]);
+      }
+    };
+    //-------------------------------------------------------------------------------------
+    const fetchRentersFeedback = async () => {
+      try {
+        const { data: feedback, error: feedbackError } = await supabase.from(
+          "renter_site_review",
+        ).select(`
+            site_review,
+            site_ratings,
+            renter: renters (
+              first_name,
+              last_name,
+             
+              profile_photo
+            )
+          `);
+
+        if (feedbackError) {
+          throw feedbackError;
+        }
+
+        setRentersFeedback(
+          feedback.map((item) => ({
+            img: item.renter.profile_photo,
+            rating: item.site_ratings,
+            name: `${item.renter.first_name} ${item.renter.last_name}`,
+            feedback: item.site_review,
+          })),
+        );
+      } catch (error) {
+        console.error(error);
+        setRentersFeedback([]);
+      }
+    };
+
+    fetchDorms();
+    fetchRentersFeedback();
+  }, []);
 
   return (
     <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem]">
@@ -132,6 +173,37 @@ function Home() {
             </Button>
           </div>
         </div>
+      </section>
+
+      {/* Featured Properties */}
+      <section className="w-full flex flex-col gap-10 items-center justify-center">
+        <HomeTitle title="Featured Properties in DormFinder.PH" />
+        <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+          {dormsData ? (
+            dormsData.length ? (
+              dormsData.map((dorm, index) => (
+                <li key={index}>
+                  <Dorm
+                    img={dorm.img}
+                    dormName={dorm.dormName}
+                    location={dorm.location}
+                    ownerName={dorm.ownerName}
+                    price={dorm.price}
+                    rating={dorm.rating}
+                    link={dorm.link}
+                    isVerfied={dorm.isVerified}
+                  />
+                </li>
+              ))
+            ) : (
+              <p>No posts yet...</p>
+            )
+          ) : (
+            Array.from({ length: 3 }).map((_, index) => (
+              <DormListSkeleton key={index} />
+            ))
+          )}
+        </ul>
       </section>
 
       {/* Welcome Message */}
@@ -160,27 +232,6 @@ function Home() {
         <div className="bg-primary w-full h-[6rem]  md:h-[10rem]"></div>
       </section>
 
-      {/* Featured Properties */}
-      <section className="w-full flex flex-col gap-10 items-center justify-center">
-        <HomeTitle title="Featured Properties in DormFinder.PH" />
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full items-center justify-center gap-10">
-          {dorms.map((dorm, index) => (
-            <li key={index}>
-              <Dorm
-                img={dorm.img}
-                dormName={dorm.dormName}
-                location={dorm.location}
-                ownerName={dorm.ownerName}
-                price={dorm.price}
-                rating={dorm.rating}
-                status={dorm.status}
-                link={dorm.link}
-              />
-            </li>
-          ))}
-        </ul>
-      </section>
-
       {/* How it works */}
       <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="How It Works" />
@@ -207,7 +258,7 @@ function Home() {
       </section>
 
       {/* Why Join Us */}
-      <section className="flex flex-col md:flex-row gap-10 items-center justify-center lg:mx-[10rem]">
+      <section className="flex flex-col md:flex-row gap-10 items-center justify-center xl:mx-[10rem]">
         <img
           src={dormImg}
           className="rounded md:max-w-[20rem] md:max-h-[20rem]  lg:max-w-[30rem] lg:max-h-[30rem] object-cover"
@@ -234,15 +285,16 @@ function Home() {
       </section>
 
       {/* Renters Feedback */}
-      <section className="flex flex-col gap-10 items-center justify-center ">
+      <section className="flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="What Our Renters Say" />
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {rentersFeedback.map((rentersFeedback, index) => (
+          {rentersFeedback.map((feedback, index) => (
             <li key={index}>
               <RenterFeedback
-                img={rentersFeedback.img}
-                name={rentersFeedback.name}
-                feedback={rentersFeedback.feedback}
+                img={feedback.img}
+                name={feedback.name}
+                feedback={feedback.feedback}
+                rating={parseInt(feedback.rating)}
               />
             </li>
           ))}

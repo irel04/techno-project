@@ -12,15 +12,18 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => !!userData?.expires_at)
 
     // Check token expiration
-    useEffect(() => {
-        const expiredAt = userData?.expires_at 
-        const currentDate = Math.floor(Date.now() / 1000);
+    // useEffect(() => {
+    //     const expiredAt = userData?.expires_at 
+    //     const currentDate = Math.floor(Date.now() / 1000);
 
-        if(currentDate>expiredAt){
-            setIsAuthenticated(false)
-        }
+    //     if(currentDate>expiredAt){
+    //         logout()
+    //         setIsAuthenticated(false)
+    //     }
 
-    }, [isAuthenticated])
+    //     console.log(currentDate, expiredAt)
+
+    // }, [isAuthenticated])
 
 
     const login = async (data) => {
@@ -29,14 +32,13 @@ export const AuthProvider = ({ children }) => {
 
             
             const { error: signinError, data: userData } = await supabase.auth.signInWithPassword(data)
-            const { data: userInfo } = await supabase.from("renters").select("*").eq("credential_id", userData.user?.id)
+            const { data: userInfo } = await supabase.from("renters").select("*").eq("user_id", userData.user?.id)
             if (signinError) {
                 throw signinError
             }
 
             toast.update(loading, {render: `Welcome back, ${userInfo[0]?.first_name} `, isLoading: false, type: "success", autoClose:autoClose})
             setIsAuthenticated(true)
-            
 
         } catch (error) {
             console.error(error.message)
@@ -47,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = async () => {
-        setIsAuthenticated(false)
+        await supabase.auth.signOut()
     }
 
     const value = useMemo(() => (

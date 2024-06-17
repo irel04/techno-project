@@ -36,7 +36,7 @@ const Register = ( ) => {
   const navigate = useNavigate()
 
   // Initialized useForm hook 
-  const { register, formState: { errors, isSubmitSuccessful }, reset, handleSubmit, getValues } = useForm({
+  const { register, formState: { errors }, reset, handleSubmit, getValues } = useForm({
     resolver: yupResolver(schema),
     defaultValues: defaultValues,
     mode: "onChange",
@@ -58,17 +58,27 @@ const Register = ( ) => {
     }
 
     try {
+
+      const { data: renters, error: renterError } = await supabase.from("renters").select("email").eq("email", userBasicInfo.email)
+
+      if(renters.length){
+        throw new Error("Email already exists")
+      }
+
       
       const { error: signUpError, data } = await supabase.auth.signUp(userCredential)
+      
       if(signUpError){
         throw new Error(`Signup Error: ${signUpError.message}`)
       }
 
       // feed basic info
-      const { error: registrationError } = await supabase.from('renters').insert([{...userBasicInfo, credential_id: data.user.id}])
+      const { error: registrationError } = await supabase.from('renters').insert([{...userBasicInfo, user_id: data.user.id}])
       if(registrationError){
         throw new Error(`Database Error: ${registrationError.message}`)
       }
+
+      reset(defaultValues)
 
       return { message: "Registration Successful" }
 
@@ -101,11 +111,6 @@ const Register = ( ) => {
   }
 
   // Reset form state as per documentation use useEffect
-  useEffect(()=> {
-    if(isSubmitSuccessful){
-      reset(defaultValues)
-    }
-  }, [isSubmitSuccessful, errors, reset])
 
 
   return (

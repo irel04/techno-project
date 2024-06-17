@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Button from "./Button";
+import { photos as staticPhoto } from "../pages/SpecificDormPage";
+import { ASSETS_DORMS } from "../utils/constant";
 
-const SlideshowModal = ({ photos, onClose }) => {
+const SlideshowModal = ({ photos, onClose, dormId }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  
 
   const nextPhoto = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % (photos.length ? photos.length : staticPhoto.length));
   };
 
   const prevPhoto = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + photos.length) % photos.length,
+      (prevIndex) => (prevIndex - 1 + photos.length) % (photos.length ? photos.length : staticPhoto.length),
     );
   };
 
@@ -38,7 +41,7 @@ const SlideshowModal = ({ photos, onClose }) => {
           <IoClose className="text-3xl text-primary" />
         </button>
         <img
-          src={photos[currentIndex]}
+          src={photos.length ? `${ASSETS_DORMS}${dormId}/${photos[currentIndex]}` : staticPhoto[currentIndex]}
           alt={`Slide ${currentIndex}`}
           className="w-full h-auto"
         />
@@ -51,7 +54,7 @@ const SlideshowModal = ({ photos, onClose }) => {
             Previous
           </Button>
           <span className="text-gray-700">
-            {currentIndex + 1} / {photos.length}
+            {currentIndex + 1} / {photos.length ? photos.length : staticPhoto.length}
           </span>
           <Button
             color="primary"

@@ -22,7 +22,7 @@ function Dorm({ img, dormName, location, ownerName, price, isVerfied, link, stat
   return (
     <div className="bg-white shadow-custom w-full h-full rounded flex flex-col gap-2">
       <img
-        src={img ? ASSETS_DORMS + img : defaultImg}
+        src={img ? `${ASSETS_DORMS}covers/${img}` : defaultImg}
         className="h-[10rem] w-full object-cover cursor-pointer rounded-t"
         onClick={handleClickDorm}
       />
