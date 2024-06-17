@@ -3,15 +3,14 @@ import { PROFILE_PHOTO } from "../utils/constant";
 import defaultImg from "../assets/default.jpg"; 
 
 
-function RenterFeedback({ img, name, feedback}) {
-  const stars = Array(5)
-    .fill(0)
-    .map((_, index) => (  
-      <FaStar
-        key={index}
-        className="text-secondary text-xl md:text-2xl"
-      />
-    ));
+function RenterFeedback({ img, name, feedback, rating}) {
+
+   const stars = Array.from({ length: rating }).map((_, index) => (
+    <FaStar
+      key={index}
+      className="text-secondary text-xl md:text-2xl"
+    />
+  ));
 
   return (
     <div className="w-full lg:w-[25rem] max-h-[20rem] flex flex-col items-center justify-center gap-4 bg-white shadow-custom p-4 rounded">

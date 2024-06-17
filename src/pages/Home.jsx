@@ -117,9 +117,11 @@ function Home() {
           .from("renter_site_review")
           .select(`
             site_review,
+            site_ratings,
             renter: renters (
               first_name,
               last_name,
+             
               profile_photo
             )
           `);
@@ -130,6 +132,7 @@ function Home() {
 
         setRentersFeedback(feedback.map((item) => ({
           img: item.renter.profile_photo,
+          rating: item.site_ratings, 
           name: `${item.renter.first_name} ${item.renter.last_name}`,
           feedback: item.site_review,
         })));
@@ -280,6 +283,7 @@ function Home() {
                 img={feedback.img}
                 name={feedback.name}
                 feedback={feedback.feedback}
+                rating={parseInt(feedback.rating)}
               />
             </li>
           ))}
