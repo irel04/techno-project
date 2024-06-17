@@ -158,7 +158,10 @@ function Home() {
           <h1 className="text-2xl lg:text-4xl font-bold text-primary">
             Find Your Dorm Now
           </h1>
-          <p>Lorem ipsum</p>
+          <p>
+            Find affordable dormitories that are conveniently located near your
+            school.
+          </p>
           <div className="flex flex-col md:flex-row gap-8">
             <SearchBar />
             <Select options={options} />

@@ -11,24 +11,22 @@ import { supabase } from "../utils/supabase";
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showAccountPopup, setShowAccountPopup] = useState(false);
   const navigate = useNavigate();
   const loginPopupRef = useRef(null);
-  const location = useLocation();
+  const accountPopupRef = useRef(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const { isAuthenticated } = useAuth()
-
-  
+  const { isAuthenticated } = useAuth();
 
   const handleLoginButtonClick = () => {
     if (isAuthenticated) {
-      navigate("/profile");
+      setShowAccountPopup(!showAccountPopup);
     } else {
       setShowLoginPopup(true);
-      // navigate("/login")
     }
   };
 
@@ -39,17 +37,33 @@ function Header() {
     }
   };
 
+  const handleProfileClick = () => {
+    navigate("/profile");
+    console.log("Navigating to profile");
+
+    setShowAccountPopup(false);
+  };
+
+  const handleLogoutClick = async () => {
+    // await signOut();
+    setShowAccountPopup(false);
+    navigate("/"); // Redirect to home or login page after logout
+  };
+
   const handleClickOutside = (event) => {
     if (
-      loginPopupRef.current &&
-      !loginPopupRef.current.contains(event.target)
+      (loginPopupRef.current &&
+        !loginPopupRef.current.contains(event.target)) ||
+      (accountPopupRef.current &&
+        !accountPopupRef.current.contains(event.target))
     ) {
       setShowLoginPopup(false);
+      setShowAccountPopup(false);
     }
   };
 
   useEffect(() => {
-    if (showLoginPopup) {
+    if (showLoginPopup || showAccountPopup) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -58,7 +72,7 @@ function Header() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showLoginPopup]);
+  }, [showLoginPopup, showAccountPopup]);
 
   return (
     <nav className="bg-primary text-white flex justify-between px-[3%] py-5 items-center top-0 z-10 sticky">
@@ -186,7 +200,8 @@ function Header() {
             </li>
           </>
         )}
-        <li>
+
+        <li className="block relative">
           <button
             onClick={handleLoginButtonClick}
             className="bg-secondary py-1 px-5 text-text-color font-semibold rounded flex items-center gap-2"
@@ -194,10 +209,32 @@ function Header() {
             Account
             <MdAccountCircle className="text-primary text-xl" />
           </button>
+
+          {isAuthenticated && showAccountPopup && (
+            <div
+              ref={accountPopupRef}
+              className="absolute w-full text-center right-0 mt-2 bg-white text-black rounded shadow-lg"
+            >
+              <ul className="py-2">
+                <li
+                  onClick={handleProfileClick}
+                  className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                >
+                  Profile
+                </li>
+                <li
+                  onClick={handleLogoutClick}
+                  className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
         </li>
       </ul>
 
-      <li className="block md:hidden">
+      <li className="block relative md:hidden">
         <button
           onClick={handleLoginButtonClick}
           className="bg-secondary py-1 px-5 text-text-color font-semibold rounded flex items-center gap-2"
@@ -205,6 +242,28 @@ function Header() {
           Account
           <MdAccountCircle className="text-primary text-xl" />
         </button>
+
+        {isAuthenticated && showAccountPopup && (
+          <div
+            ref={accountPopupRef}
+            className="absolute w-full text-center right-0 mt-2 bg-white text-black rounded shadow-lg"
+          >
+            <ul className="py-2">
+              <li
+                onClick={handleProfileClick}
+                className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+              >
+                Profile
+              </li>
+              <li
+                onClick={handleLogoutClick}
+                className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+              >
+                Logout
+              </li>
+            </ul>
+          </div>
+        )}
       </li>
     </nav>
   );
