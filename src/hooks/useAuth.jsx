@@ -76,7 +76,8 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false)
         }
 
-        // console.log(currentDate, expiredAt)
+        console.log(currentDate>expiredAt)
+        
 
     }, [userData, isAuthenticated])
 

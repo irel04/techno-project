@@ -56,6 +56,7 @@ function SpecificDormPage() {
   const { dormId } = useParams()
   const [owner] = useSearchParams()
   const [credentials] = useLocalStorage(spStorageKey, null)
+  const { id: user_id } = credentials.user
 
 
   // const openInquirePopup = () => {
@@ -95,6 +96,15 @@ function SpecificDormPage() {
     const fetchDormById = async () => {
 
       try {
+
+        const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule")
+          .select("*").eq("property_id", dormId).eq("renter_id", user_id);
+
+        if(renterScheduleError){
+          throw renterScheduleError
+        }
+
+
         const { data: dormsInfo, error: dormError } = await supabase.from("properties").select(`
           id,
           dorm_name,
@@ -139,8 +149,7 @@ function SpecificDormPage() {
 
 
   const handleScheduleVisit = async (data) => {
-    const { id: user_id } = credentials.user
-
+    
     const loading = toast.loading("Booking a schedule")
 
     try {
