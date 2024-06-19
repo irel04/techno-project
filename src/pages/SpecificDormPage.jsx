@@ -56,7 +56,7 @@ function SpecificDormPage() {
   const { dormId } = useParams()
   const [owner] = useSearchParams()
   const [credentials] = useLocalStorage(spStorageKey, null)
-  const { id: user_id } = credentials.user
+  const user = credentials?.user
 
 
   // const openInquirePopup = () => {
@@ -94,11 +94,23 @@ function SpecificDormPage() {
 
       try {
 
-        const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule")
-          .select("*").eq("property_id", dormId).eq("renter_id", user_id);
+        if (user) {
 
-        if(renterScheduleError){
-          throw renterScheduleError
+          const {data: renter, error: renterError} = await supabase.from("renters").select("id").eq("user_id", user.id)
+
+          if(renterError){
+            throw renterError
+          }
+
+          const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule")
+            .select("*").eq("property_id", dormId).eq("renter_id", renter[0].id);
+
+          if (renterScheduleError) {
+            throw renterScheduleError
+          }
+
+          console.log(renterSchedule)
+          
         }
 
 
@@ -151,20 +163,22 @@ function SpecificDormPage() {
     const loading = toast.loading("Booking a schedule")
 
     try {
-      const { data: renter, error: renterError } = await supabase.from("renters").select("id").eq("user_id", user_id)
+      const { data: renter, error: renterError } = await supabase.from("renters").select("id").eq("user_id", user?.id)
 
       if(renterError){
         throw renterError
       }
 
+      const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule").select("id").eq("property_id", dormId).eq("renter_id", renter[0].id)
+
+      if(renterScheduleError || !!renterSchedule.length){
+        throw renterScheduleError || new Error("You already booked a schedule")
+      } 
+
+
       const { error: createScheduleError } = await supabase.from("renter_schedule").insert({...data, renter_id: renter[0].id, property_id: dormId})
 
       if(createScheduleError){
-
-        if(createScheduleError.code === "23505"){
-          throw new Error("You already booked a schedule")
-        }
-
         throw createScheduleError
       }
 
@@ -176,8 +190,11 @@ function SpecificDormPage() {
     }
   }
 
-
-
+  const navigateToOwnerPage = () => {
+    if (dormDetails.length > 0 && dormDetails[0].provider) {
+      navigate(`/owner/${dormDetails[0].provider.id}`);
+    }
+  };
 
   return (
     <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
