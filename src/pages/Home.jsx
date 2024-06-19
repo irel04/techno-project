@@ -18,8 +18,6 @@ import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import DormListSkeleton from "../components/skeletons/DormListSkeleton";
 
-
-
 const howItWorks = [
   {
     img: how1,
@@ -44,7 +42,6 @@ const howItWorks = [
   },
 ];
 
-
 const options = [
   "Php 1000 - 1500",
   "Php 1000 - 1500",
@@ -62,7 +59,9 @@ function Home() {
   useEffect(() => {
     const fetchDorms = async () => {
       try {
-        const { data: dorms, error: dormError } = await supabase.from("properties").select(`
+        const { data: dorms, error: dormError } = await supabase.from(
+          "properties",
+        ).select(`
           id,
           dorm_name,
           provider : lease_providers (
@@ -83,43 +82,48 @@ function Home() {
             longitude,
             latitude
           )
-            `)
-        
-        if(dormError){
-          throw dormError
-        }
-        const verifiedDorms = dorms.filter(dorm => dorm.provider.isVerified);
+            `);
 
-       
-        setDormsData(verifiedDorms.map((dorm) => {
-          const {street, barangay, city, province} = dorm.location
-          const { last_name, first_name } = dorm.provider
-          return {
-            img: dorm.cover_photo,
-            dormName: dorm.dorm_name,
-            location: `${city}, ${province}`,
-            ownerName: `${first_name} ${last_name}`,
-            price: dorm.rates.from,
-            rating: dorm.ratings,
-            isVerified: dorm.provider.isVerified,
-            link: `/dorm/${dorm.id}`,
-          };
-        }));
+        if (dormError) {
+          throw dormError;
+        }
+        const verifiedDorms = dorms.filter((dorm) => dorm.provider.isVerified);
+
+        setDormsData(
+          verifiedDorms.map((dorm) => {
+            const { street, barangay, city, province } = dorm.location;
+            const { last_name, first_name } = dorm.provider;
+            const { isVerified } = dorm.provider;
+
+            return {
+              img: dorm.cover_photo,
+              dormName: dorm.dorm_name,
+              location: `${city}, ${province}`,
+              ownerName: `${first_name} ${last_name}`,
+              price: dorm.rates.from,
+              rating: dorm.ratings,
+              isVerified: isVerified,
+              link: `/dorm/${dorm.id}`,
+            };
+          }),
+        );
       } catch (error) {
         console.error(error);
         setDormsData([]);
       }
     };
-//-------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------
     const fetchRentersFeedback = async () => {
       try {
-        const { data: feedback, error: feedbackError } = await supabase
-          .from("renter_site_review")
-          .select(`
+        const { data: feedback, error: feedbackError } = await supabase.from(
+          "renter_site_review",
+        ).select(`
             site_review,
+            site_ratings,
             renter: renters (
               first_name,
               last_name,
+             
               profile_photo
             )
           `);
@@ -128,22 +132,23 @@ function Home() {
           throw feedbackError;
         }
 
-        setRentersFeedback(feedback.map((item) => ({
-          img: item.renter.profile_photo,
-          name: `${item.renter.first_name} ${item.renter.last_name}`,
-          feedback: item.site_review,
-        })));
+        setRentersFeedback(
+          feedback.map((item) => ({
+            img: item.renter.profile_photo,
+            rating: item.site_ratings,
+            name: `${item.renter.first_name} ${item.renter.last_name}`,
+            feedback: item.site_review,
+          })),
+        );
       } catch (error) {
         console.error(error);
         setRentersFeedback([]);
       }
     };
 
-
     fetchDorms();
     fetchRentersFeedback();
   }, []);
-
 
   return (
     <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem]">
@@ -153,7 +158,10 @@ function Home() {
           <h1 className="text-2xl lg:text-4xl font-bold text-primary">
             Find Your Dorm Now
           </h1>
-          <p>Lorem ipsum</p>
+          <p>
+            Find affordable dormitories that are conveniently located near your
+            school.
+          </p>
           <div className="flex flex-col md:flex-row gap-8">
             <SearchBar />
             <Select options={options} />
@@ -171,26 +179,32 @@ function Home() {
       <section className="w-full flex flex-col gap-10 items-center justify-center">
         <HomeTitle title="Featured Properties in DormFinder.PH" />
         <ul className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {dormsData ? dormsData.length ? dormsData.map((dorm, index) => (
-            <li key={index}>
-              <Dorm
-                img={dorm.img}
-                dormName={dorm.dormName}
-                location={dorm.location}
-                ownerName={dorm.ownerName}
-                price={dorm.price}
-                rating={dorm.rating}
-                link={dorm.link}
-                isVerified={dorm.isVerified}
-              
-              />
-            </li>
-          )) : <p>No posts yet...</p> : Array.from({ length: 3 }).map((_, index) => (
-            <DormListSkeleton key={index} />
-          ))}
+          {dormsData ? (
+            dormsData.length ? (
+              dormsData.map((dorm, index) => (
+                <li key={index}>
+                  <Dorm
+                    img={dorm.img}
+                    dormName={dorm.dormName}
+                    location={dorm.location}
+                    ownerName={dorm.ownerName}
+                    price={dorm.price}
+                    rating={dorm.rating}
+                    link={dorm.link}
+                    isVerfied={dorm.isVerified}
+                  />
+                </li>
+              ))
+            ) : (
+              <p>No posts yet...</p>
+            )
+          ) : (
+            Array.from({ length: 3 }).map((_, index) => (
+              <DormListSkeleton key={index} />
+            ))
+          )}
         </ul>
       </section>
-
 
       {/* Welcome Message */}
       <section className="flex flex-col gap-10 items-center justify-center">
@@ -244,7 +258,7 @@ function Home() {
       </section>
 
       {/* Why Join Us */}
-      <section className="flex flex-col md:flex-row gap-10 items-center justify-center lg:mx-[10rem]">
+      <section className="flex flex-col md:flex-row gap-10 items-center justify-center xl:mx-[10rem]">
         <img
           src={dormImg}
           className="rounded md:max-w-[20rem] md:max-h-[20rem]  lg:max-w-[30rem] lg:max-h-[30rem] object-cover"
@@ -280,6 +294,7 @@ function Home() {
                 img={feedback.img}
                 name={feedback.name}
                 feedback={feedback.feedback}
+                rating={parseInt(feedback.rating)}
               />
             </li>
           ))}

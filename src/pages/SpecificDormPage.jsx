@@ -73,9 +73,6 @@ function SpecificDormPage() {
     navigate("/login");
   };
 
-  const navigateToOwnerPage = () => {
-    navigate(`/owner/${owner.get("owner")}`);
-  };
 
   const openVisitPopup = () => {
     setIsVisitPopupOpen(true);
@@ -109,6 +106,7 @@ function SpecificDormPage() {
           id,
           dorm_name,
           provider: lease_providers (
+            id,
             last_name,
             first_name,
             isVerified
@@ -177,6 +175,7 @@ function SpecificDormPage() {
       toast.update(loading, customToastParameter(error.message, "error"))
     }
   }
+
 
 
 
