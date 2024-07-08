@@ -76,7 +76,7 @@ const App = () => {
             element={<Favorites />}
           />
           <Route
-            path="scheduled-visits"
+            path="scheduled-visits/:renterId"
             element={<ScheduledVisits />}
           />
           <Route

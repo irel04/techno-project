@@ -57,6 +57,7 @@ function SpecificDormPage() {
   const [owner] = useSearchParams()
   const [credentials] = useLocalStorage(spStorageKey, null)
   const user = credentials?.user
+  const [renterId, setRenterId] = useState(null)
 
 
   // const openInquirePopup = () => {
@@ -103,6 +104,8 @@ function SpecificDormPage() {
           if(renterError){
             throw renterError
           }
+
+          setRenterId(renter[0].id)
 
           const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule")
             .select("*").eq("property_id", dormId).eq("renter_id", renter[0].id);
@@ -186,6 +189,7 @@ function SpecificDormPage() {
 
       toast.update(loading, customToastParameter("Booked successfully", "success"))
       closeVisitPopup()
+      setIsScheduled(true)
     } catch (error) {
       console.error(error)
       toast.update(loading, customToastParameter(error.message, "error"))
@@ -304,7 +308,7 @@ function SpecificDormPage() {
           </Button> */}
               <Button
                 color="primary"
-                onClick={isScheduled? () => navigate('/scheduled-visits') : openVisitPopup}
+                onClick={isScheduled? () => navigate(`/scheduled-visits/${renterId}`) : openVisitPopup}
               >
                 {isScheduled? "View Schedules" : "Schedule Visit"}
               </Button>

@@ -114,7 +114,7 @@ function Header() {
               </li>
               <li>
                 <Link
-                  to="/scheduled-visits"
+                  to={`/scheduled-visits`}
                   page="Scheduled Visits"
                 />
               </li>
