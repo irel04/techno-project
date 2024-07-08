@@ -87,6 +87,8 @@ function SpecificDormPage() {
   const [dormDetails, setDormDetails] = useState([])
   const [images, setImages] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isScheduled, setIsScheduled] = useState(false)
+
 
   useEffect(() => {
 
@@ -109,7 +111,7 @@ function SpecificDormPage() {
             throw renterScheduleError
           }
 
-          console.log(renterSchedule)
+          setIsScheduled(renterSchedule.length? true : false)
           
         }
 
@@ -302,9 +304,9 @@ function SpecificDormPage() {
           </Button> */}
               <Button
                 color="primary"
-                onClick={openVisitPopup}
+                onClick={isScheduled? () => navigate('/scheduled-visits') : openVisitPopup}
               >
-                Schedule Visit
+                {isScheduled? "View Schedules" : "Schedule Visit"}
               </Button>
             </div>
 
