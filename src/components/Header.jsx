@@ -20,7 +20,7 @@ function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLoginButtonClick = () => {
     if (isAuthenticated) {
@@ -32,6 +32,7 @@ function Header() {
 
   const handleCloseLoginPopup = (success) => {
     setShowLoginPopup(false);
+    setShowAccountPopup(false)
     if (success) {
       navigate("/profile");
     }
@@ -39,16 +40,29 @@ function Header() {
 
   const handleProfileClick = () => {
     navigate("/profile");
-    console.log("Navigating to profile");
+    // console.log("Navigating to profile");
 
     setShowAccountPopup(false);
   };
 
   const handleLogoutClick = async () => {
-    // await signOut();
-    setShowAccountPopup(false);
-    navigate("/"); // Redirect to home or login page after logout
+    try {
+      const { error: logoutError } = await logout()
+
+      if (logoutError) {
+        throw logoutError
+      }
+
+      navigate("/"); // Redirect to home or login page after logout
+      setShowAccountPopup(false);
+
+    } catch (error) {
+      console.error(error)
+
+    }
+
   };
+  
 
   const handleClickOutside = (event) => {
     if (
@@ -114,7 +128,7 @@ function Header() {
               </li>
               <li>
                 <Link
-                  to="/scheduled-visits"
+                  to={`/scheduled-visits`}
                   page="Scheduled Visits"
                 />
               </li>
@@ -150,58 +164,61 @@ function Header() {
         </ul>
       )}
 
-      <ul className="hidden md:flex gap-10 items-center">
-        {isAuthenticated ? (
-          <>
-            <li>
-              <Link
-                to="/dorms"
-                page="Find a Dorm"
-              />
-            </li>
-            <li>
-              <Link
-                to="/favorites"
-                page="Favorites"
-              />
-            </li>
-            <li>
-              <Link
-                to="/scheduled-visits"
-                page="Scheduled Visits"
-              />
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-              <Link
-                to="/dorms"
-                page="Find a Dorm"
-              />
-            </li>
-            <li>
-              <Link
-                to="/about"
-                page="About Us"
-              />
-            </li>
-            <li>
-              <Link
-                to="/business"
-                page="Post My Dorm"
-              />
-            </li>
-            <li>
-              <Link
-                to="/faqs"
-                page="Help"
-              />
-            </li>
-          </>
-        )}
+      <div className="flex gap-10">
+        <ul className="hidden md:flex gap-10 items-center">
+          {isAuthenticated ? (
+            <>
+              <li>
+                <Link
+                  to="/dorms"
+                  page="Find a Dorm"
+                />
+              </li>
+              <li>
+                <Link
+                  to="/favorites"
+                  page="Favorites"
+                />
+              </li>
+              <li>
+                <Link
+                  to="/scheduled-visits"
+                  page="Scheduled Visits"
+                />
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link
+                  to="/dorms"
+                  page="Find a Dorm"
+                />
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  page="About Us"
+                />
+              </li>
+              <li>
+                <Link
+                  to="/business"
+                  page="Post My Dorm"
+                />
+              </li>
+              <li>
+                <Link
+                  to="/faqs"
+                  page="Help"
+                />
+              </li>
+            </>
+          )}
 
-        <li className="block relative">
+
+        </ul>
+        <div className="block relative">
           <button
             onClick={handleLoginButtonClick}
             className="bg-secondary py-1 px-5 text-text-color font-semibold rounded flex items-center gap-2"
@@ -231,40 +248,9 @@ function Header() {
               </ul>
             </div>
           )}
-        </li>
-      </ul>
-
-      <li className="block relative md:hidden">
-        <button
-          onClick={handleLoginButtonClick}
-          className="bg-secondary py-1 px-5 text-text-color font-semibold rounded flex items-center gap-2"
-        >
-          Account
-          <MdAccountCircle className="text-primary text-xl" />
-        </button>
-
-        {isAuthenticated && showAccountPopup && (
-          <div
-            ref={accountPopupRef}
-            className="absolute w-full text-center right-0 mt-2 bg-white text-black rounded shadow-lg"
-          >
-            <ul className="py-2">
-              <li
-                onClick={handleProfileClick}
-                className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-              >
-                Profile
-              </li>
-              <li
-                onClick={handleLogoutClick}
-                className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-              >
-                Logout
-              </li>
-            </ul>
-          </div>
-        )}
-      </li>
+        </div>
+      </div>
+      
     </nav>
   );
 }

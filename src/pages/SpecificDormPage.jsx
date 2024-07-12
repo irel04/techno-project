@@ -14,11 +14,15 @@ import Input from "../components/Input";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import FavoriteButton from "../components/FavoriteButton";
 import { supabase } from "../utils/supabase";
-import { ASSETS_DORMS } from "../utils/constant";
+import { ASSETS_DORMS, spStorageKey } from "../utils/constant";
 import DormPageSkeleton from "../components/skeletons/DormPageSkeleton";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useLocalStorage } from "../hooks/useLocalStorage"
+import { toast } from "react-toastify";
+import { customToastParameter, formatDateYYMMDD } from "../utils/helper";
+import { useAuth } from "../hooks/useAuth";
 
 
 // Nakabind to sa slideshow modal as default image
@@ -40,8 +44,7 @@ function SpecificDormPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [isInquirePopupOpen, setIsInquirePopupOpen] = useState(false);
   const [isVisitPopupOpen, setIsVisitPopupOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-
+  const { isAuthenticated } = useAuth()
 
   // Initialized form 
   const { register, formState: { errors, isDirty }, reset, handleSubmit } = useForm({
@@ -50,7 +53,12 @@ function SpecificDormPage() {
   })
 
   // dorm id
-  const { dormId } = useParams()  
+  const { dormId } = useParams()
+  const [owner] = useSearchParams()
+  const [credentials] = useLocalStorage(spStorageKey, null)
+  const user = credentials?.user
+  const [renterId, setRenterId] = useState(null)
+
 
   // const openInquirePopup = () => {
   //   setIsInquirePopupOpen(true);
@@ -80,12 +88,37 @@ function SpecificDormPage() {
   const [dormDetails, setDormDetails] = useState([])
   const [images, setImages] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isScheduled, setIsScheduled] = useState(false)
+
 
   useEffect(() => {
 
     const fetchDormById = async () => {
 
       try {
+
+        if (user) {
+
+          const {data: renter, error: renterError} = await supabase.from("renters").select("id").eq("user_id", user.id)
+
+          if(renterError){
+            throw renterError
+          }
+
+          setRenterId(renter[0].id)
+
+          const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule")
+            .select("*").eq("property_id", dormId).eq("renter_id", renter[0].id);
+
+          if (renterScheduleError) {
+            throw renterScheduleError
+          }
+
+          setIsScheduled(renterSchedule.length? true : false)
+          
+        }
+
+
         const { data: dormsInfo, error: dormError } = await supabase.from("properties").select(`
           id,
           dorm_name,
@@ -131,7 +164,36 @@ function SpecificDormPage() {
 
 
   const handleScheduleVisit = async (data) => {
-    console.log(data)
+    
+    const loading = toast.loading("Booking a schedule")
+
+    try {
+      const { data: renter, error: renterError } = await supabase.from("renters").select("id").eq("user_id", user?.id)
+
+      if(renterError){
+        throw renterError
+      }
+
+      const { data: renterSchedule, error: renterScheduleError } = await supabase.from("renter_schedule").select("id").eq("property_id", dormId).eq("renter_id", renter[0].id)
+
+      if(renterScheduleError || !!renterSchedule.length){
+        throw renterScheduleError || new Error("You already booked a schedule")
+      } 
+
+
+      const { error: createScheduleError } = await supabase.from("renter_schedule").insert({...data, renter_id: renter[0].id, property_id: dormId})
+
+      if(createScheduleError){
+        throw createScheduleError
+      }
+
+      toast.update(loading, customToastParameter("Booked successfully", "success"))
+      closeVisitPopup()
+      setIsScheduled(true)
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter(error.message, "error"))
+    }
   }
 
   const navigateToOwnerPage = () => {
@@ -139,8 +201,6 @@ function SpecificDormPage() {
       navigate(`/owner/${dormDetails[0].provider.id}`);
     }
   };
-
-
 
   return (
     <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
@@ -248,16 +308,16 @@ function SpecificDormPage() {
           </Button> */}
               <Button
                 color="primary"
-                onClick={openVisitPopup}
+                onClick={isScheduled? () => navigate(`/scheduled-visits`) : openVisitPopup}
               >
-                Schedule Visit
+                {isScheduled? "View Schedules" : "Schedule Visit"}
               </Button>
             </div>
 
             {isVisitPopupOpen && (
               <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
                 <div className="flex flex-col gap-2 bg-white p-8 rounded w-full m-4 md:w-[30rem] max-w-[30rem]">
-                  {isLoggedIn ? (
+                  {isAuthenticated ? (
                     <form onSubmit={handleSubmit(handleScheduleVisit)}>
                       <h2 className="text-2xl font-bold text-center ">
                         Schedule Visit
@@ -269,6 +329,8 @@ function SpecificDormPage() {
                         register={register}
                         error={errors.date}
                         placeholder="Select Date"
+                        maxDateTime={"2028-12-31"}
+                        minDateTime={formatDateYYMMDD()}
                         required
                       />
                       <Input
