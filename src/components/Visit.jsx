@@ -1,14 +1,39 @@
 import React, { useState } from "react";
 import { IoCalendarOutline, IoLocationOutline } from "react-icons/io5";
 import Button from "./Button";
+import { toast } from "react-toastify";
+import { customToastParameter } from "../utils/helper";
+import { supabase } from "../utils/supabase";
 
-function Visit({ img, date, dormName, status, location, link }) {
+function Visit({ img, date, dormName, status, location, link, setIsLoading, scheduleId }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleCancelSchedule = () => {
     // Perform cancellation logic here
     setShowConfirmation(false);
+    handleCancelScheduleApi()
   };
+
+
+  const handleCancelScheduleApi = async () => {
+    const loading = toast.loading("Cancelling Schedule")
+    try {
+
+      setIsLoading(true);
+      const { error: cancelError } = await supabase.from("renter_schedule").delete().eq("id", scheduleId)
+
+      if (cancelError) {
+        throw cancelError
+      }
+
+      toast.update(loading, customToastParameter("Scheduled cancelled", "success"))
+
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter("Cancellation unsuccessful", "error"))
+    }
+
+  }
 
   return (
     <div className="items-center bg-white shadow-custom w-full flex p-4 gap-4 lg:w-[28rem] xl:w-[40rem]">
