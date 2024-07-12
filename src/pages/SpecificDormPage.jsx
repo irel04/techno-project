@@ -308,7 +308,7 @@ function SpecificDormPage() {
           </Button> */}
               <Button
                 color="primary"
-                onClick={isScheduled? () => navigate(`/scheduled-visits/${renterId}`) : openVisitPopup}
+                onClick={isScheduled? () => navigate(`/scheduled-visits`) : openVisitPopup}
               >
                 {isScheduled? "View Schedules" : "Schedule Visit"}
               </Button>

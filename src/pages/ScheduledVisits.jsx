@@ -6,6 +6,8 @@ import Visit from "../components/Visit";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { spStorageKey } from "../utils/constant";
 
 const visits = [
   {
@@ -40,13 +42,17 @@ const visits = [
 
 function ScheduledVisits() {
 
-  const { renterId } = useParams()
   const [scheduledProperties, setScheduledProperties] = useState([])
+
+  const [storedValue] = useLocalStorage(spStorageKey, null)
+  const { id: userId} = storedValue.user
 
   // fetch data 
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
+
+        const {data: renter, error: userError} = await supabase.from("renters").select("id").eq("user_id", userId)
         
         const { data: schedules, error: scheduleError } = await supabase.from('renter_schedule')
         .select(`date, renter_id, isCompleted, time, id, properties(*,  location: addresses_property(
@@ -57,7 +63,7 @@ function ScheduledVisits() {
             longitude,
             latitude
           ))`)
-        .eq('renter_id', renterId)
+        .eq('renter_id', renter[0].id)
 
         if(scheduleError){
           throw scheduleError
@@ -86,7 +92,7 @@ function ScheduledVisits() {
           title="No scheduled visits found"
         />
       ) : (
-        <ul className="w-full grid grid-cols-1 lg:grid-cols-2  gap-4">
+        <ul className="w-max grid grid-cols-1 lg:grid-cols-2 gap-4">
           {scheduledProperties.map((scheds, index) => (
             <li key={index}>
               <Visit

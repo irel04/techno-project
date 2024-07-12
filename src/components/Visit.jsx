@@ -32,12 +32,12 @@ function Visit({ img, date, dormName, status, location, link }) {
         </p>
 
         <div className="flex flex-col lg:flex-row gap-2 items-center">
-          <a
+          {/* <a
             href={link}
             className="cursor-pointer flex gap-2 items-center py-2 rounded relative text-center justify-center text-md font-bold w-full bg-primary text-white text-sm"
           >
             View Listing
-          </a>
+          </a> */}
           <Button
             color="secondary"
             onClick={() => setShowConfirmation(true)}
