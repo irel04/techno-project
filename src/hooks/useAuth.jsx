@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
             
             
             setIsAuthenticated(false)
-            toast.update(loading, customToastParameter("Token Expired", "info"))
+            toast.update(loading, customToastParameter("Logged out", "info"))
             navigate("/")
             
         } catch (error) {  
