@@ -2,7 +2,7 @@ import { useState } from "react";
 import { supabase } from "../utils/supabase";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { loading_message } from "../utils/helper";
+import { customToastParameter, loading_message } from "../utils/helper";
 import logo from "../assets/logo.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -34,10 +34,59 @@ const OwnerRegister = () => {
 
 
   const handleOwnerRegisteration = async (data) => {
-    console.log(data)
-  }
-  
+    const loading = toast.loading("Please wait...")
+    
+    try {
+      const { data: leaseProviders, error: providerErrors } = await supabase.from("lease_providers").select("email").eq("email", data.email)
 
+      if(providerErrors || leaseProviders.length){
+        throw providerErrors.message || "Email is already used"
+      }
+
+      const { data: signup, error: signupError } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password
+      })
+
+      if(signupError){
+        throw signupError.message
+      }
+
+      const { data: createdProvider, error: creatingProvidersError } = await supabase.from("lease_providers").insert({
+        last_name: data.lastName,
+        first_name: data.firstName,
+        birthday: data.bday,
+        contact_no: data.number,
+        email: data.email,
+        user_id: signup.user.id
+      }).select("id")
+
+      if(creatingProvidersError){
+        throw creatingProvidersError.message
+      }
+
+
+      const { error: addressError } = await supabase.from("addresses_providers").insert({
+        provider_id: createdProvider[0].id,
+        province: data.province,
+        city: data.city,
+        barangay: data.barangay,
+        street: data.street
+      }) 
+
+      if(addressError){
+        throw addressError.message
+      }
+
+
+      toast.update(loading, customToastParameter("Registration Successful", "success"))
+      navigate("/")
+
+    } catch (error) {
+      console.error(error)
+      toast.update(loading, customToastParameter(error, "error"))
+    }
+  }
   
 
   return (
