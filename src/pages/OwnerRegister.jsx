@@ -9,61 +9,41 @@ import Button from "../components/Button";
 import { useForm } from "react-hook-form";
 import * as yup from 'yup';
 import React from 'react';
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object({
+  firstName: yup.string().required().max(50).label("First Name"),
+  lastName: yup.string().required().max(50).label("Last Name"),
+  email: yup.string().max(50).required().label("Email"),
+  bday: yup.string().required().label("Birthday"),
+  number: yup.string().max(12).label("Contact Number"),
+  province: yup.string().required().max(50).label("Province"),
+  city: yup.string().required().max(50).label("City"),
+  barangay: yup.string().required().max(50).label("Barangay"),
+  street: yup.string().max(50).label("Street"),
+  password: yup.string().required().label("Password").max(50)
+})
 
 const OwnerRegister = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+ 
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange"
+  });
 
-  const onSubmit = async (formData) => {
-    try {
-      const { data, error } = await toast.promise(
-        supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-        }),
-        loading_message("Creating Authentication...")
-      );
 
-      if (error) throw error;
+  const handleOwnerRegisteration = async (data) => {
+    console.log(data)
+  }
+  
 
-      const providerData = {
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        birthday: formData.birthday,
-        contact_no: formData.contactNo,
-        email: formData.email,
-        user_id: data.user.id,
-      };
-
-      await toast.promise(
-        supabase.from("lease_providers").insert([providerData]),
-        loading_message("Creating Account...")
-      );
-
-      const addressData = {
-        province: formData.province,
-        city: formData.city,
-        barangay: formData.barangay,
-        street: formData.street,
-        user_id: data.user.id,
-      };
-
-      await toast.promise(
-        supabase.from("addresses_property").insert([addressData]),
-        loading_message("Creating Address...")
-      );
-
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-      toast.error("Registration failed!");
-    }
-  };
+  
 
   return (
     <div className="flex flex-col justify-center items-center">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleOwnerRegisteration)}
         className="bg-white md:shadow-custom rounded md:w-[30rem] p-5 flex flex-col gap-3"
       >
         {/* Logo */}
@@ -110,18 +90,16 @@ const OwnerRegister = () => {
           <Input
             label="Birthday"
             type="date"
-            required
             register={register}
-            name="birthday"
+            name="bday"
             error={errors.birthday}
           />
 
           <Input
             label="Contact Number"
-            type="tel"
-            required
+            type="text"
             register={register}
-            name="contactNo"
+            name="number"
             error={errors.contactNo}
           />
 
@@ -155,7 +133,7 @@ const OwnerRegister = () => {
           <Input
             label="Street"
             type="text"
-            required
+            // required
             register={register}
             name="street"
             error={errors.street}

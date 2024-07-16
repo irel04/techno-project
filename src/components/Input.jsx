@@ -23,7 +23,7 @@ const Input = ({ label, required=false, type = "text", placeholder, register, na
         maxLength={maxLength}
         max={maxDateTime}
         min={minDateTime}
-        className="w-full rounded border border-[#6F7070] p-2 bg-transparent text-sm text-black"
+        className={`${error?.message ? "border-rose-500" : ""} w-full rounded border border-[#6F7070] p-2 bg-transparent text-sm text-black`}
         readOnly={readOnly}
       />
       {<p className="text-rose-500">{error?.message}</p> }
