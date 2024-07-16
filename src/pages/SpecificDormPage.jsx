@@ -202,6 +202,7 @@ function SpecificDormPage() {
     }
   };
 
+
   return (
     <main className="mt-[1rem] mb-[3rem] flex flex-col gap-5">
 
@@ -315,7 +316,7 @@ function SpecificDormPage() {
             </div>
 
             {isVisitPopupOpen && (
-              <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center overflow-hidden">
                 <div className="flex flex-col gap-2 bg-white p-8 rounded w-full m-4 md:w-[30rem] max-w-[30rem]">
                   {isAuthenticated ? (
                     <form onSubmit={handleSubmit(handleScheduleVisit)}>
