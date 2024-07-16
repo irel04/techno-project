@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 function AppLayout() {
   return (
-    <main className="overflow-x-hidden w-screen h-screen">
+    <main className="w-full h-full">
       <Header />
       <div className="mx-[5%] my-[3%]">
         <Outlet />
