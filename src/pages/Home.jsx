@@ -151,7 +151,7 @@ function Home() {
   }, []);
 
   return (
-    <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem]">
+    <main className="flex flex-col gap-[5rem] lg:gap-[10rem] items-center justify-center mt-[3rem] mb-[3rem] md:mt-[5rem] md:mb-[10rem] overflow-x-hidden">
       {/* Search */}
       <section className="flex flex-col gap-10 items-center justify-center w-full">
         <div className="bg-white shadow-custom flex flex-col gap-2 p-5 w-full max-w-[60rem]">
