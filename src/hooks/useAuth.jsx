@@ -98,21 +98,6 @@ export const AuthProvider = ({ children }) => {
     }, [userData, isAuthenticated])
 
 
-     // Check token expiration
-     useEffect(() => {
-        const expiredAt = userData?.expires_at 
-        const currentDate = Math.floor(Date.now() / 1000);
-        
-        if(currentDate>expiredAt){
-            logout()
-            setIsAuthenticated(false)
-        }
-
-        console.log(currentDate>expiredAt)
-        
-
-    }, [userData, isAuthenticated])
-
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
     );
