@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { supabase } from '../utils/supabase';
+import { toast } from 'react-toastify';
+import { customToastParameter } from '../utils/helper';
+
 
 const OwnerSchedules = () => {
-  const [schedules, setSchedules] = useState([
-    { id: 1, title: 'Dorm A Tour', visitorName: 'John Doe', visitorContact: 'john.doe@example.com', date: '2024-06-05', time: '10:00 AM', status: 'upcoming' },
-    { id: 2, title: 'Dorm B Tour', visitorName: 'Jane Smith', visitorContact: 'jane.smith@example.com', date: '2024-06-06', time: '02:00 PM', status: 'completed' },
-    { id: 3, title: 'Dorm C Tour', visitorName: 'Alice Johnson', visitorContact: 'alice.johnson@example.com', date: '2024-06-07', time: '11:00 AM', status: 'upcoming' },
-  ]);
+ 
+  const [schedules, setSchedules] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -13,14 +14,33 @@ const OwnerSchedules = () => {
     setSearchQuery(e.target.value);
   };
 
-  const handleStatusChange = (id, newStatus) => {
-    const updatedSchedules = schedules.map(schedule => {
-      if (schedule.id === id) {
-        return { ...schedule, status: newStatus };
-      }
-      return schedule;
-    });
+  const handleStatusChange = async (id, newValue) => {
+    const loading = toast.loading("Updating...")
+
+    const updatedSchedules = schedules.map(schedule => 
+      schedule.id === id ? { ...schedule, status: newValue } : schedule
+    );
+   
     setSchedules(updatedSchedules);
+    
+    try {
+      
+      const { error: updatingSchedError } = await supabase.from("renter_schedule").update({isCompleted: newValue === "completed"? true : false, is_active: newValue === "upcoming" ? true : false})
+      .eq("id", id)
+
+      if(updatingSchedError){
+        throw updatingSchedError.message
+      }
+
+      
+
+      toast.update(loading, customToastParameter("Successfully updated", "success"))
+
+    } catch (error) {
+      toast.update(loading, customToastParameter(error, "error"))
+      console.error(error);
+    }
+    
   };
 
   const getStatusStyles = (status) => {
@@ -40,6 +60,41 @@ const OwnerSchedules = () => {
     schedule.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     schedule.visitorName.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+
+  const fetchSchedules = async () => {
+    try {
+      const { data: scheds, error: fetchingSchedError } = await supabase.from("renter_schedule").select(`id, date, time, property: properties(dorm_name), renter: renters(first_name, last_name, email), isCompleted, is_active`)
+
+      if(fetchingSchedError){
+        throw fetchingSchedError.message
+      }
+
+      console.log(scheds)
+
+      const restructuredArray = scheds.map((item, index) => {
+        return {
+          id: item.id,
+          title: item.property.dorm_name,
+          visitorName: item.renter.first_name + item.renter.last_name,
+          visitorContact: item.renter.email,
+          date: item.date,
+          time: item.time,
+          status: item.isCompleted? "completed" : item.is_active? "upcoming" : "cancelled"
+        }
+      })
+
+      console.log(restructuredArray)
+      setSchedules(restructuredArray)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchSchedules()
+  }, [])
+
 
   return (
     <div className="max-w-7xl mx-auto p-4">
@@ -66,7 +121,7 @@ const OwnerSchedules = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredSchedules.map((schedule) => (
+            {schedules.map((schedule) => (
               <tr key={schedule.id} className="hover:bg-gray-50">
                 <td className="py-4 px-5 border-b border-gray-200">{schedule.title}</td>
                 <td className="py-4 px-5 border-b border-gray-200">{schedule.visitorName}</td>
