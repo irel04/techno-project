@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FaListAlt, FaClock, FaCheckCircle, FaHourglassHalf, FaBan } from 'react-icons/fa';
 import { supabase } from '../utils/supabase';
 import { checkUpcomings } from '../utils/helper';
-
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { spStorageKey } from '../utils/constant';
 
 
 const OwnerOverview = () => {
@@ -32,7 +33,30 @@ const OwnerOverview = () => {
     cancelled: 0
   })
 
-  const provider_id = "07d0e5d8-35b0-40bc-8331-cefa74ce16e0"
+  const [userCredential] = useLocalStorage(spStorageKey, null)
+  const [provider_id, setProviderId] = useState("")
+
+  const fetchOwner = async () => {
+    
+    try {
+      const { data: ownerData, error: ownerError } = await supabase.from("lease_providers").select("id").eq("user_id", userCredential.user.id)
+      
+      if(ownerError){
+        throw ownerError.message
+      }
+
+      setProviderId(ownerData[0].id)
+      console.log(ownerData[0].id)
+
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+  useEffect(() => {
+    fetchOwner()
+  }, [])
 
 
   const fetchDorms = async () => {
@@ -71,7 +95,7 @@ const OwnerOverview = () => {
   const fetchAllScheds = async () => {
     try {
 
-      const { data: dateCol, error: schedError, count:totalScheds } = await supabase.from("renter_schedule").select("date", { count: "exact" }).eq("provider_id", provider_id)
+      const { data: dateCol, error: schedError, count:totalScheds } = await supabase.from("renter_schedule").select("date", { count: "exact" }).eq("provider_id", provider_id).eq("is_active", true)
       
       if(schedError){
         throw schedError.message
@@ -102,16 +126,14 @@ const OwnerOverview = () => {
 
 
     } catch (error) {
-      console.error(first)
+      console.error(error)
     }
   }
   
-  useEffect(()=> {
-
-    
+  useEffect(()=> {    
     fetchDorms()
     fetchAllScheds()
-  }, [])
+  }, [provider_id])
 
 
 
