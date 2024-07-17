@@ -20,7 +20,7 @@ function Visit({ img, date, dormName, status, location, link, setIsLoading, sche
     try {
 
       setIsLoading(true);
-      const { error: cancelError } = await supabase.from("renter_schedule").delete().eq("id", scheduleId)
+      const { error: cancelError } = await supabase.from("renter_schedule").update({"is_active": false}).eq("id", scheduleId)
 
       if (cancelError) {
         throw cancelError

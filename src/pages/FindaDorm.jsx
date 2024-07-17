@@ -50,7 +50,7 @@ function FindaDorm() {
             longitude,
             latitude
           )
-            `)
+            `).eq("is_active", true)
         
         if(dormError|| !dorms.length){
           throw dormError
