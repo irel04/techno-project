@@ -181,7 +181,7 @@ function SpecificDormPage() {
       } 
 
 
-      const { error: createScheduleError } = await supabase.from("renter_schedule").insert({...data, renter_id: renter[0].id, property_id: dormId})
+      const { error: createScheduleError } = await supabase.from("renter_schedule").insert({...data, renter_id: renter[0].id, property_id: dormId, provider_id: dormDetails[0].provider.id})
 
       if(createScheduleError){
         throw createScheduleError
