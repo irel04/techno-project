@@ -118,12 +118,14 @@ const App = () => {
           path="business-side"
           element={<BusinessLayout />}
         >
-          <Route
-            index
-            element={<OwnerPage />}
-          />
-          <Route path="post-rental" 
-          element={<PostaRental />} />
+          <Route element={<PrivateRoute redirectTo="/" layout="business" />}>
+            <Route
+              index
+              element={<OwnerPage />}
+            />
+            <Route path="post-rental"
+              element={<PostaRental />} />
+          </Route>
         </Route>
       </Routes>
       <ToastContainer

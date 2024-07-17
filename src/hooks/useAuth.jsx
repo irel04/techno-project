@@ -12,6 +12,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [userData] = useLocalStorage(spStorageKey, null)
     const [isAuthenticated, setIsAuthenticated] = useState(() => !!userData?.expires_at)
+    const [userRole, setUserRole] = useLocalStorage("userRole", "anon")
+
 
     const navigate = useNavigate()
 
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }) => {
             const { data: renterInfo } = await supabase.from("renters").select("*").eq("user_id", authData.user?.id);
             if (renterInfo.length > 0) {
                 toast.update(loading, { render: `Welcome back, ${renterInfo[0]?.first_name}`, isLoading: false, type: "success", autoClose: autoClose });
+                setUserRole("renter")
                 setIsAuthenticated(true);
                 navigate('/');
                 return;
@@ -40,6 +43,7 @@ export const AuthProvider = ({ children }) => {
             if (ownerInfo.length > 0) {
                 toast.update(loading, { render: `Welcome back, ${ownerInfo[0]?.first_name}`, isLoading: false, type: "success", autoClose: autoClose });
                 setIsAuthenticated(true);
+                setUserRole("owner")
                 navigate('/business-side');
                 return;
             }
@@ -64,6 +68,7 @@ export const AuthProvider = ({ children }) => {
             
             
             setIsAuthenticated(false)
+            setUserRole("anon")
             toast.update(loading, customToastParameter("Logged out", "info"))
             navigate("/")
             
@@ -77,25 +82,13 @@ export const AuthProvider = ({ children }) => {
         {
             isAuthenticated,
             logout,
-            login
+            login,
+            userRole
         }
     ));
 
 
-     // Check token expiration
-     useEffect(() => {
-        const expiredAt = userData?.expires_at 
-        const currentDate = Math.floor(Date.now() / 1000);
-        
-        if(currentDate>expiredAt){
-            logout()
-            setIsAuthenticated(false)
-        }
-
-        console.log(currentDate>expiredAt)
-        
-
-    }, [userData, isAuthenticated])
+     
 
 
     return (

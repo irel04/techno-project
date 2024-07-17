@@ -44,13 +44,19 @@ function Profile() {
       const {data: renters, error} = await supabase.from("renters").select("*").eq("user_id", user_id).eq('is_active', true)
       
       if(error){
-        throw error
+        throw error.message
       }
 
-      const renter = renters[0]
+      const { data: owners, error: ownerErrors } = await supabase.from("lease_providers").select("*").eq("user_id", user_id).eq("is_active", true)
+
+      if(ownerErrors){
+        throw ownerErrors.message
+      }
+
+      const userData = renters.length? renters[0] : owners[0]
       setIsLoading(false)
 
-      return renter
+      return userData
 
     } catch (error) {
       console.error(error)

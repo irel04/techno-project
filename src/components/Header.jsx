@@ -20,7 +20,7 @@ function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, userRole } = useAuth();
 
   const handleLoginButtonClick = () => {
     if (isAuthenticated) {
@@ -112,7 +112,7 @@ function Header() {
 
       {isMenuOpen && (
         <ul className="absolute top-16 left-0 w-full bg-primary flex flex-col items-center md:hidden text-text-color">
-          {isAuthenticated ? (
+          {isAuthenticated && userRole === "renter" ? (
             <>
               <li>
                 <Link
@@ -166,7 +166,7 @@ function Header() {
 
       <div className="flex gap-10">
         <ul className="hidden md:flex gap-10 items-center">
-          {isAuthenticated ? (
+          {isAuthenticated && userRole === "renter"? (
             <>
               <li>
                 <Link
@@ -189,12 +189,17 @@ function Header() {
             </>
           ) : (
             <>
-              <li>
-                <Link
-                  to="/dorms"
-                  page="Find a Dorm"
-                />
-              </li>
+                {isAuthenticated && userRole === "owner" ? <li>
+                  <Link
+                    to="/business-side"
+                    page="Dashboard"
+                  />
+                </li> : <li>
+                  <Link
+                    to="/dorms"
+                    page="Find a Dorm"
+                  />
+                </li>}
               <li>
                 <Link
                   to="/about"
@@ -203,7 +208,7 @@ function Header() {
               </li>
               <li>
                 <Link
-                  to="/business"
+                  to={isAuthenticated && userRole === "owner" ? "business-side/post-rental" : "business"}
                   page="Post My Dorm"
                 />
               </li>

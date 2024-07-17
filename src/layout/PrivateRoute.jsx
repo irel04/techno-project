@@ -2,11 +2,22 @@ import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
-const PrivateRoute = ({ redirectTo = "/" }) => {
+const PrivateRoute = ({ redirectTo = "/", layout = "app" }) => {
 
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, userRole } = useAuth()
 
-    return isAuthenticated ? <Outlet/> : <Navigate to={redirectTo}/>
+    if (isAuthenticated) {
+        if (userRole === "renter" && layout === "app") {
+            return <Outlet />
+        } else if (userRole === "owner" && layout === "business") {
+            return <Outlet />
+        } else {
+            return <Navigate to={redirectTo} />
+        }
+    } else {
+        return <Navigate to={redirectTo} />
+    }
+
 }
 
 export default PrivateRoute
