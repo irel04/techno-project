@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaListAlt, FaClock, FaCheckCircle, FaHourglassHalf, FaBan } from 'react-icons/fa';
+import { supabase } from '../utils/supabase';
+
+
 
 const OwnerOverview = () => {
   // Placeholder data for analytics
@@ -17,6 +20,60 @@ const OwnerOverview = () => {
     cancelledSchedules: 1, // Added cancelled schedules
   });
 
+  const [totalListings, setTotalListings] = useState(0)
+  const [activeListings, setActiveListings] = useState(0)
+  const [inActiveListings, setInactiveListings] = useState(0)
+
+  const fetchDorms = async () => {
+    try {
+      
+      const { data: dorms, error: dormError, count } = await supabase.from("properties").select("*", {count: "exact"}).eq("provider_id", "07d0e5d8-35b0-40bc-8331-cefa74ce16e0")
+
+      if(dormError){
+        throw dormError.message
+      }
+
+      
+      const { error: inactiveError, count: inactiveCount } = await supabase.from("properties").select("*", {count: "exact"}).eq("provider_id", "07d0e5d8-35b0-40bc-8331-cefa74ce16e0").eq("is_active", false)
+
+      if(inactiveError){
+        throw inactiveError.message
+      }
+
+
+      const { error: activeError, count: activeCount } = await supabase.from("properties").select("*", {count: "exact"}).eq("provider_id", "07d0e5d8-35b0-40bc-8331-cefa74ce16e0").eq("is_active", true)
+
+      if(activeError){
+        throw activeError.message
+      }
+
+      setTotalListings(count)
+      setInactiveListings(inactiveCount)
+      setActiveListings(activeCount)
+
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchAllScheds = async () => {
+    try {
+      
+    } catch (error) {
+      console.error(first)
+    }
+  }
+  
+  useEffect(()=> {
+
+    
+    fetchDorms()
+
+  }, [])
+
+
+
   // State for current subscription plan
   const [currentPlan, setCurrentPlan] = useState('Basic');
   const [renewalDate, setRenewalDate] = useState('June 15, 2024');
@@ -32,23 +89,23 @@ const OwnerOverview = () => {
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaListAlt className="text-3xl text-gray-800 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Total Listings</h3>
-            <p className="text-2xl font-bold text-gray-900">{listingAnalytics.totalListings}</p>
+            <p className="text-2xl font-bold text-gray-900">{totalListings}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaCheckCircle className="text-3xl text-green-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Active Listings</h3>
-            <p className="text-2xl font-bold text-green-600">{listingAnalytics.activeListings}</p>
+            <p className="text-2xl font-bold text-green-600">{activeListings}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaClock className="text-3xl text-red-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Inactive Listings</h3>
-            <p className="text-2xl font-bold text-red-600">{listingAnalytics.inactiveListings}</p>
+            <p className="text-2xl font-bold text-red-600">{inActiveListings}</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
+          {/* <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaHourglassHalf className="text-3xl text-yellow-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Pending Listings</h3>
             <p className="text-2xl font-bold text-yellow-600">{listingAnalytics.pendingListings}</p>
-          </div>
+          </div> */}
         </div>
       </div>
 

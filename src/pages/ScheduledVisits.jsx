@@ -68,7 +68,7 @@ function ScheduledVisits() {
             longitude,
             latitude
           ))`)
-          .eq('renter_id', renter[0].id)
+          .eq('renter_id', renter[0].id).eq("is_active", true)
 
         if (scheduleError) {
           throw scheduleError

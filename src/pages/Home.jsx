@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import DormListSkeleton from "../components/skeletons/DormListSkeleton";
+import { useAuth } from "../hooks/useAuth";
 
 const howItWorks = [
   {
@@ -56,6 +57,9 @@ function Home() {
   const [dormsData, setDormsData] = useState(null);
   const [rentersFeedback, setRentersFeedback] = useState([]);
 
+
+  const { isAuthenticated } = useAuth()
+
   useEffect(() => {
     const fetchDorms = async () => {
       try {
@@ -82,7 +86,7 @@ function Home() {
             longitude,
             latitude
           )
-            `);
+            `).eq("is_active", true);
 
         if (dormError) {
           throw dormError;
@@ -248,13 +252,13 @@ function Home() {
           ))}
         </ul>
 
-        <Button
+        {isAuthenticated ? null : <Button
           className="max-w-fit px-5"
           color="primary"
           onClick={navigateToRegister}
         >
           Register Now
-        </Button>
+        </Button>}
       </section>
 
       {/* Why Join Us */}
