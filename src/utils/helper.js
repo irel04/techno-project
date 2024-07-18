@@ -23,3 +23,34 @@ export const formatDateYYMMDD = () => {
 
     return formattedDate
 }
+
+
+export const checkUpcomings = (date) => {
+    try {
+        const inputDate = new Date(date.date)
+        const today = new Date()
+
+        const timeDiff = inputDate.getTime() - today.getTime()
+
+        const dayDiff = timeDiff / (1000 * 3600 * 24)
+
+
+
+        return dayDiff >= 0 && dayDiff <= 5;
+    } catch (error) {
+        console.error(error);
+    }
+
+
+}
+
+export const createPriceRange = (price) => {
+    const interval = price * 0.5
+    const from = price - interval
+    const to = price + interval
+
+    return {
+        from: from,
+        to: to
+    }
+}

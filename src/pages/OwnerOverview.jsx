@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaListAlt, FaClock, FaCheckCircle, FaHourglassHalf, FaBan } from 'react-icons/fa';
+import { supabase } from '../utils/supabase';
+import { checkUpcomings } from '../utils/helper';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { spStorageKey } from '../utils/constant';
+
 
 const OwnerOverview = () => {
   // Placeholder data for analytics
@@ -17,6 +22,122 @@ const OwnerOverview = () => {
     cancelledSchedules: 1, // Added cancelled schedules
   });
 
+  const [totalListings, setTotalListings] = useState(0)
+  const [activeListings, setActiveListings] = useState(0)
+  const [inActiveListings, setInactiveListings] = useState(0)
+
+  const [schedules, setSchedules] = useState({
+    total: 0,
+    upcoming: 0,
+    completed: 0,
+    cancelled: 0
+  })
+
+  const [userCredential] = useLocalStorage(spStorageKey, null)
+  const [provider_id, setProviderId] = useState("")
+
+  const fetchOwner = async () => {
+    
+    try {
+      const { data: ownerData, error: ownerError } = await supabase.from("lease_providers").select("id").eq("user_id", userCredential.user.id)
+      
+      if(ownerError){
+        throw ownerError.message
+      }
+
+      setProviderId(ownerData[0].id)
+
+      console.log(ownerData[0].id)
+
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+
+  useEffect(() => {
+    fetchOwner()
+  }, [])
+
+
+  const fetchDorms = async () => {
+    try {
+      
+      const { data: dorms, error: dormError, count } = await supabase.from("properties").select("*", {count: "exact"}).eq("provider_id", provider_id)
+
+      if(dormError){
+        throw dormError.message
+      }
+
+      
+      const { error: inactiveError, count: inactiveCount } = await supabase.from("properties").select("*", {count: "exact"}).eq("provider_id", provider_id).eq("is_active", false)
+
+      if(inactiveError){
+        throw inactiveError.message
+      }
+
+
+      const { error: activeError, count: activeCount } = await supabase.from("properties").select("*", {count: "exact"}).eq("provider_id", provider_id).eq("is_active", true)
+
+      if(activeError){
+        throw activeError.message
+      }
+
+      setTotalListings(count)
+      setInactiveListings(inactiveCount)
+      setActiveListings(activeCount)
+
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchAllScheds = async () => {
+    try {
+
+      const { data: dateCol, error: schedError, count:totalScheds } = await supabase.from("renter_schedule").select("date", { count: "exact" }).eq("provider_id", provider_id).eq("is_active", true)
+      
+      if(schedError){
+        throw schedError.message
+      }
+
+      const { error: completedError, count: totalCompleted } = await supabase.from("renter_schedule").select("id", { count: "exact" }).eq("provider_id", provider_id).eq("isCompleted", true)
+      
+      if(completedError){
+        throw completedError.message
+      }
+
+
+      const { error: cancelledError, count: totalCancelled } = await supabase.from("renter_schedule").select("id", { count: "exact" }).eq("provider_id", provider_id).eq("is_active", false)
+      
+      if(cancelledError){
+        throw cancelledError.message
+      }
+
+      // check upcomings
+      const upcomings = dateCol.filter((date) => {
+        const isUpcoming = checkUpcomings(date)
+        if(isUpcoming){
+          return true
+        }
+      })
+      
+      setSchedules({...schedules, cancelled: totalCancelled, total: totalScheds, completed: totalCompleted, upcoming: upcomings.length})
+
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+  useEffect(()=> {    
+    fetchDorms()
+    fetchAllScheds()
+  }, [provider_id])
+
+
+
   // State for current subscription plan
   const [currentPlan, setCurrentPlan] = useState('Basic');
   const [renewalDate, setRenewalDate] = useState('June 15, 2024');
@@ -32,23 +153,23 @@ const OwnerOverview = () => {
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaListAlt className="text-3xl text-gray-800 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Total Listings</h3>
-            <p className="text-2xl font-bold text-gray-900">{listingAnalytics.totalListings}</p>
+            <p className="text-2xl font-bold text-gray-900">{totalListings}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaCheckCircle className="text-3xl text-green-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Active Listings</h3>
-            <p className="text-2xl font-bold text-green-600">{listingAnalytics.activeListings}</p>
+            <p className="text-2xl font-bold text-green-600">{activeListings}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaClock className="text-3xl text-red-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Inactive Listings</h3>
-            <p className="text-2xl font-bold text-red-600">{listingAnalytics.inactiveListings}</p>
+            <p className="text-2xl font-bold text-red-600">{inActiveListings}</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
+          {/* <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaHourglassHalf className="text-3xl text-yellow-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Pending Listings</h3>
             <p className="text-2xl font-bold text-yellow-600">{listingAnalytics.pendingListings}</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -59,22 +180,22 @@ const OwnerOverview = () => {
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaListAlt className="text-3xl text-gray-800 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Total Schedules</h3>
-            <p className="text-2xl font-bold text-gray-900">{scheduleAnalytics.totalSchedules}</p>
+            <p className="text-2xl font-bold text-gray-900">{schedules.total}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaClock className="text-3xl text-blue-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Upcoming Schedules</h3>
-            <p className="text-2xl font-bold text-blue-600">{scheduleAnalytics.upcomingSchedules}</p>
+            <p className="text-2xl font-bold text-blue-600">{schedules.upcoming}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaCheckCircle className="text-3xl text-green-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Completed Schedules</h3>
-            <p className="text-2xl font-bold text-green-600">{scheduleAnalytics.completedSchedules}</p>
+            <p className="text-2xl font-bold text-green-600">{schedules.completed}</p>
           </div>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col justify-center items-center hover:shadow-lg transition-shadow transform hover:scale-105 transition-transform">
             <FaBan className="text-3xl text-red-600 mb-2" />
             <h3 className="text-base font-bold text-gray-800 mb-2">Cancelled Schedules</h3>
-            <p className="text-2xl font-bold text-red-600">{scheduleAnalytics.cancelledSchedules}</p>
+            <p className="text-2xl font-bold text-red-600">{schedules.cancelled}</p>
           </div>
         </div>
       </div>

@@ -32,8 +32,8 @@ const Login = () => {
   const handleSignin = async (data) => {
     try {
       await login(data);
-      toast.success('Login successful!');
-      navigate('/business-side'); 
+      // toast.success('Login successful!');
+      // navigate('/business-side'); 
     } catch (error) {
       console.error(error);
       toast.error('Login failed!');

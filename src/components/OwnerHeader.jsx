@@ -22,10 +22,10 @@ function OwnerHeader() {
         </Link>
 
         {/* Account Button */}
-        <button className="bg-secondary py-2 px-4 text-text-color font-semibold rounded flex items-center gap-2">
+        {/* <button className="bg-secondary py-2 px-4 text-text-color font-semibold rounded flex items-center gap-2">
           <span>Account</span>
           <MdAccountCircle className="text-xl" />
-        </button>
+        </button> */}
       </div>
     </nav>
   );
