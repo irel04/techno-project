@@ -10,7 +10,7 @@ import { supabase } from "../utils/supabase";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { spStorageKey } from "../utils/constant";
 import { toast } from "react-toastify";
-import { customToastParameter } from "../utils/helper";
+import { createPriceRange, customToastParameter } from "../utils/helper";
 
 export const message = {
   required: "this field is required",
@@ -31,7 +31,12 @@ const schema = yup.object({
   water_bills: yup.string().typeError(message.isNumber).required(message.required),
   association_dues: yup.string().typeError(message.isNumber).required(message.required),
   link: yup.string().typeError(message.isString).required(message.required),
-  landmark: yup.string().typeError(message.isString).required(message.required)
+  landmark: yup.string().typeError(message.isString).required(message.required),
+  province: yup.string().typeError(message.isString).required(message.required),
+  city: yup.string().typeError(message.isString).required(message.required),
+  barangay: yup.string().typeError(message.isString).required(message.required),
+  street: yup.string().typeError(message.isString),
+  
 })
 
 
@@ -51,6 +56,7 @@ const PostaRental = () => {
     associationDues: "",
     nearLandmarks: [""],
     gmapsLink: "",
+    cover: []
   });
 
   const { register, formState: { errors }, reset, handleSubmit } = useForm({
@@ -83,6 +89,10 @@ const PostaRental = () => {
   const handleFileChange = (e) => {
     setFormData({ ...formData, pictures: e.target.files });
   };
+
+  const handleCoverPhotoChange = (e) => {
+    setFormData({...formData, cover: e.target.files})
+  }
 
   
 
@@ -157,6 +167,19 @@ const PostaRental = () => {
         throw errorAmenity.message
       }
 
+      // for creating price range 
+      const priceRange = createPriceRange(data.price)
+
+      const { error: rentRatesError } = await supabase.from("rent_rates").update({
+        ...priceRange,
+        actual_rate: data.price,
+        property_id: propertyId
+      }).eq("property_id", propertyId)
+
+      if(rentRatesError){
+        throw rentRatesError.message
+      }
+
 
       // this if for uploading pictures 
       // iterate to array of photos
@@ -206,34 +229,64 @@ const PostaRental = () => {
         Post a Dormitory
       </h2>
       <form onSubmit={handleSubmit(handleCallPostApi)}>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">
-            Pictures (minimum of 3)
-            <MdInfoOutline
-              data-tip="Upload at least 3 pictures of the rental"
-              className="inline ml-2 text-gray-400"
-            />
-          </label>
-          <input
-            type="file"
-            name="pictures"
-            multiple
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full py-2 px-3 border border-gray-300 rounded-lg"
-          />
-          <div className="flex mt-4 gap-4">
-            {Array.from(formData.pictures).map((file, index) => (
-              <img
-                key={index}
-                src={URL.createObjectURL(file)}
-                alt={`Preview ${index}`}
-                className="w-24 h-24 object-cover rounded-lg shadow-md"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Choose a cover photo
+              <MdInfoOutline
+                data-tip="Upload a cover photo"
+                className="inline ml-2 text-gray-400"
               />
-            ))}
+            </label>
+            <input
+              type="file"
+              name="pictures"
+              accept="image/*"
+              onChange={handleCoverPhotoChange}
+              className="w-full py-2 px-3 border border-gray-300 rounded-lg"
+            />
+            <div className="flex mt-4 gap-4">
+              {Array.from(formData.cover).map((file, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(file)}
+                  alt={`Preview ${index}`}
+                  className="w-24 h-24 object-cover rounded-lg shadow-md"
+                />
+              ))}
+            </div>
           </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Pictures (minimum of 3)
+              <MdInfoOutline
+                data-tip="Upload at least 3 pictures of the rental"
+                className="inline ml-2 text-gray-400"
+              />
+            </label>
+            <input
+              type="file"
+              name="pictures"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+              className="w-full py-2 px-3 border border-gray-300 rounded-lg"
+            />
+            <div className="flex mt-4 gap-4">
+              {Array.from(formData.pictures).map((file, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(file)}
+                  alt={`Preview ${index}`}
+                  className="w-24 h-24 object-cover rounded-lg shadow-md"
+                />
+              ))}
+            </div>
+          </div>
+
         </div>
-        <div className="mb-4 w-3/6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
               Dorm Name
               <MdInfoOutline
@@ -249,8 +302,10 @@ const PostaRental = () => {
               placeholder="Specify name of dorm"
               className="w-full py-2 px-3 border border-gray-300 rounded-lg"
             />
-            <SpanError errors={errors.dorm_name}/>
+            <SpanError errors={errors.dorm_name} />
           </div>
+          
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">
@@ -397,7 +452,7 @@ const PostaRental = () => {
             </label>
             <input
               type="text"
-              name="advance_payments"
+              name="advance_payment"
               {...register("advance_payment")}
               placeholder="e.g., 2 months advance..."
               className="w-full py-2 px-3 border border-gray-300 rounded-lg"
@@ -511,6 +566,80 @@ const PostaRental = () => {
                   className="w-full py-2 px-3 border border-gray-300 rounded-lg"
                 />
           <SpanError errors={errors.landmark} />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Province
+              <MdInfoOutline
+                data-tip="Specify your province"
+                className="inline ml-2 text-gray-400"
+              />
+            </label>
+            <input
+              type="text"
+              name="province"
+              {...register("province")}
+              // required
+              placeholder="e.g., Monthly, Quarterly..."
+              className="w-full py-2 px-3 border border-gray-300 rounded-lg"
+            />
+            <SpanError errors={errors.province}/>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              City
+              <MdInfoOutline
+                data-tip="Specify your city"
+                className="inline ml-2 text-gray-400"
+              />
+            </label>
+            <input
+              type="text"
+              name="city"
+              {...register("city")}
+              placeholder="e.g., 2 months advance..."
+              className="w-full py-2 px-3 border border-gray-300 rounded-lg"
+            />
+            <SpanError errors={errors.city}/>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Barangay
+              <MdInfoOutline
+                data-tip="Specify your province"
+                className="inline ml-2 text-gray-400"
+              />
+            </label>
+            <input
+              type="text"
+              name="barangay"
+              {...register("barangay")}
+              // required
+              placeholder="e.g., Monthly, Quarterly..."
+              className="w-full py-2 px-3 border border-gray-300 rounded-lg"
+            />
+            <SpanError errors={errors.barangay}/>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Street
+              <MdInfoOutline
+                data-tip="Specify your city"
+                className="inline ml-2 text-gray-400"
+              />
+            </label>
+            <input
+              type="text"
+              name="street"
+              {...register("street")}
+              placeholder="e.g., 2 months advance..."
+              className="w-full py-2 px-3 border border-gray-300 rounded-lg"
+            />
+            <SpanError errors={errors.street}/>
           </div>
         </div>
         <div className="mb-6">

@@ -43,3 +43,14 @@ export const checkUpcomings = (date) => {
 
 
 }
+
+export const createPriceRange = (price) => {
+    const interval = price * 0.5
+    const from = price - interval
+    const to = price + interval
+
+    return {
+        from: from,
+        to: to
+    }
+}
