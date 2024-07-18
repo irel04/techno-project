@@ -46,6 +46,7 @@ const OwnerOverview = () => {
       }
 
       setProviderId(ownerData[0].id)
+
       console.log(ownerData[0].id)
 
     } catch (error) {

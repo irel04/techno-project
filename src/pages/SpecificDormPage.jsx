@@ -58,6 +58,7 @@ function SpecificDormPage() {
   const [credentials] = useLocalStorage(spStorageKey, null)
   const user = credentials?.user
   const [renterId, setRenterId] = useState(null)
+  const [userRole] = useLocalStorage("userRole", null)
 
 
   // const openInquirePopup = () => {
@@ -97,7 +98,7 @@ function SpecificDormPage() {
 
       try {
 
-        if (user) {
+        if (user && userRole !== "owner") {
 
           const {data: renter, error: renterError} = await supabase.from("renters").select("id").eq("user_id", user.id)
 
@@ -318,7 +319,7 @@ function SpecificDormPage() {
             {isVisitPopupOpen && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center overflow-hidden">
                 <div className="flex flex-col gap-2 bg-white p-8 rounded w-full m-4 md:w-[30rem] max-w-[30rem]">
-                  {isAuthenticated ? (
+                  {isAuthenticated && userRole !=="owner" ? (
                     <form onSubmit={handleSubmit(handleScheduleVisit)}>
                       <h2 className="text-2xl font-bold text-center ">
                         Schedule Visit
@@ -362,7 +363,7 @@ function SpecificDormPage() {
                   ) : (
                     <div className="text-center">
                       <p className="text-lg font-semibold mb-4">
-                        You need to log in first before booking a schedule.
+                        You need to log in first as renter before booking a schedule.
                       </p>
                       <div className="flex gap-2">
                         <Button
