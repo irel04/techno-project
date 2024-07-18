@@ -11,6 +11,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { spStorageKey } from "../utils/constant";
 import { toast } from "react-toastify";
 import { createPriceRange, customToastParameter } from "../utils/helper";
+import { useNavigate } from "react-router-dom";
 
 export const message = {
   required: "this field is required",
@@ -30,17 +31,18 @@ const schema = yup.object({
   electricity_bills: yup.string().typeError(message.isNumber).required(message.required),
   water_bills: yup.string().typeError(message.isNumber).required(message.required),
   association_dues: yup.string().typeError(message.isNumber).required(message.required),
-  link: yup.string().typeError(message.isString).required(message.required),
+  link: yup.string().typeError(message.isString),
   landmark: yup.string().typeError(message.isString).required(message.required),
   province: yup.string().typeError(message.isString).required(message.required),
   city: yup.string().typeError(message.isString).required(message.required),
   barangay: yup.string().typeError(message.isString).required(message.required),
   street: yup.string().typeError(message.isString),
-  
+
 })
 
 
 const PostaRental = () => {
+
   const [formData, setFormData] = useState({
     pictures: [],
     price: "",
@@ -63,6 +65,11 @@ const PostaRental = () => {
     resolver: yupResolver(schema),
     mode: "onChange"
   })
+
+  //navigate 
+
+  const navigate = useNavigate()
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -130,8 +137,10 @@ const PostaRental = () => {
         provider_id: ownerId,
         dorm_name: data.dorm_name,
         description: data.description,
-        ratings: 0
+        ratings: 0,
+        cover_photo: formData.cover.length ? formData.cover[0].name : null 
       }
+
 
       const { error: postingError, data: properties } = await supabase.from("properties").upsert(propertyAttr).select("id")
 
@@ -181,15 +190,47 @@ const PostaRental = () => {
       }
 
 
-      // this if for uploading pictures 
-      // iterate to array of photos
-      Array.from(formData.pictures).forEach((file, index) => {
-        uploadPhoto(file, propertyId)
-      })
+      // for adding address 
+      const address = {
+        province: data.province,
+        city: data.city,
+        barangay: data.barangay,
+        street: data.street,
+        landmark: data.landmark,
+        link: data.link,
+        property_id: propertyId
+      }
+
+      const { error: addressError } = await supabase.from("addresses_property").update(address).eq("property_id", propertyId)
+
+      if(addressError){
+        throw addressError.message
+      }
+
+      if (formData.cover.length) {
+        // for uploading cover photo
+        const { error: coverPhotoError } = await supabase.storage.from("assets").upload(`dorms/covers/${formData.cover[0].name}`, formData.cover[0], {
+          upsert: true
+        })
+
+        if (coverPhotoError) {
+          throw coverPhotoError.message
+        }
+
+      }
+
+      if (formData.pictures.length) {
+
+        // this if for uploading pictures 
+        // iterate to array of photos
+        Array.from(formData.pictures).forEach((file, index) => {
+          uploadPhoto(file, propertyId)
+        })
+      }
       
 
       toast.update(loading, customToastParameter("Added successfully", "success"))
-
+      navigate("/business-side")
     } catch (error) {
       console.error(error);
       toast.update(loading, customToastParameter(error, "error"))
@@ -582,7 +623,6 @@ const PostaRental = () => {
               name="province"
               {...register("province")}
               // required
-              placeholder="e.g., Monthly, Quarterly..."
               className="w-full py-2 px-3 border border-gray-300 rounded-lg"
             />
             <SpanError errors={errors.province}/>
@@ -599,7 +639,6 @@ const PostaRental = () => {
               type="text"
               name="city"
               {...register("city")}
-              placeholder="e.g., 2 months advance..."
               className="w-full py-2 px-3 border border-gray-300 rounded-lg"
             />
             <SpanError errors={errors.city}/>
@@ -619,7 +658,6 @@ const PostaRental = () => {
               name="barangay"
               {...register("barangay")}
               // required
-              placeholder="e.g., Monthly, Quarterly..."
               className="w-full py-2 px-3 border border-gray-300 rounded-lg"
             />
             <SpanError errors={errors.barangay}/>
@@ -636,7 +674,6 @@ const PostaRental = () => {
               type="text"
               name="street"
               {...register("street")}
-              placeholder="e.g., 2 months advance..."
               className="w-full py-2 px-3 border border-gray-300 rounded-lg"
             />
             <SpanError errors={errors.street}/>
